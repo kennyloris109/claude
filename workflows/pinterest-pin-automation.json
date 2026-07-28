@@ -1,0 +1,200 @@
+{
+  "name": "Pinterest Pin Automation Agent",
+  "nodes": [
+    {
+      "id": "421606f0-fcc0-4bf7-afcd-51443c7e08ee",
+      "name": "Daily Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [-1120, 300],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "0c5feb1f-2f58-4336-9e4c-2251fd44d654",
+      "name": "Pin Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-880, 300],
+      "notes": "Edit these values: your Pinterest board_id, the list of topics to rotate through, and the visual style used for every generated image.",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "board_id",
+              "type": "string",
+              "value": "REPLACE_WITH_YOUR_PINTEREST_BOARD_ID"
+            },
+            {
+              "id": "a2",
+              "name": "topics",
+              "type": "string",
+              "value": "=[\"minimalist home office setup\",\"cozy autumn recipe flat lay\",\"boho bedroom decor\",\"healthy meal prep ideas\",\"indoor plant styling corner\"]"
+            },
+            {
+              "id": "a3",
+              "name": "image_style",
+              "type": "string",
+              "value": "high quality professional photography, warm natural lighting, styled flat lay, no text overlay, vertical portrait composition"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "45e138b0-03fa-4529-9e97-b71bb63fec7d",
+      "name": "Pick Topic",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-640, 300],
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst topics = JSON.parse(input.topics);\nconst topic = topics[Math.floor(Math.random() * topics.length)];\n\nreturn [{\n  json: {\n    board_id: input.board_id,\n    topic,\n    image_prompt: `${topic}, ${input.image_style}`\n  }\n}];"
+      }
+    },
+    {
+      "id": "33cfc424-d18a-417a-b287-b8b59ec4b167",
+      "name": "Generate Image",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.8,
+      "position": [-400, 300],
+      "parameters": {
+        "resource": "image",
+        "operation": "generate",
+        "prompt": "={{ $json.image_prompt }}",
+        "model": "dall-e-3",
+        "options": {
+          "size": "1024x1792",
+          "quality": "hd",
+          "responseFormat": "url"
+        }
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "REPLACE_ME",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "id": "eaed1840-b0d5-49bf-bcef-01399f08451b",
+      "name": "Optimize Image",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [-160, 300],
+      "notes": "Requires GraphicsMagick/ImageMagick on the n8n instance. Resizes/re-encodes the raw DALL-E output to Pinterest's recommended 2:3 portrait pin format and compresses it.",
+      "parameters": {
+        "operation": "resize",
+        "width": 1000,
+        "height": 1500,
+        "options": {
+          "quality": 85,
+          "format": "jpeg"
+        }
+      }
+    },
+    {
+      "id": "3ccdb541-9d59-43be-940c-d19e21732f23",
+      "name": "Generate Caption",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1.8,
+      "position": [80, 300],
+      "parameters": {
+        "resource": "text",
+        "operation": "message",
+        "modelId": "gpt-4o",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are a Pinterest marketing copywriter. Given a topic, write SEO-optimized Pinterest pin content. Respond ONLY with valid JSON (no markdown fences) matching exactly this shape: {\"title\": string (<=100 chars), \"description\": string (<=450 chars, natural sentence including 3-5 relevant keywords), \"alt_text\": string (plain description of the image for accessibility), \"hashtags\": array of 5 lowercase hashtag words without the # symbol}"
+            },
+            {
+              "role": "user",
+              "content": "={{ 'Topic: ' + $('Pick Topic').first().json.topic }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.7
+        }
+      },
+      "credentials": {
+        "openAiApi": {
+          "id": "REPLACE_ME",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "id": "b5d9bda4-1a3e-4767-80f9-e9d62fe65c60",
+      "name": "Prepare Pin Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [320, 300],
+      "parameters": {
+        "jsCode": "let raw = $json.message?.content ?? $json.content ?? $json.text;\nif (Array.isArray(raw)) raw = raw[0]?.text ?? '';\nraw = String(raw).trim().replace(/^```(json)?/i, '').replace(/```$/, '').trim();\n\nlet caption;\ntry {\n  caption = JSON.parse(raw);\n} catch (e) {\n  throw new Error('Could not parse caption JSON from OpenAI response: ' + raw);\n}\n\nconst imageItem = $('Optimize Image').first();\nconst binaryData = imageItem.binary && (imageItem.binary.data || Object.values(imageItem.binary)[0]);\nif (!binaryData) {\n  throw new Error('No binary image data found on \"Optimize Image\" node output.');\n}\n\nconst description = `${caption.description} ${caption.hashtags.map(h => '#' + h).join(' ')}`.slice(0, 500);\n\nreturn [{\n  json: {\n    board_id: $('Pick Topic').first().json.board_id,\n    title: String(caption.title).slice(0, 100),\n    description,\n    alt_text: caption.alt_text,\n    image_base64: binaryData.data,\n    content_type: binaryData.mimeType || 'image/jpeg'\n  }\n}];"
+      }
+    },
+    {
+      "id": "d975bb5a-8f6a-4445-ab9e-6e6a4130093c",
+      "name": "Create Pinterest Pin",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [560, 300],
+      "notes": "Requires a Generic OAuth2 API credential pointed at Pinterest's OAuth endpoints (see docs/pinterest-setup.md).",
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.pinterest.com/v5/pins",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ board_id: $json.board_id, title: $json.title, description: $json.description, alt_text: $json.alt_text, media_source: { source_type: 'image_base64', content_type: $json.content_type, data: $json.image_base64 } }) }}",
+        "options": {}
+      },
+      "credentials": {
+        "oAuth2Api": {
+          "id": "REPLACE_ME",
+          "name": "Pinterest OAuth2 account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Daily Schedule": {
+      "main": [[{ "node": "Pin Config", "type": "main", "index": 0 }]]
+    },
+    "Pin Config": {
+      "main": [[{ "node": "Pick Topic", "type": "main", "index": 0 }]]
+    },
+    "Pick Topic": {
+      "main": [[{ "node": "Generate Image", "type": "main", "index": 0 }]]
+    },
+    "Generate Image": {
+      "main": [[{ "node": "Optimize Image", "type": "main", "index": 0 }]]
+    },
+    "Optimize Image": {
+      "main": [[{ "node": "Generate Caption", "type": "main", "index": 0 }]]
+    },
+    "Generate Caption": {
+      "main": [[{ "node": "Prepare Pin Payload", "type": "main", "index": 0 }]]
+    },
+    "Prepare Pin Payload": {
+      "main": [[{ "node": "Create Pinterest Pin", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {}
+}
