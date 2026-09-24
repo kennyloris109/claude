@@ -1,0 +1,148 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Ocean Marine Services palette: chart paper, harbour ink, Q-flag yellow. */
+@theme {
+  --color-chart: #f2f5f3;
+  --color-shoal: #dce8ee;
+  --color-ink: #0e2a3b;
+  --color-ink-2: #173b50;
+  --color-deep: #0a2130;
+  --color-steel: #3f5868;
+  --color-on-shoal: #25475a;
+  --color-mist: #b9ccd6;
+  --color-rule: #b8c7cf;
+  --color-signal: #f4c20d;
+  --color-signal-hi: #ffd233;
+  --color-flag-red: #c8102e;
+  --color-flag-blue: #1d4f9c;
+
+  --font-display: "Big Shoulders Stencil", "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-head: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@theme inline {
+  --font-heading: var(--font-head);
+  --font-sans: var(--font-body);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* shadcn tokens mapped onto the palette. Light only: the site is read on deck and in offices in daylight. */
+:root {
+  color-scheme: light;
+  --background: #f2f5f3;
+  --foreground: #0e2a3b;
+  --card: #ffffff;
+  --card-foreground: #0e2a3b;
+  --popover: #ffffff;
+  --popover-foreground: #0e2a3b;
+  --primary: #0e2a3b;
+  --primary-foreground: #f2f5f3;
+  --secondary: #dce8ee;
+  --secondary-foreground: #0e2a3b;
+  --muted: #dce8ee;
+  --muted-foreground: #3f5868;
+  --accent: #dce8ee;
+  --accent-foreground: #0e2a3b;
+  --destructive: #b3261e;
+  --border: #b8c7cf;
+  --input: #9fb2bc;
+  --ring: #f4c20d;
+  --radius: 0.1875rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring;
+  }
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+  ::selection {
+    background: var(--color-signal);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-signal);
+    outline-offset: 3px;
+  }
+  input, textarea {
+    caret-color: var(--color-flag-red);
+  }
+  a {
+    text-underline-offset: 0.22em;
+    text-decoration-thickness: 1px;
+  }
+  html {
+    scrollbar-color: var(--color-ink) var(--color-chart);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+}
+
+/* Hero slide image: slow push-in while a slide is on screen. */
+@keyframes push-in {
+  from { transform: scale(1.02); }
+  to { transform: scale(1.14); }
+}
+.push-in {
+  animation: push-in 9s linear forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .push-in { animation: none; transform: scale(1.04); }
+}
+
+/* Per-slide timer bar in the hero rail. */
+@keyframes rail-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.rail-fill {
+  transform-origin: left;
+  animation: rail-fill var(--rail-duration, 7s) linear forwards;
+}
+.rail-paused .rail-fill {
+  animation-play-state: paused;
+}
