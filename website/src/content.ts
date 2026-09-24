@@ -17,21 +17,21 @@ export const heroSlides: HeroSlide[] = [
     alt: "Ship-to-shore cranes at the container terminal, Karachi Harbour",
     place: "Karachi Port",
     detail: "Container terminal, Karachi Harbour",
-    coord: "24°50′ N  66°59′ E",
+    coord: "24°50′N 66°59′E",
   },
   {
     image: img("karachi-tanker-berth"),
     alt: "Tanker alongside with a floating crane and harbour craft, Karachi",
     place: "Karachi Harbour",
     detail: "Tanker berth and floating crane",
-    coord: "24°49′ N  66°59′ E",
+    coord: "24°49′N 66°59′E",
   },
   {
     image: img("manora-harbour-launches"),
     alt: "Harbour launches moored off Manora with a tanker in the distance, Karachi",
     place: "Manora, Karachi",
     detail: "Harbour launches off Manora",
-    coord: "24°48′ N  66°58′ E",
+    coord: "24°48′N 66°58′E",
   },
   {
     image: img("aircraft-stand"),
@@ -68,8 +68,8 @@ export const services: Service[] = [
       "Safety and general consumables",
       "Bonded stores, where applicable",
     ],
-    image: img("produce"),
-    alt: "Market stall stacked with fresh fruit and vegetables",
+    image: img("stores-alongside"),
+    alt: "Pallets of stores on the quay beside a ship, with a forklift at the gangway",
   },
   {
     id: "equipment",
@@ -94,8 +94,8 @@ export const services: Service[] = [
     title: "Lubricants and technical consumables",
     summary:
       "Supply of marine lubricants, greases and technical consumables based on vessel specifications and manufacturer requirements.",
-    image: img("machinery"),
-    alt: "Close view of engine machinery, springs and fittings",
+    image: img("engine-room"),
+    alt: "Ship's engine room with machinery behind yellow guard rails",
   },
   {
     id: "port-support",
@@ -143,8 +143,8 @@ export const categories: Category[] = [
     id: "provisions",
     name: "Provisions",
     items: ["Fresh", "Frozen", "Dry", "Dairy", "Meat", "Seafood", "Fruits and vegetables", "Beverages"],
-    image: img("meat"),
-    alt: "Cuts of fresh meat on a wooden board with herbs and tomatoes",
+    image: img("stores-on-quay"),
+    alt: "Wrapped pallets of stores on a quay waiting to be loaded onto a ship",
   },
   {
     id: "deck",
@@ -157,8 +157,8 @@ export const categories: Category[] = [
     id: "engine",
     name: "Engine stores",
     items: ["Gaskets", "Filters", "Valves", "Hoses", "Fittings", "Maintenance consumables", "Tools"],
-    image: img("machinery"),
-    alt: "Close view of engine machinery and fittings",
+    image: img("engine-room"),
+    alt: "Ship's engine room with machinery behind yellow guard rails",
   },
   {
     id: "cabin",
@@ -171,8 +171,8 @@ export const categories: Category[] = [
     id: "lubricants",
     name: "Lubricants",
     items: ["Marine oils", "Hydraulic oils", "Greases", "Technical fluids"],
-    image: img("cranes"),
-    alt: "Container ship under ship-to-shore cranes",
+    image: img("karachi-tanker-berth"),
+    alt: "Tanker alongside the oil berth in Karachi Harbour",
   },
   {
     id: "equipment",
@@ -246,5 +246,7 @@ export const portCallSteps = [
 export const credits = [
   { what: "Karachi container terminal, tanker berth, tanker and Manora launches", who: "A. Savin", license: "Free Art License", href: "https://commons.wikimedia.org/wiki/User:A.Savin" },
   { what: "Admiralty Chart No. 40, Karachi Harbour (1906, new edition 1918)", who: "UK Hydrographic Office", license: "Public domain", href: "https://commons.wikimedia.org/wiki/File:Admiralty_Chart_No_40_Karachi_Harbour,_Published_1906,_New_Edition_1918.jpg" },
+  { what: "Stores on the quay (USNS Supply at Souda Bay)", who: "U.S. Navy", license: "Public domain", href: "https://commons.wikimedia.org/wiki/File:USNS_Supply_(T-AOE_6)_visits_Souda_Bay_(7040155).jpg" },
+  { what: "Engine room (Pulau Pinang)", who: "LEE 003", license: "CC BY 4.0", href: "https://commons.wikimedia.org/wiki/File:Pulau_Pinang_Engine_Room_46.jpg" },
   { what: "Other photographs", who: "Unsplash contributors", license: "Unsplash License", href: "https://unsplash.com/license" },
 ]

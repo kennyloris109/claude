@@ -54,26 +54,20 @@ export function Stores() {
                         alt={current.alt}
                         loading="lazy"
                         className="absolute inset-0 size-full object-cover"
-                        initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 1.08, filter: "blur(8px)" }}
-                        animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                        transition={{ duration: reduce ? 0.2 : 0.45 }}
                       />
                     </AnimatePresence>
                   </div>
                   <div>
                     <h3 className="font-display text-[clamp(2.6rem,5vw,4.2rem)] leading-[0.9] font-extrabold uppercase">{c.name}</h3>
                     <ul className="mt-6 flex flex-wrap gap-2">
-                      {c.items.map((it, i) => (
-                        <motion.li
-                          key={it}
-                          initial={reduce ? false : { opacity: 0, y: 8 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.35, delay: 0.05 * i }}
-                          className="rounded-[3px] border border-ink/25 bg-white px-3 py-1.5 font-medium"
-                        >
+                      {c.items.map((it) => (
+                        <li key={it} className="rounded-[3px] border border-ink/25 bg-white px-3 py-1.5 font-medium">
                           {it}
-                        </motion.li>
+                        </li>
                       ))}
                     </ul>
                   </div>
@@ -88,24 +82,17 @@ export function Stores() {
 }
 
 export function Airline() {
-  const ref = useRef<HTMLElement>(null)
-  const reduce = useReducedMotion()
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] })
-  const y = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["-8%", "8%"])
-  const reveal = useTransform(scrollYProgress, [0.05, 0.4], reduce ? ["inset(0% 0% 0% 0%)", "inset(0% 0% 0% 0%)"] : ["inset(12% 10% 12% 10%)", "inset(0% 0% 0% 0%)"])
-
   return (
-    <section id="airline" ref={ref} aria-labelledby="airline-title" className="overflow-hidden bg-deep py-24 text-white sm:py-32">
+    <section id="airline" aria-labelledby="airline-title" className="overflow-hidden bg-deep py-24 text-white sm:py-32">
       <div className="mx-auto grid max-w-[1320px] gap-12 px-4 sm:px-8 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
-        <motion.div style={{ clipPath: reveal }} className="relative aspect-[4/3] overflow-hidden rounded-[3px] lg:aspect-auto lg:min-h-[560px]">
-          <motion.img
+        <div className="relative aspect-[4/3] overflow-hidden rounded-[3px] lg:aspect-auto lg:min-h-[560px]">
+          <img
             src={img("aircraft-stand")}
             alt="Airliner at the stand at sunset with ground service vehicles alongside"
             loading="lazy"
-            style={{ y, scale: 1.18 }}
             className="absolute inset-0 size-full object-cover"
           />
-        </motion.div>
+        </div>
 
         <div className="flex flex-col justify-center">
           <h2 id="airline-title" className="font-head text-[clamp(2.4rem,5vw,4rem)] leading-[0.98] font-bold">
@@ -128,7 +115,7 @@ export function Airline() {
           <p className="mt-3 text-white/70 tabular-nums">
             Jinnah International Airport, Karachi
             <br />
-            <span className="whitespace-pre">24°54′ N  67°10′ E</span>
+            <span>24°54′N 67°10′E</span>
           </p>
         </div>
       </div>
@@ -145,7 +132,7 @@ export function WhyUs() {
             Why vessels choose Ocean Marine Services
           </h2>
           <div className="mt-8 aspect-[4/3] overflow-hidden rounded-[3px]">
-            <img src={img("produce-shelf")} alt="Shelves of fresh vegetables and fruit" loading="lazy" className="size-full object-cover" />
+            <img src={img("manora-harbour-launches")} alt="Harbour launches moored off Manora, Karachi" loading="lazy" className="size-full object-cover" />
           </div>
         </div>
         <ul className="border-t-2 border-ink">
@@ -166,7 +153,7 @@ export function WhyUs() {
 const COMMIT = "To deliver the right products, at the right time, at the right place."
 
 export function Commitment() {
-  const ref = useRef<HTMLParagraphElement>(null)
+  const ref = useRef<HTMLHeadingElement>(null)
   const reduce = useReducedMotion()
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 85%", "end 45%"] })
   const words = COMMIT.split(" ")
@@ -174,16 +161,13 @@ export function Commitment() {
   return (
     <section aria-labelledby="commit-title" className="py-24 sm:py-36">
       <div className="mx-auto max-w-[1320px] px-4 sm:px-8">
-        <h2 id="commit-title" className="font-head text-2xl font-bold text-steel">
-          Our commitment
-        </h2>
-        <p ref={ref} className="mt-6 max-w-[18ch] font-display text-[clamp(2.8rem,7.5vw,6rem)] leading-[0.95] font-extrabold uppercase">
+        <h2 id="commit-title" ref={ref} className="max-w-[18ch] font-display text-[clamp(2.8rem,7.5vw,6rem)] leading-[0.95] font-extrabold uppercase">
           {words.map((w, i) => (
             <Word key={i} progress={scrollYProgress} range={[i / words.length, (i + 1) / words.length]} still={!!reduce}>
               {w}
             </Word>
           ))}
-        </p>
+        </h2>
         <p className="mt-10 max-w-[62ch] text-lg text-steel">
           We understand the importance of vessel schedules, crew requirements and operational continuity. Our team works
           closely with vessel operators, ship managers, ship agents and procurement teams to provide dependable supply
@@ -205,7 +189,7 @@ function Word({
   range: [number, number]
   still: boolean
 }) {
-  const color = useTransform(progress, range, still ? ["#0E2A3B", "#0E2A3B"] : ["#A9BAC3", "#0E2A3B"])
+  const color = useTransform(progress, range, still ? ["#0E2A3B", "#0E2A3B"] : ["#3F5868", "#0E2A3B"])
   return (
     <motion.span style={{ color }} className="inline-block pr-[0.25em]">
       {children}

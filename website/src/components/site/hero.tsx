@@ -80,8 +80,9 @@ export function Hero() {
           )
         })}
         {/* Legibility wash: deepest behind the wordmark, clear across the sky. */}
-        <div className="absolute inset-0 z-[3] bg-linear-to-t from-deep via-deep/55 to-deep/10" />
-        <div className="absolute inset-0 z-[3] bg-linear-to-r from-deep/70 via-deep/20 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 z-[3] h-[70%] bg-linear-to-t from-deep/90 via-deep/45 to-transparent" />
+        <div className="absolute inset-y-0 left-0 z-[3] w-full bg-linear-to-r from-deep/60 via-deep/10 to-transparent md:w-[70%]" />
+        <div className="absolute inset-x-0 top-0 z-[3] h-28 bg-linear-to-b from-deep/50 to-transparent" />
       </div>
 
       <div className="mx-auto flex w-full max-w-[1320px] flex-1 items-end gap-10 px-4 pt-28 pb-8 sm:px-8 lg:pb-10">
@@ -164,7 +165,7 @@ export function Hero() {
             <p className="font-head text-lg leading-tight font-bold">{slide.place}</p>
             <p className="text-sm text-white/75 tabular-nums">
               {slide.detail}
-              {slide.coord && <span className="ml-3 hidden whitespace-pre text-white/60 sm:inline">{slide.coord}</span>}
+              {slide.coord && <span className="ml-3 hidden text-white/70 sm:inline">{slide.coord}</span>}
             </p>
           </div>
 

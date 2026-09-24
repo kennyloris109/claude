@@ -85,9 +85,6 @@ export function PortCall() {
                     {i + 1}
                   </span>
                   <div>
-                    <p className={cn("text-sm transition-colors duration-500", i === step ? "text-signal" : "text-white/55")}>
-                      {s.where}
-                    </p>
                     <h3
                       className={cn(
                         "font-head text-2xl leading-tight font-bold transition-colors duration-500",
@@ -96,6 +93,9 @@ export function PortCall() {
                     >
                       {s.title}
                     </h3>
+                    <p className={cn("text-sm transition-colors duration-500", i === step ? "text-signal" : "text-white/55")}>
+                      {s.where}
+                    </p>
                     <motion.div
                       initial={false}
                       animate={{ height: i === step ? "auto" : 0, opacity: i === step ? 1 : 0 }}
@@ -122,8 +122,8 @@ export function PortCall() {
                 >
                   <span className="font-display text-4xl leading-none font-extrabold text-signal">{step + 1}</span>
                   <div>
-                    <p className="text-sm text-signal">{portCallSteps[step].where}</p>
                     <h3 className="font-head text-2xl leading-tight font-bold">{portCallSteps[step].title}</h3>
+                    <p className="text-sm text-signal">{portCallSteps[step].where}</p>
                     <p className="mt-1 text-[0.98rem] text-white/80">{portCallSteps[step].body}</p>
                   </div>
                 </motion.div>
@@ -132,7 +132,7 @@ export function PortCall() {
           </div>
 
           {/* Chart */}
-          <div className="relative order-first flex min-h-0 flex-1 items-center justify-center bg-[#e9e2cc] pt-16 lg:order-none lg:pt-0">
+          <div className="relative order-first flex min-h-0 flex-1 items-center justify-center bg-chart pt-16 lg:order-none lg:pt-0">
             <div className="relative aspect-[1400/1800] h-full max-h-full lg:h-[88svh]">
               <img
                 src={img("admiralty-chart-karachi-1918")}
@@ -162,7 +162,7 @@ export function PortCall() {
                   <rect x="-14" y="-6" width="12" height="12" fill="#F4C20D" />
                 </g>
               </svg>
-              <p className="absolute right-2 bottom-2 rounded-[2px] bg-[#e9e2cc]/90 px-2 py-1 text-[0.72rem] leading-tight text-ink/80">
+              <p className="absolute right-2 bottom-2 rounded-[2px] bg-chart/90 px-2 py-1 text-[0.72rem] leading-tight text-ink/80">
                 Admiralty Chart No. 40, Karachi Harbour, 1918. Not for navigation.
               </p>
             </div>

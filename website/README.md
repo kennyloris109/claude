@@ -47,6 +47,8 @@ There is no server. "Email this request" opens the visitor's email app addressed
 
 - Karachi container terminal, tanker berth, tanker and Manora launches: A. Savin, Wikimedia Commons, Free Art License.
 - Admiralty Chart No. 40, Karachi Harbour (1906, new edition 1918): UK Hydrographic Office, public domain.
+- Stores on the quay: U.S. Navy (USNS Supply at Souda Bay), public domain.
+- Engine room: "Pulau Pinang Engine Room 46" by LEE 003, CC BY 4.0.
 - All other photographs: Unsplash, Unsplash License.
 
 Each image in `public/images` has a `.json` sidecar recording its exact source. Credits are also shown in the site footer.
