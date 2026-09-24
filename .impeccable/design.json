@@ -1,0 +1,477 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-24T03:41:30+00:00",
+  "title": "Design System: Ocean Marine Services",
+  "extensions": {
+    "colorMeta": {
+      "signal-yellow": {
+        "role": "primary",
+        "displayName": "Q-Flag Signal Yellow",
+        "canonical": "#f4c20d",
+        "oklch": "oklch(83.5% 0.169 89.6)",
+        "tonalRamp": [
+          "#230000",
+          "#411600",
+          "#603500",
+          "#815500",
+          "#a27500",
+          "#c59700",
+          "#edbe24",
+          "#ffe95f"
+        ]
+      },
+      "signal-yellow-hi": {
+        "role": "primary",
+        "displayName": "Bright Signal",
+        "canonical": "#ffd233",
+        "oklch": "oklch(87.8% 0.168 91.7)",
+        "tonalRamp": [
+          "#220000",
+          "#3f1800",
+          "#5e3700",
+          "#7e5600",
+          "#a07700",
+          "#c39900",
+          "#eabf25",
+          "#ffea5f"
+        ]
+      },
+      "flag-red": {
+        "role": "secondary",
+        "displayName": "ICS Flag Red",
+        "canonical": "#c8102e",
+        "oklch": "oklch(53.0% 0.207 22.3)",
+        "tonalRamp": [
+          "#360000",
+          "#5b0000",
+          "#800012",
+          "#a52931",
+          "#cb4d50",
+          "#f17070",
+          "#ff9794",
+          "#ffc1bd"
+        ]
+      },
+      "flag-blue": {
+        "role": "secondary",
+        "displayName": "ICS Flag Blue",
+        "canonical": "#1d4f9c",
+        "oklch": "oklch(43.9% 0.137 259.1)",
+        "tonalRamp": [
+          "#000043",
+          "#001a64",
+          "#063b86",
+          "#295ba9",
+          "#497ccd",
+          "#699ef2",
+          "#8ec5ff",
+          "#b7f0ff"
+        ]
+      },
+      "chart-paper": {
+        "role": "neutral",
+        "displayName": "Chart Paper",
+        "canonical": "#f2f5f3",
+        "oklch": "oklch(96.7% 0.004 157.2)",
+        "tonalRamp": [
+          "#0a0c0a",
+          "#222523",
+          "#3e403f",
+          "#5c5e5d",
+          "#7b7e7c",
+          "#9c9f9d",
+          "#c2c5c3",
+          "#ecefed"
+        ]
+      },
+      "shoal": {
+        "role": "neutral",
+        "displayName": "Shoal Water",
+        "canonical": "#dce8ee",
+        "oklch": "oklch(92.4% 0.015 229.0)",
+        "tonalRamp": [
+          "#050c10",
+          "#1d262a",
+          "#384146",
+          "#555f65",
+          "#747f85",
+          "#95a0a6",
+          "#bbc6cc",
+          "#e5f1f7"
+        ]
+      },
+      "paper-white": {
+        "role": "neutral",
+        "displayName": "Paper White",
+        "canonical": "#ffffff",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#7d7d7d",
+          "#9e9e9e",
+          "#c4c4c4",
+          "#eeeeee"
+        ]
+      },
+      "harbour-ink": {
+        "role": "neutral",
+        "displayName": "Harbour Ink",
+        "canonical": "#0e2a3b",
+        "oklch": "oklch(27.3% 0.046 238.4)",
+        "tonalRamp": [
+          "#000d1c",
+          "#0b2738",
+          "#274355",
+          "#456275",
+          "#648296",
+          "#84a3b8",
+          "#a9c9df",
+          "#d3f4ff"
+        ]
+      },
+      "deep-water": {
+        "role": "neutral",
+        "displayName": "Deep Water",
+        "canonical": "#0a2130",
+        "oklch": "oklch(23.8% 0.041 240.2)",
+        "tonalRamp": [
+          "#000d1a",
+          "#102636",
+          "#2b4353",
+          "#496173",
+          "#688193",
+          "#88a2b6",
+          "#adc8dc",
+          "#d7f3ff"
+        ]
+      },
+      "steel": {
+        "role": "neutral",
+        "displayName": "Steel",
+        "canonical": "#3f5868",
+        "oklch": "oklch(44.7% 0.040 236.9)",
+        "tonalRamp": [
+          "#000d1a",
+          "#0f2735",
+          "#2b4352",
+          "#486172",
+          "#678192",
+          "#88a3b5",
+          "#adc9db",
+          "#d6f3ff"
+        ]
+      },
+      "on-shoal": {
+        "role": "neutral",
+        "displayName": "Shoal Ink",
+        "canonical": "#25475a",
+        "oklch": "oklch(38.1% 0.051 234.8)",
+        "tonalRamp": [
+          "#000d1d",
+          "#032839",
+          "#224457",
+          "#406377",
+          "#5f8398",
+          "#80a4ba",
+          "#a5cae1",
+          "#cef5ff"
+        ]
+      },
+      "mist": {
+        "role": "neutral",
+        "displayName": "Mist",
+        "canonical": "#b9ccd6",
+        "oklch": "oklch(83.4% 0.025 230.5)",
+        "tonalRamp": [
+          "#020d14",
+          "#17262e",
+          "#32424b",
+          "#506169",
+          "#6f808a",
+          "#8fa2ab",
+          "#b5c8d1",
+          "#def2fc"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Rule Line",
+        "canonical": "#b8c7cf",
+        "oklch": "oklch(82.1% 0.020 230.8)",
+        "tonalRamp": [
+          "#030d12",
+          "#1a262c",
+          "#354248",
+          "#536067",
+          "#728087",
+          "#93a1a9",
+          "#b8c7cf",
+          "#e2f1fa"
+        ]
+      },
+      "input-stroke": {
+        "role": "neutral",
+        "displayName": "Input Stroke",
+        "canonical": "#9fb2bc",
+        "oklch": "oklch(75.2% 0.026 230.6)",
+        "tonalRamp": [
+          "#020d14",
+          "#17262e",
+          "#32424b",
+          "#4f616a",
+          "#6e808a",
+          "#8fa2ac",
+          "#b4c8d2",
+          "#def2fd"
+        ]
+      },
+      "destructive": {
+        "role": "error",
+        "displayName": "Destructive Red",
+        "canonical": "#b3261e",
+        "oklch": "oklch(50.1% 0.178 28.7)",
+        "tonalRamp": [
+          "#360000",
+          "#5b0000",
+          "#800000",
+          "#a52b22",
+          "#cb4f42",
+          "#f17263",
+          "#ff9887",
+          "#ffc3b0"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Stencil Display",
+        "purpose": "Company name and single uppercase statements; step numerals."
+      },
+      "headline": {
+        "displayName": "Section Headline",
+        "purpose": "Every section title, sentence case."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Service titles over photos, step, reason and tab titles."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Paragraph under a section title, 52-62ch."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running copy."
+      },
+      "label": {
+        "displayName": "Condensed Label",
+        "purpose": "Buttons, brand name, place names, footer heads."
+      }
+    },
+    "shadows": [
+      {
+        "name": "header-lift",
+        "value": "0 1px 0 var(--color-rule), 0 8px 24px -16px rgb(14 42 59 / 0.35)",
+        "purpose": "Header after it leaves the hero."
+      },
+      {
+        "name": "form-float",
+        "value": "0 24px 60px -40px rgb(14 42 59 / 0.45)",
+        "purpose": "White quotation panel."
+      },
+      {
+        "name": "signal-glow",
+        "value": "0 10px 30px -12px rgb(244 194 13 / 0.7)",
+        "purpose": "Hero primary button over photography only."
+      },
+      {
+        "name": "flag-drop",
+        "value": "0 12px 24px -10px rgb(0 0 0 / 0.6)",
+        "purpose": "Hoisted hero flags."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Reveals, wipes, underlines, hover nudges."
+      },
+      {
+        "name": "hero-slide-interval",
+        "value": "7000ms",
+        "purpose": "Hero autoplay; pauses on control, hidden tab and reduced motion."
+      },
+      {
+        "name": "hero-wipe",
+        "value": "clip-path inset(0 0 0 100%) to inset(0) 1150ms ease-out-expo",
+        "purpose": "Hero slide change."
+      },
+      {
+        "name": "push-in",
+        "value": "scale 1.02 to 1.14, 9s linear",
+        "purpose": "Active hero photo; static scale 1.04 under reduced motion."
+      },
+      {
+        "name": "wordmark-rise",
+        "value": "translateY 105% to 0, 900ms, 120ms stagger",
+        "purpose": "Hero wordmark lines on load."
+      },
+      {
+        "name": "underline-draw",
+        "value": "scaleX 0 to 1, 300ms ease-out-expo",
+        "purpose": "Nav link and tab markers."
+      },
+      {
+        "name": "photo-hover",
+        "value": "scale 1.06, 1200ms ease-out-expo",
+        "purpose": "Service photo on hover."
+      },
+      {
+        "name": "state-fade",
+        "value": "500ms colors",
+        "purpose": "Port-call step state changes."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Signal-yellow quotation action; the only filled button colour.",
+      "html": "<button class=\"ds-btn-primary\">Request a quotation</button>",
+      "css": ":host{--color-chart:#f2f5f3;--color-shoal:#dce8ee;--color-ink:#0e2a3b;--color-deep:#0a2130;--color-steel:#3f5868;--color-rule:#b8c7cf;--color-signal:#f4c20d;--color-signal-hi:#ffd233;--font-display:'Big Shoulders Stencil','Barlow Condensed','Arial Narrow',sans-serif;--font-head:'Barlow Condensed','Arial Narrow',sans-serif;--font-body:'Barlow','Helvetica Neue',Arial,sans-serif;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);} .ds-btn-primary{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 24px;border-radius:3px;font-family:var(--font-head,'Barlow Condensed',sans-serif);font-size:1.25rem;font-weight:700;line-height:1;text-decoration:none;cursor:pointer;border:0;background:var(--color-signal,#f4c20d);color:var(--color-ink,#0e2a3b);transition:background-color .2s,transform .2s;} .ds-btn-primary:hover{background:var(--color-signal-hi,#ffd233);} .ds-btn-primary:focus-visible{outline:3px solid var(--color-signal,#f4c20d);outline-offset:3px;}"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary action on light grounds: 2px ink outline that fills ink on hover.",
+      "html": "<button class=\"ds-btn-outline\">Copy request</button>",
+      "css": ":host{--color-chart:#f2f5f3;--color-shoal:#dce8ee;--color-ink:#0e2a3b;--color-deep:#0a2130;--color-steel:#3f5868;--color-rule:#b8c7cf;--color-signal:#f4c20d;--color-signal-hi:#ffd233;--font-display:'Big Shoulders Stencil','Barlow Condensed','Arial Narrow',sans-serif;--font-head:'Barlow Condensed','Arial Narrow',sans-serif;--font-body:'Barlow','Helvetica Neue',Arial,sans-serif;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);} .ds-btn-outline{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 24px;border-radius:3px;font-family:var(--font-head,'Barlow Condensed',sans-serif);font-size:1.25rem;font-weight:700;line-height:1;text-decoration:none;cursor:pointer;background:transparent;border:2px solid var(--color-ink,#0e2a3b);color:var(--color-ink,#0e2a3b);transition:background-color .2s,color .2s;} .ds-btn-outline:hover{background:var(--color-ink,#0e2a3b);color:var(--color-chart,#f2f5f3);} .ds-btn-outline:focus-visible{outline:3px solid var(--color-signal,#f4c20d);outline-offset:3px;}"
+    },
+    {
+      "name": "Slider Arrow",
+      "kind": "button",
+      "refersTo": "button-icon",
+      "description": "48px square outline control for sliders; disabled drops to rule-line stroke.",
+      "html": "<button class=\"ds-btn-icon\" aria-label=\"Next service\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button> <button class=\"ds-btn-icon\" aria-label=\"Previous service\" disabled><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button>",
+      "css": ":host{--color-chart:#f2f5f3;--color-shoal:#dce8ee;--color-ink:#0e2a3b;--color-deep:#0a2130;--color-steel:#3f5868;--color-rule:#b8c7cf;--color-signal:#f4c20d;--color-signal-hi:#ffd233;--font-display:'Big Shoulders Stencil','Barlow Condensed','Arial Narrow',sans-serif;--font-head:'Barlow Condensed','Arial Narrow',sans-serif;--font-body:'Barlow','Helvetica Neue',Arial,sans-serif;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);} .ds-btn-icon{display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:3px;border:2px solid var(--color-ink,#0e2a3b);background:transparent;color:var(--color-ink,#0e2a3b);cursor:pointer;transition:background-color .2s,color .2s;} .ds-btn-icon:hover:not(:disabled){background:var(--color-ink,#0e2a3b);color:var(--color-chart,#f2f5f3);} .ds-btn-icon:disabled{border-color:var(--color-rule,#b8c7cf);color:var(--color-rule,#b8c7cf);cursor:not-allowed;} .ds-btn-icon:focus-visible{outline:3px solid var(--color-signal,#f4c20d);outline-offset:3px;}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Labelled 48px field on chart paper with ink border and yellow ring on focus.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Vessel name</span><input class=\"ds-input\" placeholder=\"MV Example Star\"><span class=\"ds-field-hint\">7 digits. We check the last digit for typos.</span></label>",
+      "css": ":host{--color-chart:#f2f5f3;--color-shoal:#dce8ee;--color-ink:#0e2a3b;--color-deep:#0a2130;--color-steel:#3f5868;--color-rule:#b8c7cf;--color-signal:#f4c20d;--color-signal-hi:#ffd233;--font-display:'Big Shoulders Stencil','Barlow Condensed','Arial Narrow',sans-serif;--font-head:'Barlow Condensed','Arial Narrow',sans-serif;--font-body:'Barlow','Helvetica Neue',Arial,sans-serif;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);} .ds-field{display:grid;gap:8px;font-family:var(--font-body,'Barlow',sans-serif);color:var(--color-ink,#0e2a3b);} .ds-field-label{font-size:.98rem;font-weight:600;} .ds-field-hint{font-size:.875rem;color:var(--color-steel,#3f5868);} .ds-input{height:48px;padding:0 12px;border:1px solid #9fb2bc;border-radius:3px;background:var(--color-chart,#f2f5f3);color:var(--color-ink,#0e2a3b);font:inherit;font-size:1rem;caret-color:#c8102e;outline:none;transition:border-color .15s,box-shadow .15s;} .ds-input::placeholder{color:rgb(63 88 104/.8);} .ds-input:focus-visible{border-color:var(--color-ink,#0e2a3b);box-shadow:0 0 0 3px rgb(244 194 13/.6);}"
+    },
+    {
+      "name": "Header Navigation",
+      "kind": "nav",
+      "refersTo": "nav-bar-scrolled",
+      "description": "Scrolled header: flag mark, condensed name, links with a yellow draw-in underline, yellow quotation button.",
+      "html": "<header class=\"ds-nav\"><a class=\"ds-nav-brand\" href=\"#\"><span class=\"ds-flags\"><svg viewBox=\"0 0 30 20\"><path d=\"M0 0h30v20H0z\" fill=\"#F4C20D\"/><path d=\"M0 0h30v20z\" fill=\"#C8102E\"/></svg><svg viewBox=\"0 0 30 20\"><path d=\"M0 0h30v20H0z\" fill=\"#1D4F9C\"/><path d=\"M0 0L30 20M30 0L0 20\" stroke=\"#fff\" stroke-width=\"4.4\"/></svg><svg viewBox=\"0 0 30 20\"><path d=\"M0 0h30v20H0z\" fill=\"#fff\"/><path d=\"M10 6.5h10v7H10z\" fill=\"#1D4F9C\"/></svg></span>Ocean Marine Services</a><nav class=\"ds-nav-links\"><a href=\"#\">Services</a><a href=\"#\">How supply works</a><a href=\"#\">Supply categories</a><a class=\"ds-nav-cta\" href=\"#\">Request a quotation</a></nav></header>",
+      "css": ":host{--color-chart:#f2f5f3;--color-shoal:#dce8ee;--color-ink:#0e2a3b;--color-deep:#0a2130;--color-steel:#3f5868;--color-rule:#b8c7cf;--color-signal:#f4c20d;--color-signal-hi:#ffd233;--font-display:'Big Shoulders Stencil','Barlow Condensed','Arial Narrow',sans-serif;--font-head:'Barlow Condensed','Arial Narrow',sans-serif;--font-body:'Barlow','Helvetica Neue',Arial,sans-serif;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);} .ds-nav{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px;padding:0 32px;background:rgb(242 245 243/.95);color:var(--color-ink,#0e2a3b);box-shadow:0 1px 0 var(--color-rule,#b8c7cf),0 8px 24px -16px rgb(14 42 59/.35);font-family:var(--font-body,'Barlow',sans-serif);} .ds-nav-brand{display:flex;align-items:center;gap:12px;color:inherit;text-decoration:none;font-family:var(--font-head,'Barlow Condensed',sans-serif);font-weight:700;font-size:1.25rem;letter-spacing:.025em;white-space:nowrap;} .ds-flags{display:flex;gap:2px;} .ds-flags svg{width:18px;height:12px;box-shadow:0 0 0 1px rgb(0 0 0/.1);} .ds-nav-links{display:flex;align-items:center;gap:28px;} .ds-nav-links a{position:relative;color:inherit;text-decoration:none;font-weight:500;} .ds-nav-links a:not(.ds-nav-cta)::after{content:'';position:absolute;left:0;bottom:-4px;width:100%;height:2px;background:var(--color-signal,#f4c20d);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease-out-expo);} .ds-nav-links a:not(.ds-nav-cta):hover::after{transform:scaleX(1);} .ds-nav-cta{display:inline-flex;align-items:center;height:40px;padding:0 16px;border-radius:3px;background:var(--color-signal,#f4c20d);font-family:var(--font-head,'Barlow Condensed',sans-serif);font-size:1.125rem;font-weight:700!important;} .ds-nav-cta:hover{background:var(--color-signal-hi,#ffd233);} .ds-nav a:focus-visible{outline:3px solid var(--color-signal,#f4c20d);outline-offset:3px;}"
+    },
+    {
+      "name": "Item Chip",
+      "kind": "chip",
+      "refersTo": "chip-item",
+      "description": "Static supply item tag: white, faint ink border, 3px corner.",
+      "html": "<ul class=\"ds-chips\"><li class=\"ds-chip\">Fresh</li><li class=\"ds-chip\">Frozen</li><li class=\"ds-chip\">Fruits and vegetables</li></ul>",
+      "css": ":host{--color-chart:#f2f5f3;--color-shoal:#dce8ee;--color-ink:#0e2a3b;--color-deep:#0a2130;--color-steel:#3f5868;--color-rule:#b8c7cf;--color-signal:#f4c20d;--color-signal-hi:#ffd233;--font-display:'Big Shoulders Stencil','Barlow Condensed','Arial Narrow',sans-serif;--font-head:'Barlow Condensed','Arial Narrow',sans-serif;--font-body:'Barlow','Helvetica Neue',Arial,sans-serif;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);} .ds-chips{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0;} .ds-chip{padding:6px 12px;border:1px solid rgb(14 42 59/.25);border-radius:3px;background:#fff;color:var(--color-ink,#0e2a3b);font-family:var(--font-body,'Barlow',sans-serif);font-weight:500;}"
+    },
+    {
+      "name": "Manifest List",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Ruled list: 2px ink top rule, 1px rule-line rows, condensed titles that nudge right on hover.",
+      "html": "<ul class=\"ds-manifest\"><li><h3>Port-focused supply</h3><p>Built around Karachi Port and Port Qasim.</p></li><li><h3>One supplier</h3><p>Provisions through technical stores.</p></li></ul>",
+      "css": ":host{--color-chart:#f2f5f3;--color-shoal:#dce8ee;--color-ink:#0e2a3b;--color-deep:#0a2130;--color-steel:#3f5868;--color-rule:#b8c7cf;--color-signal:#f4c20d;--color-signal-hi:#ffd233;--font-display:'Big Shoulders Stencil','Barlow Condensed','Arial Narrow',sans-serif;--font-head:'Barlow Condensed','Arial Narrow',sans-serif;--font-body:'Barlow','Helvetica Neue',Arial,sans-serif;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);} .ds-manifest{list-style:none;margin:0;padding:0;border-top:2px solid var(--color-ink,#0e2a3b);background:var(--color-shoal,#dce8ee);color:var(--color-ink,#0e2a3b);} .ds-manifest li{display:grid;grid-template-columns:minmax(200px,.8fr) 1.2fr;gap:32px;padding:32px 0;border-bottom:1px solid var(--color-rule,#b8c7cf);} .ds-manifest h3{margin:0;font-family:var(--font-head,'Barlow Condensed',sans-serif);font-size:1.9rem;line-height:1.02;font-weight:700;transition:transform .3s var(--ease-out-expo);} .ds-manifest li:hover h3{transform:translateX(4px);} .ds-manifest p{margin:0;font-family:var(--font-body,'Barlow',sans-serif);font-size:1.125rem;color:#25475a;}"
+    },
+    {
+      "name": "Service Entry",
+      "kind": "card",
+      "refersTo": "",
+      "description": "Photo frame with title on a deep-water wash, summary and yellow-square bullets, closed by a 2px ink rule.",
+      "html": "<article class=\"ds-service\"><div class=\"ds-service-photo\"><h3>Ship chandling</h3></div><div class=\"ds-service-body\"><p>Provisions, deck, engine and cabin stores delivered alongside.</p><ul><li>Provisions</li><li>Deck stores</li><li>Engine stores</li><li>Cabin stores</li></ul></div></article>",
+      "css": ":host{--color-chart:#f2f5f3;--color-shoal:#dce8ee;--color-ink:#0e2a3b;--color-deep:#0a2130;--color-steel:#3f5868;--color-rule:#b8c7cf;--color-signal:#f4c20d;--color-signal-hi:#ffd233;--font-display:'Big Shoulders Stencil','Barlow Condensed','Arial Narrow',sans-serif;--font-head:'Barlow Condensed','Arial Narrow',sans-serif;--font-body:'Barlow','Helvetica Neue',Arial,sans-serif;--ease-out-expo:cubic-bezier(0.16,1,0.3,1);} .ds-service{max-width:420px;font-family:var(--font-body,'Barlow',sans-serif);color:var(--color-ink,#0e2a3b);} .ds-service-photo{position:relative;aspect-ratio:4/3;border-radius:3px;overflow:hidden;background:linear-gradient(160deg,#3f5868,#0e2a3b);} .ds-service-photo::after{content:'';position:absolute;inset:50% 0 0 0;background:linear-gradient(to top,rgb(10 33 48/.8),transparent);} .ds-service-photo h3{position:absolute;left:20px;right:20px;bottom:20px;z-index:1;margin:0;color:#fff;font-family:var(--font-head,'Barlow Condensed',sans-serif);font-size:2rem;line-height:1.02;font-weight:700;} .ds-service-body{display:flex;flex-direction:column;gap:16px;padding:20px 0 28px;border-bottom:2px solid var(--color-ink,#0e2a3b);} .ds-service-body p{margin:0;} .ds-service-body ul{display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;list-style:none;margin:0;padding:0;} .ds-service-body li{position:relative;padding-left:16px;font-size:.98rem;color:var(--color-steel,#3f5868);} .ds-service-body li::before{content:'';position:absolute;left:0;top:.6em;width:7px;height:7px;background:var(--color-signal,#f4c20d);}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Port Call Manifest",
+    "overview": "\n**Creative North Star: \"The Port Call Manifest\"**\n\nThe site reads like the paperwork and plates of a working port: an Admiralty chart laid on chart paper, a requisition typed in harbour ink, and signal flags run up a halyard. Light surfaces are chart paper and shoal-water blue; dark surfaces are deep harbour water. Yellow is the Q-flag: the one colour that means \"act here\", reserved for the quotation action, the active state and the focus ring.\n\nDensity is moderate and editorial. Sections breathe with tall vertical padding, headlines are condensed and heavy, and lists are ruled like a manifest rather than boxed into cards. Photography is real Karachi Harbour and supply work, full-bleed or in square-cornered frames; the stencil face appears only where a crate stencil would, on the name and on single emphatic words.\n\nThe system is light-only by design: it is read on deck and in offices in daylight. Motion is slow and physical (push-in, wipe, hoist, a vessel moving up a channel) and every motion path stops for reduced-motion users.",
+    "keyCharacteristics": [
+      "Chart paper ground, harbour ink text, Q-flag yellow as the single action colour.",
+      "Stencil display for the name and big one-word statements; Barlow Condensed for all headings, buttons and labels; Barlow for reading.",
+      "3px corners everywhere; nothing is pill-shaped or softly rounded.",
+      "2px ink rules open lists and panels; 1px rule lines divide their rows.",
+      "Signal flags O-M-S as the brand mark, drawn as ICS flags in flag red, blue, yellow and white.",
+      "Soft, diffuse shadows only, and rarely."
+    ],
+    "rules": [
+      {
+        "name": "The Q-Flag Rule",
+        "body": "Yellow means \"act here\". It marks the quotation action, the current state and focus; it is never a decorative panel, a heading colour on light ground, or a background band.",
+        "section": "colors"
+      },
+      {
+        "name": "The Flags Stay Flags Rule",
+        "body": "Flag red and flag blue appear in the ICS flags and the chart route; UI chrome uses ink, paper and yellow.",
+        "section": "colors"
+      },
+      {
+        "name": "The Stencil Is Paint Rule",
+        "body": "The stencil face is for the company name and single emphatic words set uppercase at display size; it never sets sentences below 2rem, body, buttons or labels.",
+        "section": "typography"
+      },
+      {
+        "name": "The Headline Stands Alone Rule",
+        "body": "Section titles open directly with the condensed headline and a lead paragraph; there is no small label, kicker or numbering above them.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Manifest Rule",
+        "body": "Lists, tabs and service entries are ruled, not raised. If something needs separation, use a 2px ink rule or a ground change before a shadow.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep chart paper as the default ground and alternate with shoal and deep water to pace the page.",
+      "Do use signal yellow with harbour-ink text for every \"Request a quotation\" action and for active and focus states.",
+      "Do keep every corner at 3px (2px when nested).",
+      "Do open lists and panels with a 2px harbour-ink rule and divide rows with 1px rule lines.",
+      "Do set headings, buttons and labels in Barlow Condensed, and reserve the stencil for the name and single uppercase statements.",
+      "Do place white text over photographs only on a deep-water gradient wash.",
+      "Do use the expo-out curve (cubic-bezier(0.16, 1, 0.3, 1)) for reveals and underlines, and give every animation a reduced-motion state.",
+      "Do use tabular numerals for coordinates, counters and IMO numbers."
+    ],
+    "donts": [
+      "Don't use yellow as a decorative fill, a section band or white-text button.",
+      "Don't use flag red or flag blue for buttons, panels or headings.",
+      "Don't round anything beyond 3px or make pill buttons or chips.",
+      "Don't add a dark mode; the system is light-only for daylight reading.",
+      "Don't put small labels, kickers or eyebrow text above headlines.",
+      "Don't use hard offset shadows or stack shadowed cards; the four soft shadows above are the whole vocabulary.",
+      "Don't represent a service or category with an icon tile; show it with a photograph."
+    ]
+  }
+}
