@@ -1,0 +1,35 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "gray-on-color",
+        "value": "*",
+        "files": [
+          "website/index.html"
+        ],
+        "createdAt": "2026-09-24T02:33:36.382Z",
+        "reason": "Claude triage: flagged pair is #E6EEF2 near-white dark-mode ink on the #122B3A shoal band (~12:1), which is what the rule recommends"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          "website/index.html"
+        ],
+        "createdAt": "2026-09-24T02:33:36.393Z",
+        "reason": "Claude triage: remaining hit is the two-line footer wordmark in the stencil display face; body text is 1.6 and the tagline was raised to 1.4"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "website/index.html"
+        ],
+        "createdAt": "2026-09-24T02:33:36.405Z",
+        "reason": "Claude triage: hits are full-bleed bands and rule-topped lists; text is inset by the .wrap gutter (16-48px), section padding-block and each row's own 16-28px padding, checked in desktop and 390px screenshots"
+      }
+    ]
+  }
+}
