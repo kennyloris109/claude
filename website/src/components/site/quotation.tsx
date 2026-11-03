@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Copy, Mail } from "lucide-react"
 import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
@@ -6,10 +6,19 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Textarea } from "@/components/ui/textarea"
-import { EMAIL } from "@/content"
+import { EMAIL, PHONE, PHONE_DISPLAY } from "@/content"
 import { cn } from "@/lib/utils"
 
-type Kind = "vessel" | "airline"
+type Kind = "vessel" | "bunker" | "fresh-water" | "airline"
+
+const KINDS: { id: Kind; label: string }[] = [
+  { id: "vessel", label: "Ship stores" },
+  { id: "bunker", label: "Bunkers" },
+  { id: "fresh-water", label: "Fresh water" },
+  { id: "airline", label: "Airline" },
+]
+
+const isVessel = (k: Kind) => k !== "airline"
 type ImoState = "empty" | "length" | "check" | "ok"
 
 // IMO check digit: first six digits weighted 7..2; the last digit of the sum must equal the seventh digit.
@@ -50,6 +59,9 @@ const empty = {
   company: "",
   reply: "",
   items: "",
+  grade: "",
+  qty: "",
+  delivery: "Alongside at berth",
 }
 
 export function Quotation() {
@@ -59,22 +71,37 @@ export function Quotation() {
   const set = (k: keyof typeof empty) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setF((s) => ({ ...s, [k]: e.target.value }))
 
+  // Service sections open the form on their own tab.
+  useEffect(() => {
+    const on = (e: Event) => {
+      const k = (e as CustomEvent<string>).detail as Kind
+      if (KINDS.some((x) => x.id === k)) setKind(k)
+    }
+    window.addEventListener("oms:quote", on)
+    return () => window.removeEventListener("oms:quote", on)
+  }, [])
+
   const imo = imoState(f.imo)
   const imoNum = f.imo.replace(/^IMO\s*/i, "").trim()
 
+  const what = kind === "bunker" ? "bunkers" : kind === "fresh-water" ? "fresh water" : "ship stores"
   const subject =
     kind === "airline"
       ? `Quotation request: airline stores${f.airline ? `, ${f.airline}` : ""}${f.flight ? ` ${f.flight}` : ""}`
-      : `Quotation request: ${f.vessel || "vessel"}${imoNum ? ` (IMO ${imoNum})` : ""}, ${f.port}`
+      : `Quotation request (${what}): ${f.vessel || "vessel"}${imoNum ? ` (IMO ${imoNum})` : ""}, ${f.port}`
 
   const body = useMemo(() => {
-    const lines = ["Dear Ocean Marine Services,", "", "Please quote for the items below.", ""]
+    const ask = kind === "bunker" ? "bunker supply" : kind === "fresh-water" ? "bulk fresh water supply" : "the items below"
+    const lines = ["Dear Ocean Marine Services,", "", `Please quote for ${ask}.`, ""]
     if (kind === "airline") {
       lines.push(`Airline: ${f.airline || "-"}`, `Flight: ${f.flight || "-"}`, `Required by: ${fmtTime(f.required) || "-"}`, "Airport: Jinnah International Airport, Karachi")
     } else {
       lines.push(`Vessel: ${f.vessel || "-"}`, `IMO: ${imoNum || "-"}`, `Port: ${f.port}`, `ETA: ${fmtTime(f.eta) || "-"}`)
     }
-    lines.push("", "Required items:", f.items.trim() || "-", "", `Contact: ${f.company || "-"}`)
+    if (kind === "bunker") lines.push(`Fuel grade: ${f.grade || "-"}`, `Quantity: ${f.qty ? `${f.qty} MT` : "-"}`, `Delivery: ${f.delivery}`)
+    if (kind === "fresh-water") lines.push(`Quantity: ${f.qty ? `${f.qty} MT` : "-"}`, `Delivery: ${f.delivery}`)
+    const needsItems = kind === "vessel" || kind === "airline"
+    lines.push("", needsItems ? "Required items:" : "Notes:", f.items.trim() || "-", "", `Contact: ${f.company || "-"}`)
     if (f.reply) lines.push(`Reply to: ${f.reply}`)
     return lines.join("\n")
   }, [kind, f, imoNum])
@@ -82,11 +109,13 @@ export function Quotation() {
   const full = `To: ${EMAIL}\nSubject: ${subject}\n\n${body}`
 
   const missing: string[] = []
-  if (kind === "vessel") {
+  if (isVessel(kind)) {
     if (!f.vessel.trim()) missing.push("vessel name")
     if (imo === "length" || imo === "check") missing.push("a valid IMO number")
   } else if (!f.airline.trim()) missing.push("airline")
-  if (!f.items.trim()) missing.push("required items")
+  if (kind === "bunker" && !f.grade.trim()) missing.push("fuel grade")
+  if ((kind === "bunker" || kind === "fresh-water") && !f.qty.trim()) missing.push("quantity")
+  if ((kind === "vessel" || kind === "airline") && !f.items.trim()) missing.push("required items")
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -120,8 +149,8 @@ export function Quotation() {
             Request a quotation
           </h2>
           <p className="mt-5 max-w-[60ch] text-lg text-steel">
-            Need provisions, stores, lubricants or marine supplies? Send us your vessel name, IMO number, port, ETA and
-            required items, and our team will prepare a quotation according to your requirements.
+            Need provisions, stores, lubricants, bunkers or fresh water? Send us your vessel name, IMO number, port, ETA
+            and what you need, and our team will prepare a quotation according to your requirements.
           </p>
         </div>
 
@@ -132,20 +161,20 @@ export function Quotation() {
             className="grid gap-6 rounded-[3px] border border-rule bg-white p-5 shadow-[0_24px_60px_-40px_rgb(14_42_59/0.45)] sm:p-8"
           >
             <Tabs value={kind} onValueChange={(v) => setKind(v as Kind)}>
-              <TabsList className="h-11 rounded-[3px] bg-shoal p-1">
-                {(["vessel", "airline"] as const).map((k) => (
+              <TabsList className="grid h-auto w-full grid-cols-2 gap-1 rounded-[3px] bg-shoal p-1 group-data-horizontal/tabs:h-auto sm:grid-cols-4">
+                {KINDS.map((k) => (
                   <TabsTrigger
-                    key={k}
-                    value={k}
-                    className="rounded-[2px] px-5 font-head text-lg font-bold capitalize data-active:bg-ink data-active:text-chart data-active:shadow-none"
+                    key={k.id}
+                    value={k.id}
+                    className="h-10! rounded-[2px] px-3 font-head text-lg font-bold data-active:bg-ink! data-active:text-chart! data-active:shadow-none"
                   >
-                    {k}
+                    {k.label}
                   </TabsTrigger>
                 ))}
               </TabsList>
             </Tabs>
 
-            {kind === "vessel" ? (
+            {isVessel(kind) ? (
               <div className="grid gap-5 sm:grid-cols-2">
                 <Field id="vessel" label="Vessel name">
                   <Input id="vessel" value={f.vessel} onChange={set("vessel")} placeholder="MV Example Star" autoComplete="off" aria-invalid={invalid(!f.vessel.trim())} className={fieldCls} />
@@ -200,6 +229,30 @@ export function Quotation() {
               </div>
             )}
 
+            {(kind === "bunker" || kind === "fresh-water") && (
+              <div className="grid gap-5 sm:grid-cols-2">
+                {kind === "bunker" && (
+                  <Field id="grade" label="Fuel grade" hint="As specified by the vessel, e.g. MGO DMA or VLSFO RMG 380.">
+                    <Input id="grade" value={f.grade} onChange={set("grade")} placeholder="MGO DMA" autoComplete="off" aria-invalid={invalid(!f.grade.trim())} aria-describedby="grade-hint" className={fieldCls} />
+                  </Field>
+                )}
+                <Field id="qty" label="Quantity (metric tons)">
+                  <Input id="qty" value={f.qty} onChange={set("qty")} inputMode="decimal" placeholder={kind === "bunker" ? "150" : "200"} autoComplete="off" aria-invalid={invalid(!f.qty.trim())} className={cn(fieldCls, "tabular-nums")} />
+                </Field>
+                <Field id="delivery" label="Delivery">
+                  <Select value={f.delivery} onValueChange={(v) => setF((s) => ({ ...s, delivery: v }))}>
+                    <SelectTrigger id="delivery" className={cn(fieldCls, "w-full")}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Alongside at berth">Alongside at berth</SelectItem>
+                      <SelectItem value="At anchorage">At anchorage</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </Field>
+              </div>
+            )}
+
             <div className="grid gap-5 sm:grid-cols-2">
               <Field id="company" label="Your name and company">
                 <Input id="company" value={f.company} onChange={set("company")} placeholder="Name, agency or ship manager" autoComplete="organization" className={fieldCls} />
@@ -208,14 +261,24 @@ export function Quotation() {
                 <Input id="reply" type="email" value={f.reply} onChange={set("reply")} placeholder="you@company.com" autoComplete="email" className={fieldCls} />
               </Field>
               <div className="sm:col-span-2">
-                <Field id="items" label="Required items" hint="One item per line with quantity and unit. You can also attach your own list to the email.">
+                <Field
+                  id="items"
+                  label={kind === "vessel" || kind === "airline" ? "Required items" : "Notes (optional)"}
+                  hint={kind === "vessel" || kind === "airline" ? "One item per line with quantity and unit. You can also attach your own list to the email." : "Anything else we should know, such as berth number or delivery window."}
+                >
                   <Textarea
                     id="items"
                     value={f.items}
                     onChange={set("items")}
-                    aria-invalid={invalid(!f.items.trim())}
+                    aria-invalid={invalid((kind === "vessel" || kind === "airline") && !f.items.trim())}
                     aria-describedby="items-hint"
-                    placeholder={"Fresh eggs, 60 dozen\nHydraulic oil ISO VG 46, 4 x 20 L\nNitrile gloves, size L, 10 boxes"}
+                    placeholder={
+                      kind === "bunker"
+                        ? "Berth 12, delivery window 0800 to 1200"
+                        : kind === "fresh-water"
+                          ? "Domestic use, delivery after cargo completion"
+                          : "Fresh eggs, 60 dozen\nHydraulic oil ISO VG 46, 4 x 20 L\nNitrile gloves, size L, 10 boxes"
+                    }
                     className={cn(fieldCls, "min-h-40 leading-relaxed")}
                   />
                 </Field>
@@ -245,11 +308,24 @@ export function Quotation() {
             <div>
               <p className="text-steel">Send your requisition to</p>
               <p className="mt-1 font-head text-[clamp(1.4rem,3vw,2rem)] font-bold break-all select-all">{EMAIL}</p>
+              <p className="mt-3 text-steel">
+                or call{" "}
+                <a href={`tel:${PHONE}`} className="font-semibold text-ink tabular-nums">
+                  {PHONE_DISPLAY}
+                </a>
+              </p>
             </div>
             <div>
               <p className="font-semibold">For a fast quotation, include</p>
               <ul className="mt-3 grid gap-2">
-                {["Vessel name and IMO number", "Port: Karachi Port or Port Qasim", "ETA", "Required items with quantities"].map((t) => (
+                {(kind === "bunker"
+                  ? ["Vessel name and IMO number", "Port and ETA", "Fuel grade", "Quantity in metric tons", "Berth or anchorage"]
+                  : kind === "fresh-water"
+                    ? ["Vessel name and IMO number", "Port and ETA", "Quantity in metric tons", "Berth or anchorage"]
+                    : kind === "airline"
+                      ? ["Airline and flight number", "Date and time required", "Required items with quantities"]
+                      : ["Vessel name and IMO number", "Port: Karachi Port or Port Qasim", "ETA", "Required items with quantities"]
+                ).map((t) => (
                   <li key={t} className="flex items-center gap-3">
                     <span className="size-3 shrink-0 border-2 border-ink" aria-hidden="true" />
                     {t}

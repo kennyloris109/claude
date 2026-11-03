@@ -1,4 +1,11 @@
 export const EMAIL = "oceanmarineservices.pk@gmail.com"
+// Phone exactly as supplied by the client.
+export const PHONE = "+92320208896"
+export const PHONE_DISPLAY = "+92 320 208896"
+export const ADDRESS_LINES = ["Office #404, Mehdi Tower", "115-A S.M.C.H.S., Main Shahra-e-Faisal", "Karachi 74400, Pakistan"]
+export const MAPS_URL =
+  "https://www.google.com/maps/search/?api=1&query=" +
+  encodeURIComponent("Mehdi Tower, 115-A S.M.C.H.S, Shahra-e-Faisal, Karachi 74400")
 
 export const img = (name: string) => `${import.meta.env.BASE_URL}images/${name}.webp`
 
@@ -243,10 +250,65 @@ export const portCallSteps = [
   },
 ]
 
+export type PortService = {
+  id: "bunker" | "fresh-water"
+  title: string
+  summary: string
+  coordinate: string[]
+  quoteNeeds: string[]
+  note: string
+  image: string
+  alt: string
+  caption: string
+}
+
+// Draft copy for the client to confirm: written from standard port practice, no capacity or price claims.
+export const portServices: PortService[] = [
+  {
+    id: "bunker",
+    title: "Marine bunker support",
+    summary:
+      "Coordination of marine fuel deliveries for vessels calling at Karachi Port and Port Qasim, arranged through licensed suppliers around your ETA, berth or anchorage.",
+    coordinate: [
+      "Marine gas oil and fuel oil grades as specified by the vessel",
+      "Grade and quantity confirmed before delivery",
+      "Delivery alongside at berth or at anchorage, as the port allows",
+      "Bunker delivery note and samples handled with the supplier",
+      "Scheduling around cargo operations and the vessel's stay",
+      "Lubricants delivered with bunkers on request",
+    ],
+    quoteNeeds: ["Vessel name and IMO", "Port and ETA", "Fuel grade", "Quantity in metric tons", "Berth or anchorage"],
+    note: "Subject to supplier availability and applicable port, customs, safety and environmental requirements.",
+    image: img("bunker-barge-alongside"),
+    alt: "Blue bunker tanker moored alongside a container ship under port cranes",
+    caption: "Bunker barge alongside a container feeder",
+  },
+  {
+    id: "fresh-water",
+    title: "Bulk fresh water supply",
+    summary:
+      "Bulk fresh water for vessels at Karachi Port and Port Qasim, delivered to the quantity you need and timed around your stay in port.",
+    coordinate: [
+      "Fresh water for domestic and technical use on board",
+      "Quantities measured in metric tons, to the vessel's requirement",
+      "Delivery by water boat at anchorage or alongside at berth, as port arrangements allow",
+      "Scheduling around ETA and cargo operations",
+      "Coordination with the vessel's agent and port authorities",
+    ],
+    quoteNeeds: ["Vessel name and IMO", "Port and ETA", "Quantity in metric tons", "Berth or anchorage"],
+    note: "Subject to availability and applicable port and regulatory requirements.",
+    image: img("water-boat"),
+    alt: "Blue-hulled water boat under way in a harbour",
+    caption: "Harbour water boat under way",
+  },
+]
+
 export const credits = [
   { what: "Karachi container terminal, tanker berth, tanker and Manora launches", who: "A. Savin", license: "Free Art License", href: "https://commons.wikimedia.org/wiki/User:A.Savin" },
   { what: "Admiralty Chart No. 40, Karachi Harbour (1906, new edition 1918)", who: "UK Hydrographic Office", license: "Public domain", href: "https://commons.wikimedia.org/wiki/File:Admiralty_Chart_No_40_Karachi_Harbour,_Published_1906,_New_Edition_1918.jpg" },
   { what: "Stores on the quay (USNS Supply at Souda Bay)", who: "U.S. Navy", license: "Public domain", href: "https://commons.wikimedia.org/wiki/File:USNS_Supply_(T-AOE_6)_visits_Souda_Bay_(7040155).jpg" },
   { what: "Engine room (Pulau Pinang)", who: "LEE 003", license: "CC BY 4.0", href: "https://commons.wikimedia.org/wiki/File:Pulau_Pinang_Engine_Room_46.jpg" },
+  { what: "Bunker barge Coralwater alongside a container feeder, Liverpool", who: "Niels Johannes", license: "CC BY-SA 4.0", href: "https://commons.wikimedia.org/wiki/File:Coralwater_(IMO_9004164)_Liverpool_2021.jpg" },
+  { what: "Water boat in the harbour of Rotterdam", who: "S.J. de Waard", license: "CC BY 2.5", href: "https://commons.wikimedia.org/wiki/File:Rotterdam_Waterboot_2.JPG" },
   { what: "Other photographs", who: "Unsplash contributors", license: "Unsplash License", href: "https://unsplash.com/license" },
 ]

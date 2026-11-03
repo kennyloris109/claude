@@ -20,11 +20,11 @@ Ocean Marine Services is a Pakistan-based ship chandler and marine supplier. The
 
 ## Positioning
 
-A port-focused chandler built around Karachi Port and Port Qasim, covering provisions through technical stores as one supplier, with fast quotation and delivery coordination, plus airline provisions and stores.
+A port-focused chandler built around Karachi Port and Port Qasim, covering provisions through technical stores as one supplier, with fast quotation and delivery coordination, plus airline provisions and stores, marine bunker support (coordinated through licensed suppliers) and bulk fresh water supply. The bunker and fresh water copy on the site is a draft written from standard port practice and awaits client confirmation.
 
 ## Operating Context
 
-Quotation requests arrive by email (oceanmarineservices.pk@gmail.com). Vessels work to strict schedules; deliveries go alongside or by launch. Supplies are handled under customs, port, airport, airline, environmental and food-safety requirements.
+Quotation requests arrive by email (oceanmarineservices.pk@gmail.com) or phone (+92320208896, as supplied by the client). Office: Office #404, Mehdi Tower, 115-A S.M.C.H.S., Main Shahra-e-Faisal, Karachi 74400. Vessels work to strict schedules; deliveries go alongside or by launch. Supplies are handled under customs, port, airport, airline, environmental and food-safety requirements.
 
 ## Capabilities and Constraints
 
@@ -36,7 +36,7 @@ Name "Ocean Marine Services". Tagline "Reliable Supply. Professional Service. Po
 
 ## Evidence on Hand
 
-Client-supplied copy only. Email is the only contact channel for now (client confirmed). No phone, address, logo, client names, certifications, statistics or testimonials exist: never invent them.
+Client-supplied copy, plus email, phone and office address supplied by the client. No logo, client names, certifications, statistics or testimonials exist: never invent them.
 
 ## Product Principles
 

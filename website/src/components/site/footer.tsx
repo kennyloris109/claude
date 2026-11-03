@@ -1,4 +1,4 @@
-import { EMAIL, credits } from "@/content"
+import { ADDRESS_LINES, EMAIL, MAPS_URL, PHONE, PHONE_DISPLAY, credits } from "@/content"
 import { FlagMark } from "./flags"
 
 export function Footer() {
@@ -23,17 +23,26 @@ export function Footer() {
           <div>
             <h2 className="font-head text-xl font-bold">Services</h2>
             <ul className="mt-3 grid gap-1 text-white/75">
-              {["Ship chandling", "Marine supplies", "Provisions", "Deck, engine and cabin stores", "Lubricants", "Port support", "Airline provisions and stores"].map((s) => (
+              {["Ship chandling", "Marine bunker support", "Bulk fresh water supply", "Provisions", "Deck, engine and cabin stores", "Lubricants", "Port support", "Airline provisions and stores"].map((s) => (
                 <li key={s}>{s}</li>
               ))}
             </ul>
           </div>
           <div>
             <h2 className="font-head text-xl font-bold">Contact</h2>
-            <a href={`mailto:${EMAIL}`} className="mt-3 block font-semibold break-all text-white underline decoration-signal decoration-2 hover:text-signal">
+            <a href={`tel:${PHONE}`} className="mt-3 block font-head text-2xl font-bold text-white tabular-nums no-underline hover:text-signal">
+              {PHONE_DISPLAY}
+            </a>
+            <a href={`mailto:${EMAIL}`} className="mt-2 block font-semibold break-all text-white underline decoration-signal decoration-2 hover:text-signal">
               {EMAIL}
             </a>
-            <p className="mt-3 text-white/75">Serving Karachi Port, Port Qasim and Jinnah International Airport.</p>
+            <a href={MAPS_URL} target="_blank" rel="noreferrer" className="mt-3 block text-white/75 no-underline hover:text-white">
+              {ADDRESS_LINES.map((l) => (
+                <span key={l} className="block">
+                  {l}
+                </span>
+              ))}
+            </a>
             <a href="#quotation" className="mt-6 inline-flex h-11 items-center rounded-[3px] bg-signal px-5 font-head text-lg font-bold text-ink no-underline hover:bg-signal-hi">
               Request a quotation
             </a>

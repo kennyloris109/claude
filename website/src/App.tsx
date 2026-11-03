@@ -2,7 +2,9 @@ import { Toaster } from "@/components/ui/sonner"
 import { Footer } from "@/components/site/footer"
 import { Header } from "@/components/site/header"
 import { Hero } from "@/components/site/hero"
+import { Contact } from "@/components/site/contact"
 import { PortCall } from "@/components/site/port-call"
+import { PortServices } from "@/components/site/port-services"
 import { Quotation } from "@/components/site/quotation"
 import { Coverage, Services } from "@/components/site/services"
 import { Airline, Commitment, Stores, WhyUs } from "@/components/site/stores"
@@ -21,10 +23,12 @@ export default function App() {
         <Services />
         <PortCall />
         <Stores />
+        <PortServices />
         <Airline />
         <WhyUs />
         <Commitment />
         <Quotation />
+        <Contact />
       </main>
       <Footer />
       <Toaster position="bottom-center" richColors={false} />

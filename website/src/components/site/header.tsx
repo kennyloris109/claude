@@ -2,14 +2,15 @@ import { useEffect, useState } from "react"
 import { Menu } from "lucide-react"
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
-import { EMAIL } from "@/content"
+import { EMAIL, PHONE, PHONE_DISPLAY } from "@/content"
 import { FlagMark } from "./flags"
 
 const links = [
-  { href: "#services", label: "Services" },
-  { href: "#port-call", label: "How supply works" },
-  { href: "#stores", label: "Supply categories" },
-  { href: "#airline", label: "Airline supply" },
+  { href: "#services", label: "Ship chandling" },
+  { href: "#bunker", label: "Bunker support" },
+  { href: "#fresh-water", label: "Fresh water" },
+  { href: "#airline", label: "Airline" },
+  { href: "#contact", label: "Contact" },
 ]
 
 export function Header() {
@@ -42,7 +43,7 @@ export function Header() {
           <span className="font-head text-lg leading-none font-bold tracking-wide whitespace-nowrap sm:text-xl">Ocean Marine Services</span>
         </a>
 
-        <nav aria-label="Main" className="hidden items-center gap-7 lg:flex">
+        <nav aria-label="Main" className="hidden items-center gap-6 xl:gap-7 lg:flex">
           {links.map((l) => (
             <a
               key={l.href}
@@ -91,7 +92,12 @@ export function Header() {
                   Request a quotation
                 </a>
               </SheetClose>
-              <p className="mt-auto text-sm break-all text-mist">{EMAIL}</p>
+              <div className="mt-auto grid gap-1 text-sm text-mist">
+                <a href={`tel:${PHONE}`} className="font-semibold text-white tabular-nums no-underline">
+                  {PHONE_DISPLAY}
+                </a>
+                <span className="break-all">{EMAIL}</span>
+              </div>
             </div>
           </SheetContent>
         </Sheet>
