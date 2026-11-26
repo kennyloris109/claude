@@ -29,3 +29,9 @@ Static Astro site deployed to Cloudflare Pages. The goal is to rank in Google **
 8. After adding an article: `npm run images && npm run check:content && npm run build`, then commit the markdown and the images.
 
 Use the `new-article` and `refresh-article` skills in `.claude/skills/` for the full workflow.
+
+## Third-party skills
+`.claude/skills/` also contains Vercel's agent-skills (see `.claude/skills/VERCEL-AGENT-SKILLS.md`).
+- Useful here: `web-design-guidelines` (UI and accessibility audit of `src/`) and `writing-guidelines` (prose review of `src/content/articles/`).
+- **This site deploys to Cloudflare Pages, not Vercel.** Only use `deploy-to-vercel`, `vercel-cli-with-tokens` or `vercel-optimize` when the user explicitly asks for Vercel.
+- The React skills don't apply to this codebase (Astro, no React) unless React is added.
