@@ -34,10 +34,14 @@ const boards = await Promise.all(
 ---
 <Base title={SITE.name} description={SITE.description}>
   <section class="hero">
-    <div class="wrap">
-      <h1>Find the right AI tool for the job</h1>
-      <p class="intro">{tools.length} AI tools across {Object.values(counts).filter(Boolean).length} categories, with side-by-side comparisons that name a clear pick for every use case.</p>
-      <ToolFilter counts={counts} />
+    <div class="wrap inner">
+      <h1>Find the best <span>AI tools</span> for every job</h1>
+      <p class="intro">Compare features and pricing of {tools.length} leading AI tools, with side-by-side comparisons that name a clear pick for every use case.</p>
+      <ToolFilter counts={counts} hero />
+      <div class="ctas">
+        <a class="btn btn-primary" href="/tools/">Explore tools</a>
+        <a class="btn btn-ghost" href="/compare/">Compare tools</a>
+      </div>
     </div>
   </section>
 
@@ -100,26 +104,46 @@ const boards = await Promise.all(
 </Base>
 <style>
   .hero {
-    background: var(--paper-raised);
+    background:
+      radial-gradient(60% 70% at 50% 0%, var(--hero-glow), transparent 70%),
+      linear-gradient(var(--paper-raised), var(--paper));
     border-bottom: 1px solid var(--rule);
-    padding-block: clamp(40px, 7vw, 80px) 28px;
-    margin-bottom: 32px;
+    padding-block: clamp(56px, 9vw, 112px) clamp(44px, 6vw, 72px);
+    margin-bottom: 48px;
+  }
+  .inner {
+    display: grid;
+    justify-items: center;
+    text-align: center;
   }
   h1 {
-    font-size: clamp(2.3rem, 5.5vw, 4rem);
+    font-size: clamp(2.5rem, 6.4vw, 4.6rem);
     font-weight: 800;
-    letter-spacing: -0.04em;
-    line-height: 1.02;
-    max-width: 16ch;
+    letter-spacing: -0.045em;
+    line-height: 1.03;
+    max-width: 17ch;
     margin: 0;
   }
+  h1 span {
+    color: var(--cobalt);
+  }
   .intro {
-    font-family: var(--display);
-    font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+    font-size: clamp(1.05rem, 1.5vw, 1.22rem);
     max-width: 56ch;
     color: var(--ink-soft);
-    margin: 18px 0 28px;
-    line-height: 1.5;
+    margin: 22px 0 34px;
+    line-height: 1.6;
+  }
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 8px;
+  }
+  .ctas .btn {
+    padding: 14px 28px;
+    border-radius: 14px;
   }
   .panel {
     background: var(--paper-raised);

@@ -1,19 +1,22 @@
 ---
 // Search box + category chips that filter a ToolGrid on the page. Works without JS (shows all tools).
 import { CATEGORIES } from '../lib/site';
-interface Props { target?: string; counts: Record<string, number>; placeholder?: string }
-const { target = 'tool-grid', counts, placeholder = 'Search tools, e.g. "video" or "Claude"' } = Astro.props;
+interface Props { target?: string; counts: Record<string, number>; placeholder?: string; hero?: boolean }
+const { target = 'tool-grid', counts, placeholder = 'Search for "video" or "Claude"', hero = false } = Astro.props;
 ---
-<div class="filter" data-target={target}>
+<div class:list={['filter', { hero }]} data-target={target}>
+  <div class="row">
   <label class="search">
     <span class="sr">Search AI tools</span>
     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     <input id={`${target}-q`} type="search" placeholder={placeholder} autocomplete="off" />
   </label>
+  {hero && <button type="button" class="btn btn-dark go" data-go>Search tools</button>}
+  </div>
   <div class="chips" role="group" aria-label="Filter by category">
-    <button type="button" data-cat="" aria-pressed="true">All</button>
+    <button type="button" class="chip" data-cat="" aria-pressed="true">All</button>
     {Object.entries(CATEGORIES).filter(([id]) => counts[id]).map(([id, c]) => (
-      <button type="button" data-cat={id} aria-pressed="false">{c.label.replace(/^AI (\w)/, (_, x) => x.toUpperCase())} <span>{counts[id]}</span></button>
+      <button type="button" class="chip" data-cat={id} aria-pressed="false">{c.label.replace(/^AI (\w)/, (_, x) => x.toUpperCase())} <span>{counts[id]}</span></button>
     ))}
   </div>
 </div>
@@ -36,6 +39,10 @@ const { target = 'tool-grid', counts, placeholder = 'Search tools, e.g. "video" 
       if (empty) empty.hidden = shown > 0;
     };
     input.addEventListener('input', apply);
+    // The hero's "Search tools" button and Enter key jump down to the filtered results.
+    const go = () => { apply(); grid.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+    f.querySelector('[data-go]')?.addEventListener('click', go);
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && f.classList.contains('hero')) go(); });
     chips.forEach((c) => c.addEventListener('click', () => {
       cat = c.dataset.cat!;
       chips.forEach((x) => x.setAttribute('aria-pressed', String(x === c)));
@@ -49,7 +56,38 @@ const { target = 'tool-grid', counts, placeholder = 'Search tools, e.g. "video" 
     gap: 14px;
     margin-bottom: 22px;
   }
+  .row {
+    display: flex;
+    gap: 12px;
+    max-width: 640px;
+  }
+  .hero {
+    justify-items: center;
+    text-align: center;
+  }
+  .hero .row {
+    width: 100%;
+    max-width: 760px;
+  }
+  .hero .chips {
+    justify-content: center;
+  }
+  .hero .search {
+    padding: 0 18px;
+    border-radius: 16px;
+    flex: 1;
+  }
+  .hero input {
+    padding: 18px 0;
+    font-size: 1.08rem;
+  }
+  .go {
+    border-radius: 16px;
+    padding-inline: 26px;
+    white-space: nowrap;
+  }
   .search {
+    flex: 1;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -58,7 +96,6 @@ const { target = 'tool-grid', counts, placeholder = 'Search tools, e.g. "video" 
     border-radius: 12px;
     padding: 0 14px;
     box-shadow: var(--shadow);
-    max-width: 640px;
   }
   .search:focus-within {
     border-color: var(--cobalt);
@@ -85,7 +122,7 @@ const { target = 'tool-grid', counts, placeholder = 'Search tools, e.g. "video" 
     flex-wrap: wrap;
     gap: 8px;
   }
-  button {
+  .chip {
     font: 600 0.9rem var(--display);
     border: 1px solid var(--rule);
     background: var(--paper-raised);
@@ -94,18 +131,21 @@ const { target = 'tool-grid', counts, placeholder = 'Search tools, e.g. "video" 
     padding: 6px 13px;
     cursor: pointer;
   }
-  button span {
+  .chip span {
     color: var(--ink-soft);
     font-weight: 500;
   }
-  button[aria-pressed='true'] {
+  .chip[aria-pressed='true'] {
     background: var(--ink);
     border-color: var(--ink);
     color: var(--paper);
   }
-  button[aria-pressed='true'] span {
+  .chip[aria-pressed='true'] span {
     color: inherit;
     opacity: 0.75;
+  }
+  @media (max-width: 560px) {
+    .row { flex-direction: column; }
   }
   .sr {
     position: absolute;

@@ -1,18 +1,29 @@
 ---
+// Tool badge: the tool's own logo on a light tile when we have one (public/logos/<id>.png),
+// otherwise a coloured tile with initials.
+import fs from 'node:fs';
+import path from 'node:path';
+import tools from '../data/tools.json';
 interface Props { name: string; color: string; size?: number }
 const { name, color, size = 56 } = Astro.props;
+const tool = tools.find((t) => t.name === name);
+const logo = tool && fs.existsSync(path.join(process.cwd(), 'public/logos', `${tool.id}.png`)) ? `/logos/${tool.id}.png` : null;
 // Two-word names use initials (GitHub Copilot → GC); one-word names use two letters (Claude → Cl).
 const words = name.replace(/\.[a-z]+$/i, '').replace(/[^A-Za-z ]/g, '').split(' ').filter(Boolean);
 const letters = words.length > 1 ? words.slice(0, 2).map((w) => w[0]).join('') : words[0].slice(0, 2);
 ---
-<span class="mono" style={`--c:${color};--s:${size}px`} aria-hidden="true">{letters}</span>
+{logo ? (
+  <span class="mono logo" style={`--s:${size}px`} aria-hidden="true"><img src={logo} alt="" width={size} height={size} loading="lazy" decoding="async" /></span>
+) : (
+  <span class="mono" style={`--c:${color};--s:${size}px`} aria-hidden="true">{letters}</span>
+)}
 <style>
   .mono {
     display: inline-grid;
     place-items: center;
     width: var(--s);
     height: var(--s);
-    border-radius: 30%;
+    border-radius: 28%;
     background: var(--c);
     color: #fff;
     font-family: var(--display);
@@ -20,5 +31,16 @@ const letters = words.length > 1 ? words.slice(0, 2).map((w) => w[0]).join('') :
     font-size: calc(var(--s) * 0.4);
     letter-spacing: -0.04em;
     flex: none;
+  }
+  .logo {
+    background: var(--logo-tile);
+    border: 1px solid var(--rule);
+    overflow: hidden;
+  }
+  .logo img {
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
+    border-radius: 18%;
   }
 </style>

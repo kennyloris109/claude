@@ -39,39 +39,48 @@ Object.values(out).forEach((d) => fs.mkdirSync(d, { recursive: true }));
 const fontFile = (pkg, file) =>
   'data:font/woff2;base64,' + fs.readFileSync(path.join(root, 'node_modules/@fontsource-variable', pkg, 'files', file)).toString('base64');
 const fonts = `
-@font-face{font-family:B;src:url(${fontFile('bricolage-grotesque', 'bricolage-grotesque-latin-wght-normal.woff2')}) format('woff2');font-weight:200 800}
-@font-face{font-family:L;src:url(${fontFile('literata', 'literata-latin-wght-normal.woff2')}) format('woff2');font-weight:200 900}`;
+@font-face{font-family:B;src:url(${fontFile('plus-jakarta-sans', 'plus-jakarta-sans-latin-wght-normal.woff2')}) format('woff2');font-weight:200 800}
+@font-face{font-family:L;src:url(${fontFile('inter', 'inter-latin-wght-normal.woff2')}) format('woff2');font-weight:200 900}`;
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 const initials = (n) => {
   const w = n.replace(/\.[a-z]+$/i, '').replace(/[^A-Za-z ]/g, '').split(' ').filter(Boolean);
   return w.length > 1 ? w.slice(0, 2).map((x) => x[0]).join('') : w[0].slice(0, 2);
 };
-const mono = (t, s) =>
-  `<span class="m" style="background:${t.color};width:${s}px;height:${s}px;font-size:${s * 0.4}px">${initials(t.name)}</span>`;
+// Tool logo on a light tile if public/logos/<id>.png exists, else coloured initials.
+const logoUri = (t) => {
+  const f = path.join(root, 'public/logos', `${t.id}.png`);
+  return fs.existsSync(f) ? 'data:image/png;base64,' + fs.readFileSync(f).toString('base64') : null;
+};
+const mono = (t, s) => {
+  const uri = logoUri(t);
+  return uri
+    ? `<span class="m" style="background:#fff;border:2px solid #e6e9f0;width:${s}px;height:${s}px"><img src="${uri}" style="width:70%;height:70%;object-fit:contain;border-radius:18%"></span>`
+    : `<span class="m" style="background:${t.color};width:${s}px;height:${s}px;font-size:${s * 0.4}px">${initials(t.name)}</span>`;
+};
 
 function template({ title, toolList, picks, w, h, pin, verdict = '' }) {
   const rows = picks.slice(0, pin ? 5 : 3);
   return `<!doctype html><html><head><meta charset="utf-8"><style>${fonts}
   *{box-sizing:border-box;margin:0}
-  body{width:${w}px;height:${h}px;background:#f1f4f1;color:#18212c;font-family:B;padding:${pin ? 80 : 64}px;display:flex;flex-direction:column;overflow:hidden}
-  .m{display:inline-grid;place-items:center;border-radius:30%;color:#fff;font-weight:800;letter-spacing:-.04em;box-shadow:0 0 0 5px #f1f4f1}
+  body{width:${w}px;height:${h}px;background:#f7f8fb;color:#0f172a;font-family:B;padding:${pin ? 80 : 64}px;display:flex;flex-direction:column;overflow:hidden}
+  .m{display:inline-grid;place-items:center;border-radius:30%;color:#fff;font-weight:800;letter-spacing:-.04em;box-shadow:0 0 0 5px #f7f8fb}
   .tools{display:flex;align-items:center;gap:18px;font-weight:700;font-size:${pin ? 34 : 28}px}
-  .vs{color:#4a5562;font-style:italic;font-weight:500;font-size:.8em}
+  .vs{color:#526075;font-style:italic;font-weight:500;font-size:.8em}
   h1{font-weight:800;letter-spacing:-.04em;line-height:1;font-size:${pin ? 96 : title.length > 48 ? 58 : 70}px;margin-top:${pin ? 56 : 36}px;max-width:${pin ? 840 : 1000}px}
-  .vd{font-family:L;font-size:36px;line-height:1.45;color:#4a5562;margin-top:44px;max-width:820px}
+  .vd{font-family:L;font-size:36px;line-height:1.45;color:#526075;margin-top:44px;max-width:820px}
   .picks{margin-top:auto;border-top:4px solid #18212c}
-  .row{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:${pin ? 22 : 14}px 0;border-bottom:2px solid #cfd6d1;font-size:${pin ? 34 : 26}px}
-  .row span:first-child{color:#4a5562}
+  .row{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:${pin ? 22 : 14}px 0;border-bottom:2px solid #e6e9f0;font-size:${pin ? 34 : 26}px}
+  .row span:first-child{color:#526075}
   .row b{font-weight:800;background:linear-gradient(100deg,transparent 4px,#f6d33c 6px,#f6d33c calc(100% - 6px),transparent calc(100% - 4px));padding:2px 10px}
   .brand{display:flex;align-items:center;gap:12px;font-weight:800;font-size:${pin ? 34 : 26}px;margin-top:${pin ? 40 : 22}px;letter-spacing:-.03em}
-  .ck{width:${pin ? 40 : 32}px;height:${pin ? 40 : 32}px;border-radius:50%;background:#f6d33c;display:grid;place-items:center;font-size:.7em}
+  .ck{width:${pin ? 40 : 32}px;height:${pin ? 40 : 32}px;border-radius:28%;background:#2457e6;color:#fff;display:grid;place-items:center;font-size:.7em}
   </style></head><body>
   <div class="tools">${toolList.map((t, i) => (i ? '<span class="vs">vs</span>' : '') + mono(t, pin ? 96 : 72)).join('')}</div>
   <h1>${esc(title)}</h1>
   ${pin && verdict ? `<p class="vd">${esc(verdict.split(/(?<=\.)\s/)[0])}</p>` : ''}
   ${rows.length ? `<div class="picks">${rows.map((p) => `<div class="row"><span>${esc(p.useCase)}</span><b>${esc(tools[p.tool]?.name ?? p.tool)}</b></div>`).join('')}</div>` : '<div style="margin-top:auto"></div>'}
-  <div class="brand"><span class="ck">✓</span>${esc(SITE.name)}<span style="font-weight:400;color:#4a5562;margin-left:auto;font-size:.8em">${esc(new URL(SITE.url).hostname)}</span></div>
+  <div class="brand"><span class="ck">✓</span>${esc(SITE.name)}<span style="font-weight:400;color:#526075;margin-left:auto;font-size:.8em">${esc(new URL(SITE.url).hostname)}</span></div>
   </body></html>`;
 }
 

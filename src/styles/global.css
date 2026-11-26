@@ -1,19 +1,22 @@
-@import '@fontsource-variable/bricolage-grotesque';
-@import '@fontsource-variable/literata';
+@import '@fontsource-variable/plus-jakarta-sans';
+@import '@fontsource-variable/inter';
 
 :root {
-  --paper: #f6f7f9;
+  --paper: #f7f8fb;
   --paper-raised: #ffffff;
-  --ink: #18212c;
-  --ink-soft: #566170;
-  --rule: #e2e5ea;
-  --cobalt: #2747c9;
-  --tint: #eef1fb;
+  --ink: #0f172a;
+  --ink-soft: #526075;
+  --rule: #e6e9f0;
+  --cobalt: #2457e6;
+  --cobalt-ink: #ffffff;
+  --tint: #edf2fe;
+  --logo-tile: #f2f5fb;
+  --hero-glow: #e6edfd;
   --shadow: 0 1px 2px rgba(24, 33, 44, 0.05), 0 4px 16px rgba(24, 33, 44, 0.05);
   --highlight: #f6d33c;
   --highlight-ink: #18212c;
-  --display: 'Bricolage Grotesque Variable', 'Segoe UI', system-ui, sans-serif;
-  --text: 'Literata Variable', Georgia, 'Times New Roman', serif;
+  --display: 'Plus Jakarta Sans Variable', 'Segoe UI', system-ui, sans-serif;
+  --text: 'Inter Variable', 'Segoe UI', system-ui, sans-serif;
   --measure: 68ch;
   --gutter: clamp(16px, 4vw, 40px);
   --radius-s: 6px;
@@ -28,8 +31,11 @@
     --ink: #e8ece9;
     --ink-soft: #a6b0ba;
     --rule: #2d3844;
-    --cobalt: #8ea4ff;
+    --cobalt: #7fa0ff;
     --tint: #1e2840;
+    --cobalt-ink: #0d1424;
+    --logo-tile: #222c38;
+    --hero-glow: #1a2540;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     --highlight: #e2bf2a;
     --highlight-ink: #121820;
@@ -42,8 +48,11 @@
   --ink: #e8ece9;
   --ink-soft: #a6b0ba;
   --rule: #2d3844;
-  --cobalt: #8ea4ff;
+  --cobalt: #7fa0ff;
   --tint: #1e2840;
+  --cobalt-ink: #0d1424;
+  --logo-tile: #222c38;
+  --hero-glow: #1a2540;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   --highlight: #e2bf2a;
   --highlight-ink: #121820;
@@ -67,6 +76,7 @@ body {
   font-family: var(--text);
   font-size: 1.0625rem;
   line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
   font-optical-sizing: auto;
   overflow-x: hidden;
 }
@@ -76,9 +86,9 @@ h2,
 h3,
 h4 {
   font-family: var(--display);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  font-weight: 800;
   text-wrap: balance;
 }
 
@@ -105,7 +115,7 @@ img {
 
 .wrap {
   width: 100%;
-  max-width: 1180px;
+  max-width: 1240px;
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
@@ -144,7 +154,7 @@ img {
 .prose h2 {
   font-size: clamp(1.6rem, 2.4vw, 2rem);
   margin: 2.4em 0 0.6em;
-  scroll-margin-top: 24px;
+  scroll-margin-top: 96px;
 }
 .prose h3 {
   font-size: 1.3rem;
@@ -229,3 +239,23 @@ img {
   font-weight: 600;
   font-size: 0.98rem;
 }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font: 700 1rem var(--display);
+  padding: 12px 22px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.btn:hover { text-decoration: none; transform: translateY(-1px); }
+.btn-primary { background: var(--cobalt); color: var(--cobalt-ink); box-shadow: 0 6px 18px -6px color-mix(in srgb, var(--cobalt) 60%, transparent); }
+.btn-dark { background: var(--ink); color: var(--paper); }
+.btn-ghost { background: var(--paper-raised); color: var(--ink); border-color: var(--rule); }
+.btn-ghost:hover { border-color: var(--ink-soft); }
