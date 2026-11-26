@@ -2,12 +2,14 @@
 @import '@fontsource-variable/literata';
 
 :root {
-  --paper: #f1f4f1;
+  --paper: #f6f7f9;
   --paper-raised: #ffffff;
   --ink: #18212c;
-  --ink-soft: #4a5562;
-  --rule: #cfd6d1;
+  --ink-soft: #566170;
+  --rule: #e2e5ea;
   --cobalt: #2747c9;
+  --tint: #eef1fb;
+  --shadow: 0 1px 2px rgba(24, 33, 44, 0.05), 0 4px 16px rgba(24, 33, 44, 0.05);
   --highlight: #f6d33c;
   --highlight-ink: #18212c;
   --display: 'Bricolage Grotesque Variable', 'Segoe UI', system-ui, sans-serif;
@@ -27,6 +29,8 @@
     --ink-soft: #a6b0ba;
     --rule: #2d3844;
     --cobalt: #8ea4ff;
+    --tint: #1e2840;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     --highlight: #e2bf2a;
     --highlight-ink: #121820;
     color-scheme: dark;
@@ -39,6 +43,8 @@
   --ink-soft: #a6b0ba;
   --rule: #2d3844;
   --cobalt: #8ea4ff;
+  --tint: #1e2840;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   --highlight: #e2bf2a;
   --highlight-ink: #121820;
   color-scheme: dark;
@@ -185,4 +191,41 @@ img {
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* Shared UI: tags and cards */
+.tag {
+  display: inline-block;
+  font-family: var(--display);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--tint);
+  color: var(--cobalt);
+  white-space: nowrap;
+}
+.tag.free { background: #e3f4ea; color: #17663b; }
+.tag.paid { background: #f6ebe3; color: #8a4316; }
+:root[data-theme='dark'] .tag.free { background: #173326; color: #8fdcae; }
+:root[data-theme='dark'] .tag.paid { background: #3a2617; color: #f0b88a; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .tag.free { background: #173326; color: #8fdcae; }
+  :root:not([data-theme='light']) .tag.paid { background: #3a2617; color: #f0b88a; }
+}
+.section-h {
+  font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+  margin: 64px 0 18px;
+}
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.section-head a {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 0.98rem;
 }

@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro';
+import CompareCards from '../../components/CompareCards.astro';
+import { getArticles } from '../../lib/site';
+const articles = await getArticles();
+---
+<Base title="AI tool comparisons" description="Head-to-head comparisons of AI tools. Each one opens with a short answer and names a pick for every use case, with current pricing.">
+  <div class="wrap">
+    <h1>Comparisons</h1>
+    <p class="lede">Each comparison opens with a short answer, then shows the trade-offs, current prices and a pick for every use case.</p>
+    <CompareCards articles={articles} />
+  </div>
+</Base>
+<style>
+  h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 800; letter-spacing: -0.04em; margin: 48px 0 10px; }
+  .lede { font-family: var(--display); color: var(--ink-soft); max-width: 60ch; margin: 0 0 28px; font-size: 1.08rem; line-height: 1.5; }
+</style>

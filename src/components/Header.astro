@@ -1,11 +1,10 @@
 ---
 import { SITE } from '../site.config.mjs';
 const nav = [
-  { href: '/category/assistants/', label: 'Chatbots' },
-  { href: '/category/coding/', label: 'Coding' },
-  { href: '/category/image/', label: 'Images' },
-  { href: '/category/search/', label: 'AI search' },
-  { href: '/category/meetings/', label: 'Meetings' },
+  { href: '/tools/', label: 'All tools' },
+  { href: '/categories/', label: 'Categories' },
+  { href: '/compare/', label: 'Comparisons' },
+  { href: '/about/', label: 'About' },
 ];
 const path = Astro.url.pathname;
 ---
@@ -26,6 +25,7 @@ const path = Astro.url.pathname;
 <style>
   .site-header {
     border-bottom: 1px solid var(--rule);
+    background: var(--paper-raised);
   }
   .bar {
     display: flex;

@@ -1,0 +1,117 @@
+---
+// Search box + category chips that filter a ToolGrid on the page. Works without JS (shows all tools).
+import { CATEGORIES } from '../lib/site';
+interface Props { target?: string; counts: Record<string, number>; placeholder?: string }
+const { target = 'tool-grid', counts, placeholder = 'Search tools, e.g. "video" or "Claude"' } = Astro.props;
+---
+<div class="filter" data-target={target}>
+  <label class="search">
+    <span class="sr">Search AI tools</span>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <input id={`${target}-q`} type="search" placeholder={placeholder} autocomplete="off" />
+  </label>
+  <div class="chips" role="group" aria-label="Filter by category">
+    <button type="button" data-cat="" aria-pressed="true">All</button>
+    {Object.entries(CATEGORIES).filter(([id]) => counts[id]).map(([id, c]) => (
+      <button type="button" data-cat={id} aria-pressed="false">{c.label.replace(/^AI (\w)/, (_, x) => x.toUpperCase())} <span>{counts[id]}</span></button>
+    ))}
+  </div>
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('.filter').forEach((f) => {
+    const target = f.dataset.target!;
+    const grid = document.getElementById(target)!;
+    const empty = document.getElementById(`${target}-empty`);
+    const input = f.querySelector('input')!;
+    const chips = [...f.querySelectorAll<HTMLButtonElement>('button[data-cat]')];
+    let cat = '';
+    const apply = () => {
+      const q = input.value.trim().toLowerCase();
+      let shown = 0;
+      grid.querySelectorAll<HTMLElement>('[data-name]').forEach((card) => {
+        const ok = (!cat || card.dataset.category === cat) && (!q || card.dataset.name!.includes(q) || card.dataset.category!.includes(q));
+        card.hidden = !ok;
+        if (ok) shown++;
+      });
+      if (empty) empty.hidden = shown > 0;
+    };
+    input.addEventListener('input', apply);
+    chips.forEach((c) => c.addEventListener('click', () => {
+      cat = c.dataset.cat!;
+      chips.forEach((x) => x.setAttribute('aria-pressed', String(x === c)));
+      apply();
+    }));
+  });
+</script>
+<style>
+  .filter {
+    display: grid;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 0 14px;
+    box-shadow: var(--shadow);
+    max-width: 640px;
+  }
+  .search:focus-within {
+    border-color: var(--cobalt);
+    outline: 3px solid var(--tint);
+  }
+  .search svg {
+    width: 20px;
+    height: 20px;
+    color: var(--ink-soft);
+    flex: none;
+  }
+  input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font: 500 1.02rem var(--display);
+    padding: 14px 0;
+    outline: none;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  button {
+    font: 600 0.9rem var(--display);
+    border: 1px solid var(--rule);
+    background: var(--paper-raised);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 6px 13px;
+    cursor: pointer;
+  }
+  button span {
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+  button[aria-pressed='true'] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+  button[aria-pressed='true'] span {
+    color: inherit;
+    opacity: 0.75;
+  }
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+</style>

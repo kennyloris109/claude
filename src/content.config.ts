@@ -7,11 +7,12 @@ const tools = defineCollection({
   schema: z.object({
     name: z.string(),
     vendor: z.string(),
-    category: z.enum(['assistants', 'coding', 'image', 'search', 'meetings']),
+    category: z.enum(['assistants', 'coding', 'image', 'video', 'voice', 'search', 'meetings', 'productivity']),
     url: z.string().url(),
     pricingUrl: z.string().url(),
     startingPrice: z.string(), // human readable, e.g. "Free · paid from $20/mo"
     freeTier: z.boolean(),
+    pricing: z.enum(['Free', 'Freemium', 'Paid']),
     bestFor: z.string(),
     summary: z.string(),
     color: z.string(), // brand-neutral accent used for the monogram badge
@@ -26,7 +27,7 @@ const articles = defineCollection({
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date(),
     lastVerified: z.coerce.date(), // date prices/features were last checked against vendor pages
-    category: z.enum(['assistants', 'coding', 'image', 'search', 'meetings']),
+    category: z.enum(['assistants', 'coding', 'image', 'video', 'voice', 'search', 'meetings', 'productivity']),
     type: z.enum(['versus', 'best', 'guide']),
     tools: z.array(reference('tools')).min(1),
     verdict: z.string().min(80).max(400), // the 2–3 sentence "short answer" AI engines quote

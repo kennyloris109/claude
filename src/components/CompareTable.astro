@@ -3,8 +3,10 @@ import type { CollectionEntry } from 'astro:content';
 interface Props {
   tools: CollectionEntry<'tools'>[];
   comparison?: CollectionEntry<'articles'>['data']['comparison'];
+  heading?: boolean;
 }
-const { tools, comparison } = Astro.props;
+const { tools, comparison, heading = true } = Astro.props;
+const hid = heading ? 'compare-h' : `compare-${tools.map((t) => t.id).join('-')}`;
 const rows = [
   { label: 'Made by', values: tools.map((t) => t.data.vendor) },
   { label: 'Price', values: tools.map((t) => t.data.startingPrice) },
@@ -13,9 +15,9 @@ const rows = [
   { label: 'Best for', values: tools.map((t) => t.data.bestFor) },
 ];
 ---
-<section class="compare" aria-labelledby="compare-h">
-  <h2 id="compare-h">Side by side</h2>
-  <div class="scroll" tabindex="0" role="region" aria-labelledby="compare-h">
+<section class="compare" aria-labelledby={hid} data-heading={heading ? undefined : 'none'}>
+  {heading ? <h2 id={hid}>Side by side</h2> : <h2 id={hid} class="sr">{tools.map((t) => t.data.name).join(' vs ')}</h2>}
+  <div class="scroll" tabindex="0" role="region" aria-labelledby={hid}>
     <table>
       <thead>
         <tr>
@@ -37,6 +39,9 @@ const rows = [
 <style>
   .compare {
     margin: 48px 0;
+  }
+  .compare[data-heading='none'] {
+    margin: 0;
   }
   h2 {
     font-size: clamp(1.5rem, 2.4vw, 1.9rem);

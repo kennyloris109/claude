@@ -1,0 +1,24 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ToolCard from './ToolCard.astro';
+interface Props { tools: CollectionEntry<'tools'>[]; picks: Set<string>; id?: string }
+const { tools, picks, id = 'tool-grid' } = Astro.props;
+---
+<ul class="grid" id={id} role="list">
+  {tools.map((t) => <ToolCard tool={t} pick={picks.has(t.id)} />)}
+</ul>
+<p class="empty" id={`${id}-empty`} hidden>No tools match that search. Try a tool name or a job, such as "video" or "notes".</p>
+<style>
+  .grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+    gap: 16px;
+  }
+  .empty {
+    font-family: var(--display);
+    color: var(--ink-soft);
+  }
+</style>

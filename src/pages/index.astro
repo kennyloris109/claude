@@ -1,132 +1,234 @@
 ---
-import { getEntries } from 'astro:content';
+import { getCollection, getEntries, getEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import ArticleList from '../components/ArticleList.astro';
+import ToolGrid from '../components/ToolGrid.astro';
+import ToolFilter from '../components/ToolFilter.astro';
+import CompareCards from '../components/CompareCards.astro';
+import CompareTable from '../components/CompareTable.astro';
 import Monogram from '../components/Monogram.astro';
-import { getArticles, CATEGORIES, articleUrl } from '../lib/site';
+import { getArticles, getPickedToolIds, CATEGORIES, articleUrl, type Category } from '../lib/site';
 import { SITE } from '../site.config.mjs';
 
+const tools = await getCollection('tools');
 const articles = await getArticles();
-const [lead, ...rest] = articles;
-const leadTools = lead ? await getEntries(lead.data.tools) : [];
+const picked = await getPickedToolIds();
+const counts = Object.fromEntries(Object.keys(CATEGORIES).map((c) => [c, tools.filter((t) => t.data.category === c).length]));
+
+// Show editor's picks first, then the rest, so the grid opens with the strongest tools.
+const ordered = [...tools].sort((a, b) => Number(picked.has(b.id)) - Number(picked.has(a.id)));
+
+const flagship = articles.find((a) => a.id === 'chatgpt-vs-claude-vs-gemini');
+const flagshipTools = flagship ? await getEntries(flagship.data.tools) : [];
+
+// "Top picks" boards: the use-case picks from the newest comparison in each category.
+const boards = await Promise.all(
+  (Object.keys(CATEGORIES) as Category[]).map(async (c) => {
+    const a = articles.find((x) => x.data.category === c);
+    if (!a) return null;
+    const seen = new Set<string>();
+    const unique = a.data.picks.filter((p) => !seen.has(p.tool.id) && seen.add(p.tool.id));
+    const rows = await Promise.all(unique.map(async (p) => ({ useCase: p.useCase, tool: (await getEntry(p.tool))! })));
+    return { c, a, rows };
+  })
+);
 ---
 <Base title={SITE.name} description={SITE.description}>
-  <section class="wrap hero">
-    <h1>Which AI tool should you use? We compare them and pick one.</h1>
-    <p class="intro">Every comparison opens with a one-line answer, then shows the reasoning: the jobs that matter, current prices and the real trade-offs.</p>
+  <section class="hero">
+    <div class="wrap">
+      <h1>Find the right AI tool for the job</h1>
+      <p class="intro">{tools.length} AI tools across {Object.values(counts).filter(Boolean).length} categories, with side-by-side comparisons that name a clear pick for every use case.</p>
+      <ToolFilter counts={counts} />
+    </div>
   </section>
 
-  {lead && (
-    <section class="wrap lead" aria-labelledby="lead-h">
-      <div class="lead-tools" aria-hidden="true">
-        {leadTools.map((t) => <Monogram name={t.data.name} color={t.data.color} size={72} />)}
-      </div>
-      <div>
-        <h2 id="lead-h"><a href={articleUrl(lead)}>{lead.data.title}</a></h2>
-        <p class="lead-verdict"><span class="marker">{lead.data.verdict}</span></p>
-        <a class="read" href={articleUrl(lead)}>Read the full comparison</a>
+  <div class="wrap">
+    <ToolGrid tools={ordered} picks={picked} />
+
+    {flagship && (
+      <section aria-labelledby="h2h">
+        <div class="section-head">
+          <h2 id="h2h" class="section-h">ChatGPT vs Claude vs Gemini at a glance</h2>
+          <a href={articleUrl(flagship)}>Read the full comparison</a>
+        </div>
+        <div class="panel">
+          <CompareTable tools={flagshipTools} comparison={flagship.data.comparison} heading={false} />
+        </div>
+      </section>
+    )}
+
+    <section aria-labelledby="picks-h">
+      <h2 id="picks-h" class="section-h">Top picks by category</h2>
+      <div class="boards">
+        {boards.filter(Boolean).map((b) => (
+          <article class="board">
+            <h3><a href={`/category/${b!.c}/`}>{CATEGORIES[b!.c].label}</a></h3>
+            <ol>
+              {b!.rows.map((r) => (
+                <li>
+                  <Monogram name={r.tool.data.name} color={r.tool.data.color} size={28} />
+                  <a href={`/tools/${r.tool.id}/`}>{r.tool.data.name}</a>
+                  <span>{r.useCase}</span>
+                </li>
+              ))}
+            </ol>
+            <a class="more" href={articleUrl(b!.a)}>See why</a>
+          </article>
+        ))}
       </div>
     </section>
-  )}
 
-  <section class="wrap" aria-labelledby="latest-h">
-    <h2 id="latest-h" class="section-h">Latest verdicts</h2>
-    <ArticleList articles={rest} headingLevel="h3" />
-  </section>
+    <section aria-labelledby="latest-h">
+      <div class="section-head">
+        <h2 id="latest-h" class="section-h">Latest comparisons</h2>
+        <a href="/compare/">All comparisons</a>
+      </div>
+      <CompareCards articles={articles.slice(0, 6)} />
+    </section>
 
-  <section class="wrap" aria-labelledby="cats-h">
-    <h2 id="cats-h" class="section-h">Browse by job</h2>
-    <ul class="cats" role="list">
-      {Object.entries(CATEGORIES).map(([id, c]) => (
-        <li><a href={`/category/${id}/`}>{c.label}</a><span>{c.blurb}</span></li>
-      ))}
-    </ul>
-  </section>
+    <section aria-labelledby="cats-h">
+      <div class="section-head">
+        <h2 id="cats-h" class="section-h">Browse by category</h2>
+        <a href="/categories/">All categories</a>
+      </div>
+      <ul class="cats" role="list">
+        {Object.entries(CATEGORIES).map(([id, c]) => (
+          <li><a href={`/category/${id}/`}>{c.label}</a><span>{counts[id]} tools</span></li>
+        ))}
+      </ul>
+    </section>
+  </div>
 </Base>
 <style>
   .hero {
-    padding-block: clamp(48px, 9vw, 110px) 28px;
+    background: var(--paper-raised);
+    border-bottom: 1px solid var(--rule);
+    padding-block: clamp(40px, 7vw, 80px) 28px;
+    margin-bottom: 32px;
   }
   h1 {
-    font-size: clamp(2.6rem, 7vw, 5.6rem);
+    font-size: clamp(2.3rem, 5.5vw, 4rem);
     font-weight: 800;
-    letter-spacing: -0.045em;
-    line-height: 0.98;
-    max-width: 15ch;
+    letter-spacing: -0.04em;
+    line-height: 1.02;
+    max-width: 16ch;
     margin: 0;
   }
   .intro {
-    font-size: clamp(1.1rem, 1.6vw, 1.3rem);
-    max-width: 52ch;
+    font-family: var(--display);
+    font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+    max-width: 56ch;
     color: var(--ink-soft);
-    margin: 28px 0 0;
+    margin: 18px 0 28px;
+    line-height: 1.5;
   }
-  .lead {
+  .panel {
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 4px 8px;
+    box-shadow: var(--shadow);
+  }
+  .boards {
     display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 36px;
-    padding-block: 40px 64px;
-    align-items: start;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 16px;
   }
-  .lead-tools {
+  .board {
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+  }
+  .board h3 {
+    margin: 0 0 12px;
+    font-size: 1.1rem;
+  }
+  .board h3 a {
+    color: var(--ink);
+  }
+  .board ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: rank;
     display: grid;
     gap: 10px;
+    flex: 1;
   }
-  .lead h2 {
-    font-size: clamp(1.6rem, 3vw, 2.4rem);
-    margin: 0 0 18px;
+  .board li {
+    display: grid;
+    grid-template-columns: 22px 28px 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 10px;
+    align-items: center;
+    font-family: var(--display);
+    counter-increment: rank;
   }
-  .lead h2 a {
+  .board li::before {
+    content: counter(rank);
+    grid-row: span 2;
+    font-weight: 700;
+    color: var(--ink-soft);
+  }
+  .board li :global(.mono) {
+    grid-row: span 2;
+  }
+  .board li a {
+    font-weight: 700;
     color: var(--ink);
     text-decoration: none;
   }
-  .lead-verdict {
+  .board li a:hover {
+    text-decoration: underline;
+  }
+  .board li span {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    grid-column: 3;
+  }
+  .more {
+    margin-top: 14px;
     font-family: var(--display);
     font-weight: 600;
-    font-size: clamp(1.2rem, 2vw, 1.5rem);
-    line-height: 1.45;
-    max-width: 52ch;
-    margin: 0 0 18px;
-  }
-  .read {
-    font-family: var(--display);
-    font-weight: 600;
-  }
-  .section-h {
-    font-size: clamp(1.5rem, 2.6vw, 2rem);
-    margin: 56px 0 16px;
+    font-size: 0.95rem;
   }
   .cats {
     list-style: none;
     padding: 0;
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 28px 36px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+    gap: 12px;
   }
   .cats li {
+    position: relative;
     display: grid;
-    gap: 4px;
-    border-top: 2px solid var(--ink);
-    padding-top: 12px;
+    gap: 2px;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .cats li:hover {
+    border-color: var(--cobalt);
   }
   .cats a {
     font-family: var(--display);
     font-weight: 700;
-    font-size: 1.2rem;
     color: var(--ink);
+    text-decoration: none;
+  }
+  .cats a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
   }
   .cats span {
+    font-family: var(--display);
+    font-size: 0.88rem;
     color: var(--ink-soft);
-    font-size: 0.97rem;
-  }
-  @media (max-width: 640px) {
-    .lead {
-      grid-template-columns: 1fr;
-      gap: 18px;
-    }
-    .lead-tools {
-      display: flex;
-    }
   }
 </style>

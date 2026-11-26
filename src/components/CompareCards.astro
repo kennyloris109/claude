@@ -1,0 +1,78 @@
+---
+import { getEntries, type CollectionEntry } from 'astro:content';
+import Monogram from './Monogram.astro';
+import { articleUrl, CATEGORIES } from '../lib/site';
+interface Props { articles: CollectionEntry<'articles'>[] }
+const items = await Promise.all(Astro.props.articles.map(async (a) => ({ a, tools: await getEntries(a.data.tools) })));
+---
+<ul class="cards" role="list">
+  {items.map(({ a, tools }) => (
+    <li>
+      <div class="badges" aria-hidden="true">
+        {tools.map((t, i) => (<>{i > 0 && <span class="vs">vs</span>}<Monogram name={t.data.name} color={t.data.color} size={36} /></>))}
+      </div>
+      <h3><a href={articleUrl(a)}>{a.data.title}</a></h3>
+      <p>{a.data.verdict.split(/(?<=\.)\s/)[0]}</p>
+      <span class="tag">{CATEGORIES[a.data.category].label}</span>
+    </li>
+  ))}
+</ul>
+<style>
+  .cards {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr));
+    gap: 16px;
+  }
+  li {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+  li:hover,
+  li:focus-within {
+    border-color: var(--cobalt);
+  }
+  .badges {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--display);
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+  .vs {
+    font-style: italic;
+  }
+  h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  h3 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+  }
+  p {
+    margin: 0;
+    font-family: var(--display);
+    font-size: 0.97rem;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    flex: 1;
+  }
+</style>

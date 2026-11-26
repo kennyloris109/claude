@@ -1,9 +1,9 @@
 ---
-import Base from '../../layouts/Base.astro';
-import ArticleList from '../../components/ArticleList.astro';
 import { getCollection } from 'astro:content';
-import Monogram from '../../components/Monogram.astro';
-import { getArticles, CATEGORIES, type Category } from '../../lib/site';
+import Base from '../../layouts/Base.astro';
+import ToolGrid from '../../components/ToolGrid.astro';
+import CompareCards from '../../components/CompareCards.astro';
+import { getArticles, getPickedToolIds, CATEGORIES, type Category } from '../../lib/site';
 import { SITE } from '../../site.config.mjs';
 
 export function getStaticPaths() {
@@ -13,29 +13,33 @@ const category = Astro.params.category as Category;
 const c = CATEGORIES[category];
 const articles = (await getArticles()).filter((a) => a.data.category === category);
 const tools = (await getCollection('tools')).filter((t) => t.data.category === category);
+const picked = await getPickedToolIds();
 const jsonLd = [{
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
   name: `${c.label} compared`,
   description: c.blurb,
   url: `${SITE.url}/category/${category}/`,
+  mainEntity: { '@type': 'ItemList', itemListElement: tools.map((t, i) => ({ '@type': 'ListItem', position: i + 1, name: t.data.name, url: `${SITE.url}/tools/${t.id}/` })) },
 }];
 ---
-<Base title={`${c.label} compared`} description={`${c.blurb} Head-to-head comparisons with a clear pick for every use case, updated with current pricing.`} jsonLd={jsonLd}>
+<Base title={`Best ${c.label.replace(/^AI /, 'AI ')} compared`} description={`${c.blurb} Compare ${tools.map((t) => t.data.name).join(', ')} with pricing and a clear pick for every use case.`.slice(0, 160)} jsonLd={jsonLd}>
   <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/categories/">Categories</a></nav>
     <h1>{c.label}</h1>
-    <p class="blurb">{c.blurb}</p>
-    {tools.length > 0 && (
-      <ul class="tools" role="list">
-        {tools.map((t) => <li><a href={`/tools/${t.id}/`}><Monogram name={t.data.name} color={t.data.color} size={36} />{t.data.name}</a></li>)}
-      </ul>
+    <p class="lede">{c.blurb}</p>
+    <ToolGrid tools={tools} picks={picked} />
+    {articles.length > 0 && (
+      <section aria-labelledby="cmp-h">
+        <h2 id="cmp-h" class="section-h">Comparisons</h2>
+        <CompareCards articles={articles} />
+      </section>
     )}
-    {articles.length ? <ArticleList articles={articles} /> : <p>No comparisons in this category yet. Browse <a href="/">the latest verdicts</a> instead.</p>}
   </div>
 </Base>
 <style>
-  h1 { font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight: 800; letter-spacing: -0.04em; margin: 56px 0 12px; }
-  .blurb { font-size: 1.2rem; color: var(--ink-soft); max-width: 55ch; margin: 0 0 28px; }
-  .tools { list-style: none; padding: 0; margin: 0 0 40px; display: flex; flex-wrap: wrap; gap: 12px 24px; }
-  .tools a { display: inline-flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 600; color: var(--ink); }
+  .crumbs { font-family: var(--display); font-size: 0.92rem; margin-top: 28px; color: var(--ink-soft); }
+  .crumbs a { color: var(--ink-soft); }
+  h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 800; letter-spacing: -0.04em; margin: 20px 0 10px; }
+  .lede { font-family: var(--display); color: var(--ink-soft); max-width: 60ch; margin: 0 0 28px; font-size: 1.08rem; line-height: 1.5; }
 </style>

@@ -8,6 +8,9 @@ Priority = search demand × how clearly we can give a verdict. Write top to bott
 - [x] Midjourney vs Ideogram vs Adobe Firefly
 - [x] Perplexity vs ChatGPT Search vs Google AI Mode
 - [x] Otter vs Fireflies vs Fathom
+- [x] Runway vs Kling vs Google Veo
+- [x] ElevenLabs vs Murf vs WellSaid
+- [x] Gamma vs Beautiful.ai vs Canva
 
 ## Next up: head-to-head "X vs Y" (high intent, quick to rank)
 1. [ ] ChatGPT vs Claude (two-way, for writers)
@@ -17,8 +20,8 @@ Priority = search demand × how clearly we can give a verdict. Write top to bott
 5. [ ] Gemini vs ChatGPT for Google Workspace users
 6. [ ] Grammarly vs ChatGPT for editing
 7. [ ] Notion AI vs ClickUp Brain vs Coda AI
-8. [ ] ElevenLabs vs Murf vs Play.ht (AI voice)
-9. [ ] Runway vs Pika vs Kling vs Veo (AI video)
+8. [ ] Grok vs ChatGPT vs Meta AI
+9. [ ] Leonardo AI vs Midjourney
 10. [ ] Canva Magic Studio vs Adobe Express
 11. [ ] Lovable vs Bolt vs v0 (AI app builders)
 12. [ ] Jasper vs Copy.ai vs Writesonic (marketing copy)
@@ -32,7 +35,7 @@ Priority = search demand × how clearly we can give a verdict. Write top to bott
 18. [ ] Best free AI tools (no credit card)
 19. [ ] Best AI writing tools for bloggers
 20. [ ] Best AI tools for YouTube creators
-21. [ ] Best AI presentation makers (Gamma vs Beautiful.ai vs Copilot)
+21. [ ] Microsoft Copilot vs ChatGPT for Microsoft 365 users
 22. [ ] Best AI coding tools for beginners
 23. [ ] Best AI image generators for commercial use
 
