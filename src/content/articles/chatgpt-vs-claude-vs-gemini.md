@@ -11,10 +11,10 @@ verdict: "Pick ChatGPT if you want one app that does a bit of everything: voice,
 picks:
   - useCase: Best all-rounder
     tool: chatgpt
-    why: The widest feature set in one subscription, including image generation, voice mode, deep research and agents.
+    why: It has the most features in one subscription, including image generation, voice mode, deep research and agents.
   - useCase: Writing and editing
     tool: claude
-    why: Its prose sounds the most natural and needs the least rewriting. It also follows style instructions closely.
+    why: Its drafts sound the most natural, need the least rewriting and follow style instructions closely.
   - useCase: Long PDFs and codebases
     tool: claude
     why: It holds very long inputs well and is the strongest of the three for multi-step coding.
@@ -38,7 +38,7 @@ comparison:
       values: ["Custom GPTs, apps, Mac/Windows apps", "Projects, Artifacts, desktop apps, MCP connectors", "Gmail, Docs, Drive, Android, Chrome"]
 faqs:
   - q: Is ChatGPT, Claude or Gemini better in 2026?
-    a: None of them is best at everything. ChatGPT is the best all-rounder, Claude is best for writing and coding, and Gemini is best if you use Google's apps every day. All three paid plans cost about $20 a month.
+    a: No single one wins at everything. ChatGPT is the best all-rounder, Claude is best for writing and coding, and Gemini is best if you use Google's apps every day. All three paid plans cost about $20 a month.
   - q: Which AI assistant has the best free plan?
     a: Gemini's free plan is the most generous for everyday questions because it is grounded in Google Search. ChatGPT's free plan has the most features but tighter limits on its best model. Claude's free plan is good for writing but has the lowest message limits.
   - q: Can I use Claude to generate images?
@@ -55,72 +55,44 @@ sources:
 heroAlt: "Scorecard comparing ChatGPT, Claude and Gemini: ChatGPT best all-rounder, Claude best for writing, Gemini best for Google Workspace users."
 ---
 
-All three assistants now cost roughly the same, about **$20 a month** for the standard paid plan, and all three can search the web, read files and write code. The differences that matter are in *what each one is best at* and *which apps it plugs into*. This guide skips the spec sheet and gets to those.
+ChatGPT, Claude and Gemini all cost about $20 a month on their standard paid plans, and all three can search the web, read your files and write code. So the choice comes down to what each one does best and which apps it works inside.
 
 ## How we compared them
 
-We judged each assistant on the jobs people actually pay for: writing and editing, research with sources, working with long documents, coding, and everyday quick questions. We also weighed free-plan limits and what each subscription bundles in beyond the chatbot itself. Prices and plan details come from each vendor's official pricing page, linked at the bottom.
+We compared each assistant on the jobs people pay for: writing and editing, research with sources, long documents, coding and quick everyday questions. We also looked at how far each free plan goes and what the paid plans include beyond the chatbot. Prices and plan details come from each vendor's own pricing page, linked at the bottom of this article.
 
-## ChatGPT: the Swiss Army knife
+## ChatGPT: the most features in one app
 
-ChatGPT has the widest set of features of any AI assistant. One subscription gets you a strong general model, image generation, the most polished voice mode, deep research reports, scheduled tasks, custom GPTs and an agent that can operate a browser for you.
+ChatGPT has the widest feature set of the three. One subscription covers a strong general model, image generation, voice mode, deep research reports, scheduled tasks, custom GPTs and an agent that can use a browser for you.
 
-**Where it shines**
+That breadth is the reason to pick it. You can brainstorm, make a quick image, talk through an idea on a walk and get a research report without switching apps. Advanced voice mode is natural enough for language practice or hands-free help in the kitchen. Image generation sits inside the chat, you edit an image by describing the change, and it handles text in images reasonably well.
 
-- **Breadth.** If you want a single app for brainstorming, a quick image, a spoken conversation on a walk and a research report, ChatGPT covers all of them without switching tools.
-- **Voice.** Advanced voice mode is natural enough for language practice, hands-free cooking help or thinking out loud.
-- **Image generation.** Image creation is built into the chat. You can edit by describing changes, and the images handle text reasonably well.
+The writing is weaker. Drafts drift toward a recognisable "ChatGPT voice", so expect to edit for tone more than you would with Claude. OpenAI also renames plan tiers and models often, which makes it hard to tell exactly what each price buys.
 
-**Where it falls short**
+## Claude: best for writing and code
 
-- Writing can drift toward a recognisable "ChatGPT voice", so expect to edit more for tone than you would with Claude.
-- Plan tiers and model names change often, which makes it hard to know exactly what you're getting at each price.
+Claude, from Anthropic, is known for prose that sounds like a person wrote it and for strong coding. It follows detailed style instructions closely, so a brand voice guide or a "write like this sample" request works better than with most rivals.
 
-## Claude: the writer's and developer's pick
+Drafts need less rewriting, and Claude gives structural feedback ("this section repeats your intro") as well as line edits. It handles long contracts, research papers and transcripts well, and Projects keep a set of reference files you can reuse. Artifacts let it build small working apps, documents, charts and diagrams you can share.
 
-Claude, from Anthropic, has built its reputation on two things: **prose that sounds human** and **coding**. It follows detailed style instructions closely, so a brand voice guide or "write like this sample" works better than with most rivals.
+For developers, paid plans include [Claude Code](/tools/claude-code/), an agent that works directly in your codebase, and many developers subscribe for that alone. Our [AI coding tools comparison](/compare/cursor-vs-github-copilot-vs-claude-code/) covers it in detail.
 
-**Where it shines**
+Claude can't generate photos or artwork. On the Pro plan, chat and Claude Code share one usage limit, so heavy coders often move up to a Max plan.
 
-- **Writing and editing.** Drafts need less rewriting, and Claude is good at structural feedback ("this section repeats your intro") rather than only polishing sentences.
-- **Long documents.** It handles long contracts, research papers and transcripts well, and Projects let you keep a reusable set of reference files.
-- **Coding.** Paid plans include [Claude Code](/tools/claude-code/), an agent that works directly in your codebase. For many developers this alone justifies the subscription. See our [AI coding tools comparison](/compare/cursor-vs-github-copilot-vs-claude-code/).
-- **Artifacts.** Claude can build working mini apps, documents, charts and diagrams that you can share.
+## Gemini: best if you live in Google's apps
 
-**Where it falls short**
+Gemini runs inside Gmail, Docs, Sheets, Drive, Chrome and Android, and the paid Google AI Pro plan adds extra Google One cloud storage. If your work already happens in Google's apps, that saves you time on almost every task.
 
-- No photographic or artistic image generation.
-- Usage limits on the Pro plan are shared between chat and Claude Code, so heavy coders often move up to a Max plan.
+You can summarise a long email thread, draft a reply in your own tone or ask questions across the files in your Drive. Answers draw on Google Search, so questions about recent events or local places come back current. Because storage, the Workspace AI features and the assistant come in one plan, Gemini is the cheapest of the three in practice if you'd pay for Google One anyway.
 
-## Gemini: the best fit for Google users
-
-Gemini's advantage is **where it lives**. It's in Gmail, Docs, Sheets, Drive, Chrome and Android, and the paid Google AI Pro plan bundles extra Google One cloud storage. If your work already happens in Google's apps, that integration saves time on every task.
-
-**Where it shines**
-
-- **Workspace integration.** You can summarise a long email thread, draft a reply in your tone, or ask questions across files in your Drive.
-- **Fresh, grounded answers.** Answers draw on Google Search, so current-events and local questions come back up to date.
-- **Value.** Storage, Workspace AI features and the assistant come in one plan. If you'd pay for Google One anyway, Gemini is the cheapest of the three in practice.
-
-**Where it falls short**
-
-- Outside Google's ecosystem, its advantages shrink.
-- Its writing style tends to be more generic than Claude's.
+Outside Google's apps it loses most of that advantage, and its writing tends to read more generic than Claude's.
 
 ## Which free plan is enough?
 
-If you ask a handful of questions a day, a **free plan is enough**, and Gemini's is the easiest to live with. Upgrade when you hit one of these limits:
-
-1. You hit message caps on the best model most days.
-2. You need to upload long files or many files at once.
-3. You want a coding agent, deep research or image generation on demand.
+If you ask a handful of questions a day, a free plan is enough, and Gemini's is the easiest to live with. It's time to upgrade when you hit the message cap on the best model most days, when you need to upload long files or several at once, or when you want a coding agent, deep research or image generation on demand.
 
 ## The bottom line
 
-Choose by your main job, not by benchmark charts:
+Pick [Claude](/tools/claude/) if your work is mostly writing, analysis or code. Pick [ChatGPT](/tools/chatgpt/) if you want a bit of everything, especially images and voice. Pick [Gemini](/tools/gemini/) if you already work in Google's apps.
 
-- **Mostly writing, analysis or code:** [Claude](/tools/claude/).
-- **A bit of everything, especially images and voice:** [ChatGPT](/tools/chatgpt/).
-- **You live in Google's apps:** [Gemini](/tools/gemini/).
-
-All three offer monthly billing, so the cheapest way to decide is to pay for one month of the assistant that matches your main use, give it your real tasks, and switch if it doesn't fit.
+All three bill monthly, so the cheapest way to decide is to pay for one month of the one that fits your main use, give it your real tasks and switch if it doesn't suit you.

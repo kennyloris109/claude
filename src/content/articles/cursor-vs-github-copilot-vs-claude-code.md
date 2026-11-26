@@ -50,41 +50,35 @@ sources:
 heroAlt: "Scorecard comparing Cursor, GitHub Copilot and Claude Code: Copilot cheapest, Cursor best editor experience, Claude Code best for large tasks."
 ---
 
-AI coding tools have split into two camps. **Assistants** help while you type: completions, chat and quick edits. **Agents** take a task, such as "add rate limiting to the API and write tests", and work through it themselves. GitHub Copilot started as an assistant, Claude Code was built as an agent, and Cursor sits between the two. Which one is right depends mostly on how much you want to hand over.
+AI coding tools now come in two kinds. Assistants help while you type, with completions, chat and quick edits. Agents take a whole task, such as "add rate limiting to the API and write tests", and work through it on their own. GitHub Copilot started as an assistant, Claude Code was built as an agent, and Cursor sits between them. Which one suits you depends mostly on how much of the work you want to hand over.
 
 ## How we compared them
 
-We looked at the work developers do every day: completing code as you type, explaining unfamiliar code, refactoring across several files, fixing failing tests and building a small feature end to end. We also compared real-world cost, because sticker prices and the bills heavy users actually pay can differ a lot.
+We looked at the work developers do every day: completing code as they type, explaining unfamiliar code, refactoring across several files, fixing failing tests and building a small feature end to end. We also compared what each tool costs in practice, because heavy users often pay well above the sticker price.
 
-## GitHub Copilot: the safe default
+## GitHub Copilot: the cheap, safe default
 
-Copilot is the most widely used coding assistant, and the reasons are practical: it's **cheap**, it **works in almost every IDE**, and your company may already pay for it.
+Copilot is the most widely used coding assistant. It costs the least, it works in almost every IDE, and your company may already pay for it.
 
-- **Completions** are fast and unobtrusive.
-- **Copilot Chat** answers questions about your code in the sidebar.
-- **The coding agent** can take a GitHub issue and open a pull request for you to review, which fits teams that already run everything through GitHub.
+Its completions are fast and stay out of the way, and Copilot Chat answers questions about your code in the sidebar. The coding agent can take a GitHub issue and open a pull request for you to review, which suits teams that already run everything through GitHub.
 
-**Trade-off:** Copilot works inside someone else's editor, so its agent features feel less integrated than Cursor's. Premium model requests are metered, so check how many your plan includes.
+Because Copilot lives inside someone else's editor, its agent features feel less integrated than Cursor's. Premium model requests are metered, so check how many your plan includes.
 
-## Cursor: the AI-first editor
+## Cursor: an editor built around AI
 
-Cursor is a fork of VS Code, so your extensions and keybindings carry over, but every part of it is built around AI.
+Cursor is a fork of VS Code, so your extensions and keybindings carry over, and every part of the editor is designed around AI.
 
-- **Tab** predicts your *next edit*, not just the next line, and often jumps you to the next place that needs the same change.
-- **Agent mode** makes coordinated changes across files and shows them as reviewable diffs.
-- **Model choice** lets you switch between models from several vendors per task.
+Its Tab feature predicts your next edit rather than only the next line, and often jumps you to the next place that needs the same change. Agent mode makes coordinated changes across files and shows them as diffs you can review. You can also switch between models from several vendors for each task.
 
-**Trade-off:** The $20 Pro plan covers moderate use, but developers who lean heavily on agent mode often pay well above the sticker price. Watch your usage dashboard during the first month.
+The $20 Pro plan covers moderate use. Developers who lean heavily on agent mode often pay well above that, so watch the usage dashboard in your first month.
 
-## Claude Code: the agent that does the work
+## Claude Code: an agent that does the task
 
-Claude Code works differently from the other two. You describe a task, and it reads your repo, makes a plan, edits files, runs your tests and commands, and iterates until the task is done or it needs your input. It runs in the terminal, in VS Code and JetBrains, in a desktop app and on the web.
+Claude Code works differently from the other two. You describe a task, and it reads your repo, makes a plan, edits files, runs your tests and commands, and keeps going until the task is done or it needs your input. It runs in the terminal, in VS Code and JetBrains, in a desktop app and on the web.
 
-- **Multi-step tasks** such as migrations, refactors across dozens of files or "make CI green" are where it saves the most time.
-- **It's scriptable.** Hooks, custom commands, MCP connectors and a headless mode let it slot into your workflow and CI.
-- **It's included with Claude plans**, so if you already pay for Claude Pro or Max, you have it.
+It saves the most time on multi-step work: migrations, refactors across dozens of files, or getting a failing CI run back to green. Hooks, custom commands, MCP connectors and a headless mode let you fit it into your own workflow and CI. It's included with Claude's paid plans, so if you already pay for Claude Pro or Max, you have it.
 
-**Trade-off:** Usage limits are shared with Claude chat, and long agent sessions burn through them quickly on the Pro plan. It works best when you give it clear tasks and review the result, not when you want keystroke-level control.
+Claude Code shares its usage limit with Claude chat, and long agent sessions use it up quickly on the Pro plan. It works best when you give it a clear task and review the result. If you want control over every keystroke, an editor tool suits you better.
 
 ## Which should you choose?
 
@@ -95,8 +89,8 @@ Claude Code works differently from the other two. You describe a task, and it re
 | Want to delegate whole tasks and review the results | Claude Code |
 | Run a team that standardises on GitHub | GitHub Copilot Business |
 
-Many professional developers end up combining an **editor tool** (Copilot or Cursor) with an **agent** (Claude Code) because they solve different problems.
+Many professional developers use an editor tool (Copilot or Cursor) alongside an agent (Claude Code), since the two handle different kinds of work.
 
 ## The bottom line
 
-Start with [GitHub Copilot](/tools/github-copilot/) if cost or company approval matters most. Try [Cursor](/tools/cursor/) if you want the most fluid editing experience. Add [Claude Code](/tools/claude-code/) when you're ready to hand off whole tasks. It's also the one to try if you already pay for Claude. For the chat assistants behind these tools, see [ChatGPT vs Claude vs Gemini](/compare/chatgpt-vs-claude-vs-gemini/).
+Start with [GitHub Copilot](/tools/github-copilot/) if cost or company approval matters most. Try [Cursor](/tools/cursor/) for the smoothest editing experience. Add [Claude Code](/tools/claude-code/) when you want to hand off whole tasks, or try it first if you already pay for Claude. For the chat assistants behind these tools, see [ChatGPT vs Claude vs Gemini](/compare/chatgpt-vs-claude-vs-gemini/).

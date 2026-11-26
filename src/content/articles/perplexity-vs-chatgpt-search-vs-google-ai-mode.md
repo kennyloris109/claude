@@ -50,52 +50,46 @@ sources:
 heroAlt: "Scorecard comparing Perplexity, ChatGPT Search and Google AI Mode: Perplexity best for research, Google AI Mode best for everyday search, ChatGPT Search best when search becomes a task."
 ---
 
-Searching now often means reading a written answer instead of a list of links. Three products lead: **Perplexity**, a standalone answer engine; **ChatGPT Search**, web search built into ChatGPT; and **Google AI Mode**, a conversational mode inside Google Search. They look similar, but each is built for a different kind of question.
+A search now often ends with a written answer instead of a list of links. Three products lead here. Perplexity is a standalone answer engine, ChatGPT Search is web search built into ChatGPT, and Google AI Mode is a conversational mode inside Google Search. They look alike, but each suits a different kind of question.
 
 ## How we compared them
 
-We compared them on the searches people actually run: factual research, product comparisons, "best restaurant near me" local queries, breaking news, and multi-step questions with several parts. We looked closely at **how easy each answer is to verify**, because every AI search engine still makes mistakes.
+We compared them on the searches people run: factual research, product comparisons, "best restaurant near me" local queries, breaking news and questions with several parts. We paid most attention to how easy each answer is to check, because every AI search engine still makes mistakes.
 
 ## Perplexity: built for checking sources
 
-Perplexity's core design choice is that every sentence links to the page it came from. That makes it the best tool when you need to **trust but verify**.
+Perplexity links every sentence to the page it came from, so it's the easiest of the three to fact-check.
 
-- **Focus filters** restrict sources to academic papers, social discussion or specific sites.
-- **Deep research** produces long, cited reports in minutes.
-- **Spaces** keep files and searches together for an ongoing project.
+Focus filters limit the sources to academic papers, social discussion or specific sites. Deep research writes long, cited reports in a few minutes, and Spaces keep the files and searches for an ongoing project together.
 
-**Trade-off:** For local businesses, maps and shopping it's noticeably weaker than Google.
+For local businesses, maps and shopping it's noticeably weaker than Google.
 
 ## Google AI Mode: best for everyday searches
 
-AI Mode brings conversational answers to the search engine most people already use, backed by **Google's index, Maps, reviews and Shopping data**. For "where should I eat tonight", "compare these two vacuums" or "what time does the pharmacy close", it has data the others don't.
+AI Mode adds conversational answers to the search engine most people already use, and it draws on Google's index, Maps, reviews and Shopping data. For "where should I eat tonight", "compare these two vacuums" or "what time does the pharmacy close", it has data the other two don't.
 
-- **It's free**, with no sign-up beyond a Google account.
-- **Follow-up questions** keep the context of your search.
-- **Freshness** for news and local information is generally the best of the three.
+It's free with a Google account, follow-up questions keep the context of your search, and its news and local information is generally the most current of the three.
 
-**Trade-off:** Answers can feel like a summary of the top results rather than a synthesis, and sources are sometimes less visible than in Perplexity.
+Its answers can read like a summary of the top results, and it sometimes shows its sources less clearly than Perplexity does.
 
 ## ChatGPT Search: best when search becomes a task
 
-ChatGPT Search is strongest when the search *is only the first step*. Find three suppliers, then draft an email to each. Research a topic, then turn it into a slide outline. Everything stays in one conversation.
+ChatGPT Search is most useful when the search is the first step of a bigger job: find three suppliers and then draft an email to each, or research a topic and turn it into a slide outline. All of it stays in one conversation.
 
-- **Smooth handoff** to writing, analysis, code and agents.
-- **Memory and projects** carry context across sessions.
-- **The Atlas browser** brings the assistant into everyday browsing.
+From the results you can move straight into writing, analysis, code or an agent task. Memory and projects carry context from one session to the next, and the Atlas browser brings the assistant into everyday browsing.
 
-**Trade-off:** For pure fact-finding, citations are less granular than Perplexity's.
+For plain fact-finding, its citations are less precise than Perplexity's.
 
 ## What this means if you run a website
 
-AI search engines send traffic to the pages they cite, so being cited is worth working for. The pattern that works across all three:
+AI search engines send traffic to the pages they cite, so getting cited is worth the effort. The same steps help with all three:
 
-1. **Allow AI crawlers** in robots.txt.
-2. **Answer first.** Put a two-to-three sentence direct answer near the top of the page, as every page on this site does.
-3. **Structure the page** with descriptive headings, comparison tables and FAQs.
-4. **Show freshness** with visible "updated" dates and real updates.
-5. **Earn mentions** on sites AI engines already trust, such as reviews, forums and roundups.
+1. Let AI crawlers in through robots.txt.
+2. Put a direct two-to-three sentence answer near the top of the page, as every page on this site does.
+3. Use descriptive headings, comparison tables and FAQs.
+4. Show when the page was last updated, and update it for real.
+5. Get mentioned on sites AI engines already trust, such as review sites, forums and roundups.
 
 ## The bottom line
 
-Use [Perplexity](/tools/perplexity/) for research you need to verify, [Google AI Mode](/tools/google-ai-mode/) for everyday, local and shopping searches, and [ChatGPT Search](/tools/chatgpt-search/) when a search should lead into getting work done. Deciding which assistant to pay for overall? See [ChatGPT vs Claude vs Gemini](/compare/chatgpt-vs-claude-vs-gemini/).
+Use [Perplexity](/tools/perplexity/) for research you need to verify, [Google AI Mode](/tools/google-ai-mode/) for everyday, local and shopping searches, and [ChatGPT Search](/tools/chatgpt-search/) when a search should turn into finished work. If you're deciding which assistant to pay for overall, see [ChatGPT vs Claude vs Gemini](/compare/chatgpt-vs-claude-vs-gemini/).
