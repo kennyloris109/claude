@@ -1,0 +1,37 @@
+---
+interface Props { faqs: { q: string; a: string }[] }
+const { faqs } = Astro.props;
+---
+{faqs.length > 0 && (
+  <section class="faq" aria-labelledby="faq-h">
+    <h2 id="faq-h">Questions people ask</h2>
+    {faqs.map((f) => (
+      <details>
+        <summary>{f.q}</summary>
+        <p>{f.a}</p>
+      </details>
+    ))}
+  </section>
+)}
+<style>
+  .faq {
+    max-width: var(--measure);
+    margin: 56px 0;
+  }
+  h2 {
+    font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+  }
+  details {
+    border-bottom: 1px solid var(--rule);
+    padding: 14px 0;
+  }
+  summary {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+  details p {
+    margin: 10px 0 0;
+  }
+</style>

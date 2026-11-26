@@ -1,0 +1,79 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props {
+  tools: CollectionEntry<'tools'>[];
+  comparison?: CollectionEntry<'articles'>['data']['comparison'];
+}
+const { tools, comparison } = Astro.props;
+const rows = [
+  { label: 'Made by', values: tools.map((t) => t.data.vendor) },
+  { label: 'Price', values: tools.map((t) => t.data.startingPrice) },
+  { label: 'Free plan', values: tools.map((t) => (t.data.freeTier ? 'Yes' : 'No')) },
+  ...(comparison?.rows ?? []),
+  { label: 'Best for', values: tools.map((t) => t.data.bestFor) },
+];
+---
+<section class="compare" aria-labelledby="compare-h">
+  <h2 id="compare-h">Side by side</h2>
+  <div class="scroll" tabindex="0" role="region" aria-labelledby="compare-h">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col"><span class="sr">Feature</span></th>
+          {tools.map((t) => <th scope="col" style={`--c:${t.data.color}`}>{t.data.name}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((r) => (
+          <tr>
+            <th scope="row">{r.label}</th>
+            {r.values.map((v) => <td>{v}</td>)}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>
+<style>
+  .compare {
+    margin: 48px 0;
+  }
+  h2 {
+    font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+    margin: 0 0 16px;
+  }
+  .scroll {
+    overflow-x: auto;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 560px;
+    font-family: var(--display);
+    font-size: 0.97rem;
+    line-height: 1.45;
+  }
+  th,
+  td {
+    text-align: left;
+    vertical-align: top;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--rule);
+  }
+  thead th {
+    font-size: 1.1rem;
+    border-bottom: 4px solid var(--c, var(--ink));
+  }
+  tbody th {
+    color: var(--ink-soft);
+    font-weight: 500;
+    width: 16%;
+  }
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+</style>

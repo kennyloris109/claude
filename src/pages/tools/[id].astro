@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Monogram from '../../components/Monogram.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import { getArticles, CATEGORIES } from '../../lib/site';
+import { SITE } from '../../site.config.mjs';
+
+export async function getStaticPaths() {
+  const tools = await getCollection('tools');
+  return tools.map((t) => ({ params: { id: t.id }, props: { tool: t } }));
+}
+const { tool } = Astro.props;
+const t = tool.data;
+const articles = (await getArticles()).filter((a) => a.data.tools.some((x) => x.id === tool.id));
+const jsonLd = [{
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: t.name,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  url: t.url,
+  description: t.summary,
+  publisher: { '@type': 'Organization', name: t.vendor },
+  offers: { '@type': 'Offer', price: t.freeTier ? '0' : undefined, priceCurrency: 'USD', description: t.startingPrice, url: t.pricingUrl },
+}];
+---
+<Base title={`${t.name}: pricing, strengths and alternatives`} description={`${t.summary.slice(0, 120)} See how ${t.name} compares with alternatives.`.slice(0, 160)} jsonLd={jsonLd}>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/tools/">All tools</a> / <a href={`/category/${t.category}/`}>{CATEGORIES[t.category].label}</a></nav>
+    <header>
+      <Monogram name={t.name} color={t.color} size={80} />
+      <div>
+        <h1>{t.name}</h1>
+        <p class="vendor">Made by {t.vendor}</p>
+      </div>
+    </header>
+    <p class="summary">{t.summary}</p>
+    <dl class="facts">
+      <div><dt>Price</dt><dd>{t.startingPrice} (<a href={t.pricingUrl} rel="nofollow noopener" target="_blank">official pricing</a>)</dd></div>
+      <div><dt>Free plan</dt><dd>{t.freeTier ? 'Yes' : 'No'}</dd></div>
+      <div><dt>Best for</dt><dd>{t.bestFor}</dd></div>
+      <div><dt>Website</dt><dd><a href={t.url} rel="nofollow noopener" target="_blank">{new URL(t.url).hostname}</a></dd></div>
+    </dl>
+    {articles.length > 0 && (<><h2>Comparisons that include {t.name}</h2><ArticleList articles={articles} headingLevel="h3" /></>)}
+  </div>
+</Base>
+<style>
+  .crumbs { font-family: var(--display); font-size: 0.92rem; margin-top: 28px; color: var(--ink-soft); }
+  .crumbs a { color: var(--ink-soft); }
+  header { display: flex; align-items: center; gap: 22px; margin-top: 36px; }
+  h1 { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 800; letter-spacing: -0.04em; margin: 0; }
+  .vendor { margin: 4px 0 0; font-family: var(--display); color: var(--ink-soft); }
+  .summary { font-size: 1.25rem; max-width: 58ch; margin: 28px 0; }
+  .facts { margin: 0 0 48px; max-width: 760px; border-top: 2px solid var(--ink); }
+  .facts div { display: grid; grid-template-columns: 140px 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--rule); }
+  dt { font-family: var(--display); font-weight: 600; }
+  dd { margin: 0; }
+  h2 { font-size: clamp(1.5rem, 2.6vw, 2rem); }
+</style>

@@ -1,0 +1,35 @@
+---
+interface Props { text: string; verified: string }
+const { text, verified } = Astro.props;
+---
+<section class="verdict" aria-labelledby="short-answer">
+  <h2 id="short-answer">The short answer</h2>
+  <p><span class="marker">{text}</span></p>
+  <p class="checked">Prices and features last checked {verified}.</p>
+</section>
+<style>
+  .verdict {
+    max-width: var(--measure);
+    margin: 40px 0 8px;
+  }
+  h2 {
+    font-size: 1.05rem;
+    margin: 0 0 10px;
+    color: var(--ink-soft);
+    letter-spacing: 0;
+  }
+  p {
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(1.3rem, 2.3vw, 1.6rem);
+    line-height: 1.45;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .checked {
+    margin-top: 12px;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--ink-soft);
+  }
+</style>

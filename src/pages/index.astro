@@ -1,0 +1,132 @@
+---
+import { getEntries } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ArticleList from '../components/ArticleList.astro';
+import Monogram from '../components/Monogram.astro';
+import { getArticles, CATEGORIES, articleUrl } from '../lib/site';
+import { SITE } from '../site.config.mjs';
+
+const articles = await getArticles();
+const [lead, ...rest] = articles;
+const leadTools = lead ? await getEntries(lead.data.tools) : [];
+---
+<Base title={SITE.name} description={SITE.description}>
+  <section class="wrap hero">
+    <h1>Which AI tool should you use? We compare them and pick one.</h1>
+    <p class="intro">Every comparison opens with a one-line answer, then shows the reasoning: the jobs that matter, current prices and the real trade-offs.</p>
+  </section>
+
+  {lead && (
+    <section class="wrap lead" aria-labelledby="lead-h">
+      <div class="lead-tools" aria-hidden="true">
+        {leadTools.map((t) => <Monogram name={t.data.name} color={t.data.color} size={72} />)}
+      </div>
+      <div>
+        <h2 id="lead-h"><a href={articleUrl(lead)}>{lead.data.title}</a></h2>
+        <p class="lead-verdict"><span class="marker">{lead.data.verdict}</span></p>
+        <a class="read" href={articleUrl(lead)}>Read the full comparison</a>
+      </div>
+    </section>
+  )}
+
+  <section class="wrap" aria-labelledby="latest-h">
+    <h2 id="latest-h" class="section-h">Latest verdicts</h2>
+    <ArticleList articles={rest} headingLevel="h3" />
+  </section>
+
+  <section class="wrap" aria-labelledby="cats-h">
+    <h2 id="cats-h" class="section-h">Browse by job</h2>
+    <ul class="cats" role="list">
+      {Object.entries(CATEGORIES).map(([id, c]) => (
+        <li><a href={`/category/${id}/`}>{c.label}</a><span>{c.blurb}</span></li>
+      ))}
+    </ul>
+  </section>
+</Base>
+<style>
+  .hero {
+    padding-block: clamp(48px, 9vw, 110px) 28px;
+  }
+  h1 {
+    font-size: clamp(2.6rem, 7vw, 5.6rem);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 0.98;
+    max-width: 15ch;
+    margin: 0;
+  }
+  .intro {
+    font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+    max-width: 52ch;
+    color: var(--ink-soft);
+    margin: 28px 0 0;
+  }
+  .lead {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 36px;
+    padding-block: 40px 64px;
+    align-items: start;
+  }
+  .lead-tools {
+    display: grid;
+    gap: 10px;
+  }
+  .lead h2 {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    margin: 0 0 18px;
+  }
+  .lead h2 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .lead-verdict {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    line-height: 1.45;
+    max-width: 52ch;
+    margin: 0 0 18px;
+  }
+  .read {
+    font-family: var(--display);
+    font-weight: 600;
+  }
+  .section-h {
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    margin: 56px 0 16px;
+  }
+  .cats {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 28px 36px;
+  }
+  .cats li {
+    display: grid;
+    gap: 4px;
+    border-top: 2px solid var(--ink);
+    padding-top: 12px;
+  }
+  .cats a {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--ink);
+  }
+  .cats span {
+    color: var(--ink-soft);
+    font-size: 0.97rem;
+  }
+  @media (max-width: 640px) {
+    .lead {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    .lead-tools {
+      display: flex;
+    }
+  }
+</style>

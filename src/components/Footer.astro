@@ -1,0 +1,52 @@
+---
+import { SITE } from '../site.config.mjs';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="wrap cols">
+    <p class="about">
+      <strong>{SITE.name}</strong> compares AI tools by the jobs people use them for and names a pick for each one. We don't accept payment for verdicts.
+    </p>
+    <ul>
+      <li><a href="/about/">About us</a></li>
+      <li><a href="/methodology/">How we compare</a></li>
+      <li><a href="/tools/">All tools</a></li>
+      <li><a href="/rss.xml">RSS feed</a></li>
+    </ul>
+  </div>
+  <p class="wrap legal">© {year} {SITE.name}. Prices change often; each article shows when we last checked them.</p>
+</footer>
+<style>
+  .site-footer {
+    margin-top: 96px;
+    border-top: 1px solid var(--rule);
+    padding-block: 40px 28px;
+    font-family: var(--display);
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+  .cols {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .about {
+    max-width: 46ch;
+    margin: 0;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+  }
+  a {
+    color: var(--ink);
+  }
+  .legal {
+    margin-top: 28px;
+    font-size: 0.85rem;
+  }
+</style>

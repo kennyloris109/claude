@@ -1,0 +1,233 @@
+---
+import { getEntries, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Monogram from '../../components/Monogram.astro';
+import Verdict from '../../components/Verdict.astro';
+import Picks from '../../components/Picks.astro';
+import CompareTable from '../../components/CompareTable.astro';
+import Faq from '../../components/Faq.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import { getArticles, CATEGORIES, heroUrl, formatDate, readingMinutes, articleUrl } from '../../lib/site';
+import { SITE } from '../../site.config.mjs';
+
+export async function getStaticPaths() {
+  const articles = await getArticles();
+  return articles.map((a) => ({ params: { slug: a.id }, props: { article: a } }));
+}
+
+const { article } = Astro.props;
+const d = article.data;
+const { Content, headings } = await render(article);
+const tools = await getEntries(d.tools);
+const cat = CATEGORIES[d.category];
+const url = new URL(articleUrl(article), SITE.url).href;
+const related = (await getArticles())
+  .filter((a) => a.id !== article.id && (a.data.category === d.category || a.data.tools.some((t) => d.tools.some((x) => x.id === t.id))))
+  .slice(0, 3);
+const toc = headings.filter((h) => h.depth === 2);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: d.title,
+    description: d.description,
+    image: [new URL(heroUrl(article), SITE.url).href],
+    datePublished: d.pubDate.toISOString(),
+    dateModified: d.updatedDate.toISOString(),
+    author: { '@type': 'Organization', name: SITE.author.name, url: new URL(SITE.author.url, SITE.url).href },
+    publisher: { '@id': `${SITE.url}/#org` },
+    mainEntityOfPage: url,
+    about: tools.map((t) => ({ '@type': 'SoftwareApplication', name: t.data.name, applicationCategory: 'BusinessApplication', url: t.data.url })),
+    abstract: d.verdict,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE.url + '/' },
+      { '@type': 'ListItem', position: 2, name: cat.label, item: `${SITE.url}/category/${d.category}/` },
+      { '@type': 'ListItem', position: 3, name: d.title, item: url },
+    ],
+  },
+  ...(d.faqs.length
+    ? [{
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: d.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+      }]
+    : []),
+];
+---
+<Base
+  title={d.title}
+  description={d.description}
+  image={heroUrl(article)}
+  imageAlt={d.heroAlt}
+  type="article"
+  publishedTime={d.pubDate.toISOString()}
+  modifiedTime={d.updatedDate.toISOString()}
+  jsonLd={jsonLd}
+>
+  <article class="wrap">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a> / <a href={`/category/${d.category}/`}>{cat.label}</a>
+    </nav>
+
+    <header class="tape" style={`--n:${tools.length}`}>
+      <div class="fighters" aria-hidden="true">
+        {tools.map((t, i) => (
+          <>
+            {i > 0 && <span class="vs">vs</span>}
+            <span class="fighter"><Monogram name={t.data.name} color={t.data.color} size={64} /><span>{t.data.name}</span></span>
+          </>
+        ))}
+      </div>
+      <h1>{d.title}</h1>
+      <p class="byline">
+        By <a href={SITE.author.url}>{SITE.author.name}</a>. Updated <time datetime={d.updatedDate.toISOString()}>{formatDate(d.updatedDate)}</time>. {readingMinutes(article.body)} min read.
+      </p>
+    </header>
+
+    <Verdict text={d.verdict} verified={formatDate(d.lastVerified)} />
+    <figure class="scorecard">
+      <img src={heroUrl(article).replace('.png', '.webp')} width="1200" height="630" alt={d.heroAlt} fetchpriority="high" />
+    </figure>
+    <Picks picks={d.picks} />
+    <CompareTable tools={tools} comparison={d.comparison} />
+
+    <div class="body">
+      {toc.length > 2 && (
+        <aside class="toc" aria-labelledby="toc-h">
+          <h2 id="toc-h">In this comparison</h2>
+          <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+        </aside>
+      )}
+      <div class="prose">
+        <Content />
+        <Faq faqs={d.faqs} />
+        {d.sources.length > 0 && (
+          <section class="sources" aria-labelledby="src-h">
+            <h2 id="src-h">Sources we checked</h2>
+            <ul>{d.sources.map((s) => <li><a href={s.url} rel="nofollow noopener" target="_blank">{s.title}</a></li>)}</ul>
+          </section>
+        )}
+      </div>
+    </div>
+
+    {related.length > 0 && (
+      <section class="related" aria-labelledby="rel-h">
+        <h2 id="rel-h">Related comparisons</h2>
+        <ArticleList articles={related} headingLevel="h3" />
+      </section>
+    )}
+  </article>
+</Base>
+<style>
+  .crumbs {
+    font-family: var(--display);
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    margin: 28px 0 0;
+  }
+  .crumbs a {
+    color: var(--ink-soft);
+  }
+  .tape {
+    margin-top: 36px;
+  }
+  .fighters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px 18px;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+  .fighter {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .vs {
+    font-size: 1rem;
+    color: var(--ink-soft);
+    font-style: italic;
+    font-weight: 500;
+  }
+  h1 {
+    font-size: clamp(2.3rem, 5.6vw, 4.4rem);
+    letter-spacing: -0.035em;
+    margin: 26px 0 16px;
+    max-width: 18ch;
+    font-weight: 800;
+  }
+  .byline {
+    font-family: var(--display);
+    color: var(--ink-soft);
+    margin: 0;
+    font-size: 0.97rem;
+  }
+  .scorecard {
+    margin: 36px 0 0;
+    max-width: 860px;
+  }
+  .scorecard img {
+    border-radius: var(--radius-l);
+    border: 1px solid var(--rule);
+  }
+  .body {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    gap: 56px;
+    align-items: start;
+  }
+  .body:not(:has(.toc)) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .toc {
+    position: sticky;
+    top: 24px;
+    font-family: var(--display);
+    font-size: 0.93rem;
+    padding-top: 2.2em;
+  }
+  .toc h2 {
+    font-size: 0.95rem;
+    letter-spacing: 0;
+    color: var(--ink-soft);
+    margin: 0 0 8px;
+  }
+  .toc ol {
+    padding-left: 1.1em;
+    margin: 0;
+    display: grid;
+    gap: 6px;
+  }
+  .toc a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .toc a:hover {
+    text-decoration: underline;
+  }
+  .sources ul {
+    font-size: 0.95rem;
+  }
+  .related {
+    margin-top: 72px;
+  }
+  .related > h2 {
+    font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+  }
+  @media (max-width: 900px) {
+    .body {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+    }
+    .toc {
+      position: static;
+    }
+  }
+</style>

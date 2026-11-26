@@ -1,0 +1,41 @@
+---
+import Base from '../../layouts/Base.astro';
+import ArticleList from '../../components/ArticleList.astro';
+import { getCollection } from 'astro:content';
+import Monogram from '../../components/Monogram.astro';
+import { getArticles, CATEGORIES, type Category } from '../../lib/site';
+import { SITE } from '../../site.config.mjs';
+
+export function getStaticPaths() {
+  return Object.keys(CATEGORIES).map((category) => ({ params: { category } }));
+}
+const category = Astro.params.category as Category;
+const c = CATEGORIES[category];
+const articles = (await getArticles()).filter((a) => a.data.category === category);
+const tools = (await getCollection('tools')).filter((t) => t.data.category === category);
+const jsonLd = [{
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: `${c.label} compared`,
+  description: c.blurb,
+  url: `${SITE.url}/category/${category}/`,
+}];
+---
+<Base title={`${c.label} compared`} description={`${c.blurb} Head-to-head comparisons with a clear pick for every use case, updated with current pricing.`} jsonLd={jsonLd}>
+  <div class="wrap">
+    <h1>{c.label}</h1>
+    <p class="blurb">{c.blurb}</p>
+    {tools.length > 0 && (
+      <ul class="tools" role="list">
+        {tools.map((t) => <li><a href={`/tools/${t.id}/`}><Monogram name={t.data.name} color={t.data.color} size={36} />{t.data.name}</a></li>)}
+      </ul>
+    )}
+    {articles.length ? <ArticleList articles={articles} /> : <p>No comparisons in this category yet. Browse <a href="/">the latest verdicts</a> instead.</p>}
+  </div>
+</Base>
+<style>
+  h1 { font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight: 800; letter-spacing: -0.04em; margin: 56px 0 12px; }
+  .blurb { font-size: 1.2rem; color: var(--ink-soft); max-width: 55ch; margin: 0 0 28px; }
+  .tools { list-style: none; padding: 0; margin: 0 0 40px; display: flex; flex-wrap: wrap; gap: 12px 24px; }
+  .tools a { display: inline-flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 600; color: var(--ink); }
+</style>

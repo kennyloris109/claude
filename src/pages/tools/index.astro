@@ -1,0 +1,32 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Monogram from '../../components/Monogram.astro';
+import { CATEGORIES, type Category } from '../../lib/site';
+const tools = await getCollection('tools');
+---
+<Base title="Every AI tool we cover" description="The AI tools ToolVerdict tests and compares: chatbots, coding assistants, image generators, AI search engines and meeting notetakers, with pricing.">
+  <div class="wrap">
+    <h1>Every tool we cover</h1>
+    {(Object.keys(CATEGORIES) as Category[]).map((c) => (
+      <section>
+        <h2><a href={`/category/${c}/`}>{CATEGORIES[c].label}</a></h2>
+        <ul role="list">
+          {tools.filter((t) => t.data.category === c).map((t) => (
+            <li><Monogram name={t.data.name} color={t.data.color} size={40} /><div><a href={`/tools/${t.id}/`}>{t.data.name}</a><span>{t.data.bestFor}</span></div></li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+</Base>
+<style>
+  h1 { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 800; letter-spacing: -0.04em; margin: 56px 0 8px; }
+  h2 { font-size: 1.5rem; margin: 40px 0 12px; }
+  h2 a { color: var(--ink); }
+  ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px 32px; }
+  li { display: flex; gap: 14px; align-items: flex-start; }
+  li div { display: grid; }
+  li a { font-family: var(--display); font-weight: 700; font-size: 1.1rem; color: var(--ink); }
+  li span { color: var(--ink-soft); font-size: 0.95rem; }
+</style>
