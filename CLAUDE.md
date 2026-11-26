@@ -4,7 +4,7 @@ Static Astro site deployed to Cloudflare Pages. The goal is to rank in Google **
 
 ## Layout
 - `src/site.config.mjs`: brand name, domain, author, IndexNow key. Change the brand here only.
-- `src/data/tools.json`: one record per tool (pricing, best-for, color). Tool pages are generated from it.
+- `src/data/tools.json`: one record per tool (pricing, best-for, color, plus `inputs`/`does`/`outputs`/`strengths`/`watchOut` for the how-it-works explainer). Tool pages and the explainer images in `public/images/tools/` are generated from it.
 - `src/content/articles/*.md`: comparisons. The schema is in `src/content.config.ts`, and the build fails on invalid frontmatter.
 - `src/pages/`: routes. `compare/[slug]`, `tools/[id]`, `category/[category]`, `llms.txt`, `llms-full.txt`, `robots.txt`, `rss.xml`.
 - `scripts/generate-images.mjs`: renders the OG/scorecard image and Pinterest pin for each article with Playwright. **Images are committed**, and the Cloudflare build doesn't regenerate them.
@@ -25,8 +25,9 @@ Static Astro site deployed to Cloudflare Pages. The goal is to rank in Google **
 4. **Question-shaped H2s and FAQs** that match real searches ("Is X better than Y?").
 5. **Internal links.** Link at least 2 related `/compare/…/` or `/tools/…/` pages, and add a link back from an older related article.
 6. Title ≤ 60 chars where possible, description 110–160 chars, plain language, sentence case, no hype words ("revolutionary", "game-changer").
-7. Slugs are `tool-a-vs-tool-b` or `best-<category>-for-<audience>`, and never change once published.
-8. After adding an article: `npm run images && npm run check:content && npm run build`, then commit the markdown and the images.
+7. **Voices (reviewer quotes)** go in the `voices` frontmatter list. Only word-for-word quotes that you have read on the source page yourself (fetch it), from a named person or publication, with the exact URL and the date shown on the page. Never paraphrase inside quote marks, never invent or "improve" a quote, and leave a tool without voices rather than use a weak or unverifiable one.
+8. Slugs are `tool-a-vs-tool-b` or `best-<category>-for-<audience>`, and never change once published.
+9. After adding an article: `npm run images && npm run check:content && npm run build`, then commit the markdown and the images.
 
 Use the `new-article` and `refresh-article` skills in `.claude/skills/` for the full workflow.
 

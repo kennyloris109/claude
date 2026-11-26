@@ -7,6 +7,8 @@ import Picks from '../../components/Picks.astro';
 import CompareTable from '../../components/CompareTable.astro';
 import Faq from '../../components/Faq.astro';
 import CompareCards from '../../components/CompareCards.astro';
+import ToolExplainer from '../../components/ToolExplainer.astro';
+import Voices from '../../components/Voices.astro';
 import { getArticles, CATEGORIES, heroUrl, formatDate, readingMinutes, articleUrl } from '../../lib/site';
 import { SITE } from '../../site.config.mjs';
 
@@ -99,6 +101,34 @@ const jsonLd = [
       <div class="table-panel">
         <CompareTable tools={tools} comparison={d.comparison} />
       </div>
+
+      <section class="upclose" aria-labelledby="upclose-h">
+        <h2 id="upclose-h">The tools up close</h2>
+        <p class="lede">What you put into each tool, what it does with it and what you get back, plus where it's strong and what to watch for.</p>
+        {tools.map((t) => {
+          const count = d.voices.filter((v) => v.tool.id === t.id).length;
+          return (
+            <article class="tool-card" id={`tool-${t.id}`} aria-labelledby={`tc-${t.id}`}>
+              <header>
+                <Monogram name={t.data.name} color={t.data.color} size={56} />
+                <div class="tc-id">
+                  <h3 id={`tc-${t.id}`}><a href={`/tools/${t.id}/`}>{t.data.name}</a></h3>
+                  <span>Made by {t.data.vendor}</span>
+                </div>
+                <span class="tc-price">{t.data.startingPrice}</span>
+              </header>
+              <ToolExplainer tool={t} />
+              {count > 0 && (
+                <div class="tc-voices">
+                  <h4>What reviewers say about {t.data.name}</h4>
+                  <Voices voices={d.voices} toolId={t.id} heading={false} />
+                </div>
+              )}
+            </article>
+          );
+        })}
+        {d.voices.length > 0 && <p class="voices-note">Quotes are word for word from the linked reviews and posts. We don't edit them, and the people quoted have no connection to {SITE.name}.</p>}
+      </section>
 
       <div class="body">
         {toc.length > 2 && (
@@ -222,6 +252,77 @@ const jsonLd = [
     border: 1px solid var(--rule);
     border-radius: 20px;
     padding: 6px 10px;
+  }
+  .upclose {
+    margin-top: 72px;
+  }
+  .upclose > h2 {
+    font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+    margin: 0 0 8px;
+  }
+  .lede {
+    margin: 0 0 24px;
+    max-width: 62ch;
+    color: var(--ink-soft);
+  }
+  .tool-card {
+    display: grid;
+    gap: 20px;
+    padding-block: 32px;
+    border-top: 1px solid var(--rule);
+    scroll-margin-top: 96px;
+  }
+  .tool-card:first-of-type {
+    border-top: 2px solid var(--ink);
+  }
+  .tool-card header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+  }
+  .tool-card header :global(.mono) {
+    border-radius: 16px;
+  }
+  .tc-id {
+    display: grid;
+    flex: 1;
+    min-width: 0;
+  }
+  .tc-id h3 {
+    margin: 0;
+    font-size: 1.45rem;
+  }
+  .tc-id h3 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .tc-id h3 a:hover {
+    color: var(--cobalt);
+    text-decoration: underline;
+  }
+  .tc-id span {
+    font: 500 0.92rem var(--display);
+    color: var(--ink-soft);
+  }
+  .tc-price {
+    font: 700 0.9rem var(--display);
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: var(--tint);
+    color: var(--ink);
+  }
+  .tc-voices h4 {
+    margin: 4px 0 12px;
+    font: 700 1rem var(--display);
+  }
+  .tc-voices :global(.voices) {
+    margin: 0;
+  }
+  .voices-note {
+    margin: 8px 0 0;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
   }
   .body {
     display: grid;

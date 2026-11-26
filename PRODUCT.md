@@ -46,6 +46,8 @@ Every comparison opens with a short answer that names a winner for each use case
 ## Evidence on Hand
 
 - Editorial comparisons researched from official vendor pricing pages (linked under "Sources we checked" in each article).
+- Reviewer and practitioner quotes in article `voices`: verbatim, attributed and linked to the source page, collected November 2026 (Ethan Mollick, Simon Willison, Andrej Karpathy, TechRadar, TechRepublic, Unite.AI, Techpoint Africa). No quotes yet for Runway, Kling, Google Veo, Midjourney, Adobe Firefly or Canva.
+- How-it-works explainers are illustrations built from our own tool data, not real outputs of the tools.
 - **Absent, must not be fabricated:** user reviews, star ratings, testimonials, visitor or traffic counts, hands-on test results or benchmark scores, a named author. The "Top pick" badge reflects our own comparison picks, not user ratings.
 
 ## Product Principles

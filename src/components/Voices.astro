@@ -1,0 +1,110 @@
+---
+// Attributed, verbatim quotes from named reviewers and practitioners, each linked to its source.
+import { getEntry, type CollectionEntry } from 'astro:content';
+import Monogram from './Monogram.astro';
+interface Props { voices: CollectionEntry<'articles'>['data']['voices']; toolId?: string; heading?: boolean }
+const { voices, toolId, heading = true } = Astro.props;
+const list = await Promise.all(
+  voices.filter((v) => !toolId || v.tool.id === toolId).map(async (v) => ({ ...v, tool: (await getEntry(v.tool))! }))
+);
+---
+{list.length > 0 && (
+  <section class:list={['voices', { bare: !heading }]} aria-labelledby={heading ? 'voices-h' : undefined}>
+    {heading && (
+      <>
+        <h2 id="voices-h">What reviewers and practitioners say</h2>
+        <p class="intro">Short excerpts from people who have used these tools, quoted word for word from their own reviews and posts. Follow each link for the full context and date.</p>
+      </>
+    )}
+    <div class="grid">
+      {list.map((v) => (
+        <figure class="quote">
+          {!toolId && <div class="tool"><Monogram name={v.tool.data.name} color={v.tool.data.color} size={26} />{v.tool.data.name}</div>}
+          <blockquote cite={v.url}><p>“{v.quote}”</p></blockquote>
+          <figcaption>
+            <strong>{v.name}</strong>
+            <span>{v.role}</span>
+            <a href={v.url} rel="nofollow noopener" target="_blank">{v.source}<span class="sr"> (opens in a new tab)</span></a>
+            <span class="date">{v.date}</span>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </section>
+)}
+<style>
+  .voices {
+    margin: 64px 0 0;
+  }
+  .voices.bare {
+    margin: 0;
+  }
+  h2 {
+    font-family: var(--display);
+    font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+    margin: 0 0 8px;
+  }
+  .intro {
+    margin: 0 0 20px;
+    max-width: 60ch;
+    color: var(--ink-soft);
+    font-size: 0.98rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 16px;
+  }
+  .quote {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 22px;
+    border-radius: 20px;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+  }
+  .tool {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font: 700 0.9rem var(--display);
+    color: var(--ink-soft);
+  }
+  .tool :global(.mono) {
+    border-radius: 8px;
+  }
+  blockquote {
+    margin: 0;
+    flex: 1;
+  }
+  blockquote p {
+    margin: 0;
+    font-family: var(--read);
+    font-size: 1.15rem;
+    line-height: 1.55;
+  }
+  figcaption {
+    display: grid;
+    gap: 2px;
+    font: 500 0.88rem/1.45 var(--display);
+    color: var(--ink-soft);
+  }
+  figcaption strong {
+    color: var(--ink);
+  }
+  figcaption a {
+    font-weight: 600;
+  }
+  .date {
+    font-size: 0.82rem;
+  }
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+</style>

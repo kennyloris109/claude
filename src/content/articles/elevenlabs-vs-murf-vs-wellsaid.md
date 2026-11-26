@@ -47,6 +47,7 @@ sources:
     url: https://murf.ai/pricing
   - title: WellSaid pricing
     url: https://wellsaidlabs.com/pricing/
+voices: [{"tool": "elevenlabs", "quote": "The cloned version is realistic enough to be used in a narration or to fix mistakes in a recording.", "name": "Janine Heinrichs", "role": "AI software reviewer, Unite.AI", "source": "Unite.AI: ElevenLabs Review", "url": "https://www.unite.ai/elevenlabs-review/", "date": "21 September 2026"}, {"tool": "murf", "quote": "Murf is the ElevenLabs alternative I’d recommend to business users.", "name": "Janine Heinrichs", "role": "AI software reviewer, Unite.AI", "source": "Unite.AI: ElevenLabs Review", "url": "https://www.unite.ai/elevenlabs-review/", "date": "21 September 2026"}, {"tool": "wellsaid", "quote": "Choose WellSaid if you’re producing corporate training, e-learning, or client work", "name": "Janine Heinrichs", "role": "AI software reviewer, Unite.AI", "source": "Unite.AI: ElevenLabs Review", "url": "https://www.unite.ai/elevenlabs-review/", "date": "21 September 2026"}]
 heroAlt: "Scorecard comparing ElevenLabs, Murf and WellSaid: ElevenLabs most natural voices, Murf best for training videos, WellSaid best for enterprise."
 ---
 

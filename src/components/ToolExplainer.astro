@@ -1,0 +1,164 @@
+---
+// Visual "how it works" card for one tool: what you give it → what it does → what you get.
+import type { CollectionEntry } from 'astro:content';
+import Monogram from './Monogram.astro';
+interface Props { tool: CollectionEntry<'tools'>; compact?: boolean }
+const { tool, compact = false } = Astro.props;
+const t = tool.data;
+---
+<figure class:list={['explainer', { compact }]} aria-label={`How ${t.name} works`}>
+  <div class="flow">
+    <div class="col in">
+      <span class="label">You give it</span>
+      <ul role="list">{t.inputs.map((x) => <li>{x}</li>)}</ul>
+    </div>
+    <div class="arrow" aria-hidden="true"><svg viewBox="0 0 40 16"><path d="M0 8h34m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="col core">
+      <Monogram name={t.name} color={t.color} size={52} />
+      <strong>{t.name}</strong>
+      <p>{t.does}</p>
+    </div>
+    <div class="arrow" aria-hidden="true"><svg viewBox="0 0 40 16"><path d="M0 8h34m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="col out">
+      <span class="label">You get</span>
+      <ul role="list">{t.outputs.map((x) => <li>{x}</li>)}</ul>
+    </div>
+  </div>
+  {!compact && (t.strengths.length > 0 || t.watchOut.length > 0) && (
+    <div class="notes">
+      {t.strengths.length > 0 && (
+        <div class="good">
+          <span class="label">Strengths</span>
+          <ul role="list">{t.strengths.map((x) => <li>{x}</li>)}</ul>
+        </div>
+      )}
+      {t.watchOut.length > 0 && (
+        <div class="bad">
+          <span class="label">Watch out for</span>
+          <ul role="list">{t.watchOut.map((x) => <li>{x}</li>)}</ul>
+        </div>
+      )}
+    </div>
+  )}
+  <figcaption class="sr">Illustration of what goes into {t.name}, what it does and what comes out.</figcaption>
+</figure>
+<style>
+  .explainer {
+    margin: 0;
+    display: grid;
+    gap: 16px;
+  }
+  .flow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1.2fr) 40px minmax(0, 1fr);
+    align-items: stretch;
+    gap: 8px;
+  }
+  .col {
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+  }
+  .core {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    text-align: center;
+    gap: 8px;
+    background: var(--tint);
+    border-color: color-mix(in srgb, var(--cobalt) 25%, var(--rule));
+  }
+  .core strong {
+    font: 800 1.05rem var(--display);
+  }
+  .core p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: var(--ink-soft);
+  }
+  .label {
+    display: block;
+    margin-bottom: 8px;
+    font: 700 0.82rem var(--display);
+    color: var(--ink-soft);
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .in li,
+  .out li {
+    font: 600 0.85rem/1.3 var(--display);
+    padding: 6px 10px;
+    border-radius: 10px;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+  }
+  .out li {
+    border-color: color-mix(in srgb, #1f9d55 35%, var(--rule));
+  }
+  .arrow {
+    display: grid;
+    place-items: center;
+    color: var(--cobalt);
+  }
+  .arrow svg {
+    width: 34px;
+    height: 14px;
+  }
+  .notes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 12px;
+  }
+  .notes > div {
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid var(--rule);
+  }
+  .notes ul {
+    display: grid;
+    gap: 8px;
+  }
+  .notes li {
+    position: relative;
+    padding-left: 24px;
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+  .notes li::before {
+    position: absolute;
+    left: 0;
+    top: 0.05em;
+    font-weight: 800;
+  }
+  .good li::before {
+    content: '+';
+    color: #1f9d55;
+  }
+  .bad li::before {
+    content: '!';
+    color: #c2410c;
+  }
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+  @media (max-width: 720px) {
+    .flow {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .arrow svg {
+      transform: rotate(90deg);
+    }
+  }
+</style>

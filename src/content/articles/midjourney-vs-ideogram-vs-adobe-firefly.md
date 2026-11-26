@@ -47,6 +47,7 @@ sources:
     url: https://ideogram.ai/pricing
   - title: Adobe Firefly plans
     url: https://www.adobe.com/products/firefly/plans.html
+voices: [{"tool": "ideogram", "quote": "The image results may not match the consistent and coherent quality of Midjourney, but it's not far off.", "name": "Nigel Powell", "role": "Tech journalist", "source": "TechRadar: Ideogram AI image generator review", "url": "https://www.techradar.com/pro/software-services/ideogram-ai-image-generator-review", "date": "22 July 2024"}, {"tool": "ideogram", "quote": "In general, creating lush, beautiful images with Ideogram is fast and painless.", "name": "Nigel Powell", "role": "Tech journalist", "source": "TechRadar: Ideogram AI image generator review", "url": "https://www.techradar.com/pro/software-services/ideogram-ai-image-generator-review", "date": "22 July 2024"}]
 heroAlt: "Scorecard comparing Midjourney, Ideogram and Adobe Firefly: Midjourney most striking images, Ideogram best for text, Firefly best for commercial work."
 ---
 

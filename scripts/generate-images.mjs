@@ -113,6 +113,46 @@ for (const f of fs.readdirSync(articleDir).filter((f) => f.endsWith('.md'))) {
   console.log(`[images] ${slug}`);
 }
 
+// Tool explainer cards: what goes in, what the tool does, what comes out (1200×630).
+const toolDir = path.join(root, 'public/images/tools');
+fs.mkdirSync(toolDir, { recursive: true });
+const chip = (x) => `<span class="c">${esc(x)}</span>`;
+let toolsMade = 0;
+for (const t of Object.values(tools)) {
+  const file = path.join(toolDir, `${t.id}.png`);
+  if (!force && fs.existsSync(file) && fs.statSync(file).mtimeMs > fs.statSync(path.join(root, 'src/data/tools.json')).mtimeMs) continue;
+  const html = `<!doctype html><html><head><meta charset="utf-8"><style>${fonts}
+  *{box-sizing:border-box;margin:0}
+  body{width:1200px;height:630px;background:#f7f8fb;color:#0f172a;font-family:B;padding:56px 64px;display:flex;flex-direction:column}
+  .m{display:inline-grid;place-items:center;border-radius:28%;overflow:hidden}
+  .top{display:flex;align-items:center;gap:20px}
+  h1{font-size:56px;font-weight:800;letter-spacing:-.04em}
+  .v{font-size:22px;color:#526075;margin-top:4px}
+  .flow{display:grid;grid-template-columns:1fr 56px 1.15fr 56px 1fr;gap:10px;margin-top:40px;flex:1}
+  .col{border:2px solid #e6e9f0;border-radius:24px;padding:22px;background:#fff}
+  .core{background:#edf2fe;border-color:#c9d6fb;display:flex;flex-direction:column;justify-content:center;font-family:L;font-size:24px;line-height:1.4}
+  .lab{font-size:18px;font-weight:700;color:#526075;margin-bottom:14px}
+  .c{display:inline-block;font-size:19px;font-weight:600;padding:8px 12px;border:2px solid #e6e9f0;border-radius:12px;margin:0 8px 8px 0;background:#fff}
+  .out .c{border-color:#bfe3cc}
+  .ar{display:grid;place-items:center;color:#2457e6;font-size:44px;font-weight:800}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:24px;margin-top:26px}
+  .ck{width:30px;height:30px;border-radius:28%;background:#2457e6;color:#fff;display:grid;place-items:center;font-size:.7em}
+  </style></head><body>
+  <div class="top">${mono(t, 84)}<div><h1>How ${esc(t.name)} works</h1><div class="v">${esc(t.vendor)} · ${esc(t.startingPrice)}</div></div></div>
+  <div class="flow">
+    <div class="col"><div class="lab">You give it</div>${(t.inputs || []).map(chip).join('')}</div>
+    <div class="ar">→</div>
+    <div class="col core">${esc(t.does || '')}</div>
+    <div class="ar">→</div>
+    <div class="col out"><div class="lab">You get</div>${(t.outputs || []).map(chip).join('')}</div>
+  </div>
+  <div class="brand"><span class="ck">✓</span>${esc(SITE.name)}<span style="font-weight:400;color:#526075;margin-left:auto;font-size:.8em">Illustration · ${esc(new URL(SITE.url).hostname)}</span></div>
+  </body></html>`;
+  await shoot(html, 1200, 630, file);
+  toolsMade++;
+}
+console.log(`[images] ${toolsMade} tool explainer image(s) rendered`);
+
 const def = path.join(root, 'public/images/og-default.png');
 if (force || !fs.existsSync(def)) {
   await shoot(

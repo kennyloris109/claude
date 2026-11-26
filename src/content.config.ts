@@ -16,6 +16,12 @@ const tools = defineCollection({
     bestFor: z.string(),
     summary: z.string(),
     color: z.string(), // brand-neutral accent used for the monogram badge
+    // Explainer data: what goes in, what the tool does, what comes out.
+    inputs: z.array(z.string()).default([]),
+    does: z.string().optional(),
+    outputs: z.array(z.string()).default([]),
+    strengths: z.array(z.string()).default([]),
+    watchOut: z.array(z.string()).default([]),
   }),
 });
 
@@ -42,6 +48,20 @@ const articles = defineCollection({
     faqs: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
     sources: z.array(z.object({ title: z.string(), url: z.string().url() })).default([]),
     heroAlt: z.string(),
+    // Verified, attributed opinions from named practitioners and reviewers. Quotes must be verbatim from `url`.
+    voices: z
+      .array(
+        z.object({
+          tool: reference('tools'),
+          quote: z.string().max(320),
+          name: z.string(),
+          role: z.string(),
+          source: z.string(),
+          url: z.string().url(),
+          date: z.string(),
+        })
+      )
+      .default([]),
     draft: z.boolean().default(false),
   }),
 });

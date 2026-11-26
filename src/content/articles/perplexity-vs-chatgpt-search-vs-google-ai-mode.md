@@ -47,6 +47,7 @@ sources:
     url: https://chatgpt.com/pricing/
   - title: Google AI plans
     url: https://one.google.com/about/ai-premium
+voices: [{"tool": "perplexity", "quote": "It’s by far the best implementation I’ve seen of LLM-assisted search", "name": "Simon Willison", "role": "Developer and creator of Datasette", "source": "Simon Willison’s Weblog", "url": "https://simonwillison.net/2024/Jan/13/perplexity/", "date": "13 January 2024"}, {"tool": "chatgpt-search", "quote": "GPT-5 Thinking in ChatGPT (aka Research Goblin) is shockingly good at search", "name": "Simon Willison", "role": "Developer and creator of Datasette (post title)", "source": "Simon Willison’s Weblog", "url": "https://simonwillison.net/2025/Sep/6/research-goblin/", "date": "6 September 2025"}, {"tool": "google-ai-mode", "quote": "It feels very similar to GPT-5 search but returns results much faster.", "name": "Simon Willison", "role": "Developer and creator of Datasette", "source": "Simon Willison’s Weblog: AI mode is good, actually", "url": "https://simonwillison.net/2025/Sep/7/ai-mode/", "date": "7 September 2025"}]
 heroAlt: "Scorecard comparing Perplexity, ChatGPT Search and Google AI Mode: Perplexity best for research, Google AI Mode best for everyday search, ChatGPT Search best when search becomes a task."
 ---
 

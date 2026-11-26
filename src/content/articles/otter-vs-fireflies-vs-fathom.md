@@ -47,6 +47,7 @@ sources:
     url: https://fireflies.ai/pricing
   - title: Otter pricing
     url: https://otter.ai/pricing
+voices: [{"tool": "fathom", "quote": "Fathom is the strongest all-around choice if you want to start free and keep the same platform as your team grows.", "name": "TechRepublic staff", "role": "Editorial team, TechRepublic", "source": "TechRepublic: 6 Best AI Meeting Note Takers for 2026", "url": "https://www.techrepublic.com/article/news-best-ai-meeting-note-takers-2026/", "date": "28 September 2026"}, {"tool": "fireflies", "quote": "Its integration support is a major strength.", "name": "TechRepublic staff", "role": "Editorial team, TechRepublic", "source": "TechRepublic: 6 Best AI Meeting Note Takers for 2026", "url": "https://www.techrepublic.com/article/news-best-ai-meeting-note-takers-2026/", "date": "28 September 2026"}, {"tool": "otter", "quote": "Otter stands out for live transcription and searchable history.", "name": "TechRepublic staff", "role": "Editorial team, TechRepublic", "source": "TechRepublic: 6 Best AI Meeting Note Takers for 2026", "url": "https://www.techrepublic.com/article/news-best-ai-meeting-note-takers-2026/", "date": "28 September 2026"}]
 heroAlt: "Scorecard comparing Fathom, Fireflies and Otter: Fathom best free plan, Fireflies best for CRM workflows, Otter best for live transcription."
 ---
 

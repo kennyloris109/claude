@@ -47,6 +47,7 @@ sources:
     url: https://www.beautiful.ai/pricing
   - title: Canva pricing
     url: https://www.canva.com/pricing/
+voices: [{"tool": "gamma", "quote": "The AI gets you 70% there, but you’ll still need to clean up after it.", "name": "Osamu Ekhator", "role": "Reviewer, Techpoint Africa", "source": "Techpoint Africa: I tested Gamma AI", "url": "https://techpoint.africa/guide/i-tested-gamma-ai-for-10-days/", "date": "25 August 2025"}, {"tool": "beautiful-ai", "quote": "Beautiful.ai did better both in data handling and in being comprehensive for a report.", "name": "Ifeoma Joy Okorie", "role": "Reviewer, Techpoint Africa", "source": "Techpoint Africa: Beautiful.ai vs Gamma", "url": "https://techpoint.africa/guide/beautiful-ai-vs-gamma/", "date": "3 September 2025"}]
 heroAlt: "Scorecard comparing Gamma, Beautiful.ai and Canva: Gamma fastest first draft, Beautiful.ai best for on-brand team decks, Canva best free plan."
 ---
 

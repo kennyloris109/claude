@@ -52,6 +52,7 @@ sources:
     url: https://claude.com/pricing
   - title: Google AI plans (Google One)
     url: https://one.google.com/about/ai-premium
+voices: [{"tool": "chatgpt", "quote": "GPT-5.2 Pro, with the harness that comes with it, is a VERY smart model.", "name": "Ethan Mollick", "role": "Wharton professor and author of One Useful Thing", "source": "One Useful Thing: A Guide to Which AI to Use in the Agentic Era", "url": "https://www.oneusefulthing.org/p/a-guide-to-which-ai-to-use-in-the", "date": "18 February 2026"}, {"tool": "claude", "quote": "Claude for Excel, in particular, feels like a massive change in working with spreadsheets", "name": "Ethan Mollick", "role": "Wharton professor and author of One Useful Thing", "source": "One Useful Thing: A Guide to Which AI to Use in the Agentic Era", "url": "https://www.oneusefulthing.org/p/a-guide-to-which-ai-to-use-in-the", "date": "18 February 2026"}, {"tool": "gemini", "quote": "Google’s Gemini website is much less capable (even though its AI model is just as good),", "name": "Ethan Mollick", "role": "Wharton professor and author of One Useful Thing", "source": "One Useful Thing: A Guide to Which AI to Use in the Agentic Era", "url": "https://www.oneusefulthing.org/p/a-guide-to-which-ai-to-use-in-the", "date": "18 February 2026"}]
 heroAlt: "Scorecard comparing ChatGPT, Claude and Gemini: ChatGPT best all-rounder, Claude best for writing, Gemini best for Google Workspace users."
 ---
 

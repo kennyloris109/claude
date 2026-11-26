@@ -24,6 +24,10 @@ Follow the frontmatter schema in `src/content.config.ts` and the writing rules i
 5. `## The bottom line` with links to each `/tools/<id>/` page and at least one related `/compare/…/` article.
 6. 4+ FAQs in frontmatter, phrased the way people search.
 
+## 3a. Voices and tool data
+- Make sure each tool has `inputs`, `does`, `outputs`, `strengths` and `watchOut` in `src/data/tools.json` (facts only).
+- Look for real opinions from named reviewers or practitioners (their blogs, reviews, interviews). Fetch each page and copy short quotes word for word into `voices` with name, role, source, exact URL and the date shown. Skip any quote you could not read on the page yourself.
+
 ## 3b. Humanize the prose
 Run the `humanizer` skill over the article body, verdict, picks and FAQs. Keep every fact, price, pick and source exactly as researched; only the wording changes.
 

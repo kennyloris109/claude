@@ -55,6 +55,10 @@ Headings use tight tracking (−0.025em to −0.045em), `text-wrap: balance`; pa
 - **Comparison table**: inside a rounded panel, tool-coloured column rules, tabular numbers, scrolls on its own on small screens.
 - **Search + chips**: one controller per grid; filters sync to `?q=` / `?cat=`; live result count; empty state names the search and category.
 - **FAQ**: rounded `<details>` with a chevron; first item open.
+- **How-it-works explainer** (`ToolExplainer`): "You give it" chips → tool core (tinted) → "You get" chips (green-edged), then Strengths (+) and Watch out for (!) panels. Labelled as an illustration. PNG versions in `public/images/tools/` are each tool page's share image.
+- **Voices** (`Voices`): quote cards in Newsreader with name, role, linked source and date; always verbatim, with a note that the people quoted have no connection to the site.
+- **Blog index** (`/compare/`): header with real counts, a featured latest comparison (image + highlighter verdict), category chips and image cards.
+- **Article "tools up close"**: one open section per tool (divider, not a card) holding its explainer and voices; avoids nested cards.
 
 ## Motion
 

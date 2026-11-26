@@ -11,7 +11,28 @@
   "bestFor": "All-round everyday use, voice, images and plugins in one app",
   "summary": "The broadest general-purpose AI assistant: chat, web search, image generation, voice mode, file analysis and agents in one subscription.",
   "color": "#1F7A5C",
-  "pricing": "Freemium"
+  "pricing": "Freemium",
+  "inputs": [
+   "Chat prompts",
+   "Files and images",
+   "Voice"
+  ],
+  "does": "Answers, writes, searches the web, makes images and runs agent tasks in one chat",
+  "outputs": [
+   "Written answers and drafts",
+   "Generated images",
+   "Research reports",
+   "Voice conversations"
+  ],
+  "strengths": [
+   "Widest feature set in one subscription",
+   "Most polished voice mode",
+   "Image generation built into the chat"
+  ],
+  "watchOut": [
+   "Writing drifts toward a recognisable house style",
+   "Plan and model names change often"
+  ]
  },
  {
   "id": "claude",
@@ -25,7 +46,28 @@
   "bestFor": "Long-form writing, careful reasoning and coding",
   "summary": "An assistant known for natural writing, long-document analysis and strong coding, with Projects, Artifacts and Claude Code included in paid plans.",
   "color": "#8A4FD8",
-  "pricing": "Freemium"
+  "pricing": "Freemium",
+  "inputs": [
+   "Chat prompts",
+   "Long documents and PDFs",
+   "Code repositories"
+  ],
+  "does": "Reads long material, writes in a natural voice and works through code",
+  "outputs": [
+   "Drafts and edits",
+   "Summaries of long documents",
+   "Artifacts: small apps, charts, diagrams",
+   "Code changes via Claude Code"
+  ],
+  "strengths": [
+   "Most natural-sounding writing",
+   "Handles very long inputs well",
+   "Claude Code included in paid plans"
+  ],
+  "watchOut": [
+   "No photo or artwork generation",
+   "Pro plan limits are shared with Claude Code"
+  ]
  },
  {
   "id": "gemini",
@@ -39,7 +81,28 @@
   "bestFor": "People who live in Gmail, Docs and Android",
   "summary": "Google's assistant, built into Workspace and Android, with Google Search grounding and cloud storage bundled into its paid plans.",
   "color": "#2B6CD9",
-  "pricing": "Freemium"
+  "pricing": "Freemium",
+  "inputs": [
+   "Chat prompts",
+   "Gmail, Docs and Drive files",
+   "Android and Chrome context"
+  ],
+  "does": "Answers with Google Search grounding and works inside Google Workspace",
+  "outputs": [
+   "Answers grounded in Google Search",
+   "Email and document drafts",
+   "Summaries across your Drive",
+   "Generated images"
+  ],
+  "strengths": [
+   "Built into Gmail, Docs, Sheets and Drive",
+   "Fresh answers from Google Search",
+   "Paid plan bundles Google One storage"
+  ],
+  "watchOut": [
+   "Advantages shrink outside Google apps",
+   "Writing tends to read generic"
+  ]
  },
  {
   "id": "github-copilot",
@@ -53,7 +116,27 @@
   "bestFor": "Teams already on GitHub who want low-friction completions in any IDE",
   "summary": "The most widely deployed coding assistant: inline completions, chat and a coding agent across VS Code, JetBrains, Visual Studio and GitHub itself.",
   "color": "#3A3F4B",
-  "pricing": "Freemium"
+  "pricing": "Freemium",
+  "inputs": [
+   "Code you are typing",
+   "Questions about your code",
+   "GitHub issues"
+  ],
+  "does": "Completes code as you type, answers questions and opens pull requests",
+  "outputs": [
+   "Inline code completions",
+   "Chat answers in the IDE",
+   "Pull requests from issues"
+  ],
+  "strengths": [
+   "Cheapest paid tier",
+   "Works in almost every IDE",
+   "Coding agent fits GitHub workflows"
+  ],
+  "watchOut": [
+   "Agent features feel less integrated than Cursor",
+   "Premium model requests are metered"
+  ]
  },
  {
   "id": "cursor",
@@ -67,7 +150,24 @@
   "bestFor": "Developers who want an AI-first editor with multi-file edits",
   "summary": "A VS Code-based editor rebuilt around AI: fast tab completions, codebase-aware chat and an agent that edits across many files.",
   "color": "#0E8A8A",
-  "pricing": "Freemium"
+  "pricing": "Freemium",
+  "inputs": [
+   "Your codebase",
+   "Natural-language edit requests"
+  ],
+  "does": "An AI-first code editor that predicts edits and changes many files at once",
+  "outputs": [
+   "Predicted next edits (Tab)",
+   "Multi-file changes as reviewable diffs"
+  ],
+  "strengths": [
+   "Best inline editing experience",
+   "Choice of models from several vendors",
+   "VS Code extensions carry over"
+  ],
+  "watchOut": [
+   "Heavy agent use costs more than the $20 sticker price"
+  ]
  },
  {
   "id": "claude-code",
@@ -81,7 +181,27 @@
   "bestFor": "Agentic, terminal-first work on large codebases",
   "summary": "An agentic coding tool that runs in the terminal, IDE, desktop and web, reading your repo, running commands and making multi-step changes.",
   "color": "#B4532A",
-  "pricing": "Paid"
+  "pricing": "Paid",
+  "inputs": [
+   "A task in plain English",
+   "Your repository",
+   "Tests and commands"
+  ],
+  "does": "An agent that plans, edits files, runs tests and iterates until the task is done",
+  "outputs": [
+   "Completed multi-file changes",
+   "Passing tests and fixed CI",
+   "Commits and pull requests"
+  ],
+  "strengths": [
+   "Best at multi-step tasks",
+   "Scriptable with hooks, commands and MCP",
+   "Included with Claude Pro and Max"
+  ],
+  "watchOut": [
+   "Usage limits shared with Claude chat",
+   "Less suited to keystroke-level control"
+  ]
  },
  {
   "id": "midjourney",
@@ -95,7 +215,26 @@
   "bestFor": "Striking, art-directed imagery and mood boards",
   "summary": "The aesthetic leader for artistic and photographic images, with strong style controls, but no free plan and no public API.",
   "color": "#5B4BB7",
-  "pricing": "Paid"
+  "pricing": "Paid",
+  "inputs": [
+   "Text prompts",
+   "Style references and moodboards",
+   "Images to edit"
+  ],
+  "does": "Generates art-directed images and animates stills into short clips",
+  "outputs": [
+   "High-quality images",
+   "Consistent styles across a series",
+   "Short image-to-video clips"
+  ],
+  "strengths": [
+   "Strongest sense of style and composition",
+   "Style references keep a look consistent"
+  ],
+  "watchOut": [
+   "No free plan",
+   "No public API"
+  ]
  },
  {
   "id": "ideogram",
@@ -109,7 +248,23 @@
   "bestFor": "Images with legible text: posters, logos, thumbnails",
   "summary": "An image generator that renders typography reliably, making it the go-to for social graphics, posters and logo concepts.",
   "color": "#C23B6B",
-  "pricing": "Freemium"
+  "pricing": "Freemium",
+  "inputs": [
+   "Text prompts with the exact words to show"
+  ],
+  "does": "Generates images that render typography reliably",
+  "outputs": [
+   "Posters, thumbnails and social graphics",
+   "Logo concepts with legible text"
+  ],
+  "strengths": [
+   "Reliable, legible text in images",
+   "Free tier",
+   "API for automation"
+  ],
+  "watchOut": [
+   "Artistic output a step behind Midjourney"
+  ]
  },
  {
   "id": "adobe-firefly",
@@ -123,7 +278,26 @@
   "bestFor": "Commercially safe images inside Photoshop and Express workflows",
   "summary": "Adobe's generative image suite, trained with commercial use in mind and built into Photoshop, with access to partner models too.",
   "color": "#D2452F",
-  "pricing": "Freemium"
+  "pricing": "Freemium",
+  "inputs": [
+   "Text prompts",
+   "Photos in Photoshop",
+   "Selections to fill or extend"
+  ],
+  "does": "Generates and edits images inside Photoshop, Illustrator and Express",
+  "outputs": [
+   "Generative Fill and Expand edits",
+   "New images for commercial use"
+  ],
+  "strengths": [
+   "Designed for commercial use",
+   "Built into Photoshop",
+   "IP indemnity on some enterprise plans"
+  ],
+  "watchOut": [
+   "Prompt-only images can look stock-like",
+   "Adobe credit system takes some reading"
+  ]
  },
  {
   "id": "perplexity",
@@ -137,7 +311,23 @@
   "bestFor": "Research where you need to check every source",
   "summary": "An answer engine that cites sources inline for every claim, with model choice and deep research on its Pro plan.",
   "color": "#1C7C8C",
-  "pricing": "Freemium"
+  "pricing": "Freemium",
+  "inputs": [
+   "A question"
+  ],
+  "does": "Searches the web and writes an answer with a citation on every claim",
+  "outputs": [
+   "Cited answers",
+   "Deep research reports",
+   "Project Spaces"
+  ],
+  "strengths": [
+   "Every sentence links to its source",
+   "Source filters for academic or social results"
+  ],
+  "watchOut": [
+   "Weaker for local businesses, maps and shopping"
+  ]
  },
  {
   "id": "chatgpt-search",
@@ -151,7 +341,22 @@
   "bestFor": "Search that turns into a follow-up conversation or a task",
   "summary": "Web search built into ChatGPT, best when a search becomes a longer conversation, a draft or a multi-step task.",
   "color": "#1F7A5C",
-  "pricing": "Free"
+  "pricing": "Free",
+  "inputs": [
+   "A question inside ChatGPT"
+  ],
+  "does": "Searches the web inside a ChatGPT conversation that can continue into work",
+  "outputs": [
+   "Cited answers",
+   "Drafts and analysis built on the results"
+  ],
+  "strengths": [
+   "Search flows into writing, code and agents",
+   "Memory carries context across sessions"
+  ],
+  "watchOut": [
+   "Citations less precise than Perplexity's"
+  ]
  },
  {
   "id": "google-ai-mode",
@@ -165,7 +370,23 @@
   "bestFor": "Everyday, local and shopping searches",
   "summary": "Google Search's conversational mode, backed by Google's index, Maps and Shopping data, free for everyone.",
   "color": "#2B6CD9",
-  "pricing": "Free"
+  "pricing": "Free",
+  "inputs": [
+   "A question in Google Search"
+  ],
+  "does": "Answers conversationally using Google's index, Maps, reviews and Shopping data",
+  "outputs": [
+   "Conversational search answers",
+   "Local and shopping results"
+  ],
+  "strengths": [
+   "Free",
+   "Best for local, shopping and fresh news"
+  ],
+  "watchOut": [
+   "Can read like a summary of top results",
+   "Sources sometimes less visible"
+  ]
  },
  {
   "id": "otter",
@@ -179,7 +400,25 @@
   "bestFor": "Live transcription for lectures, interviews and in-person meetings",
   "summary": "A veteran transcription tool with live captions, a mobile recorder and an AI chat over your meeting history.",
   "color": "#2C5FB3",
-  "pricing": "Freemium"
+  "pricing": "Freemium",
+  "inputs": [
+   "Live speech",
+   "Calls on Zoom, Meet, Teams",
+   "In-person recordings"
+  ],
+  "does": "Transcribes conversations live and answers questions about them",
+  "outputs": [
+   "Live captions",
+   "Transcripts and summaries",
+   "Answers about a meeting"
+  ],
+  "strengths": [
+   "Best for in-person and live transcription",
+   "Strong mobile recorder"
+  ],
+  "watchOut": [
+   "Free plan caps minutes and conversation length"
+  ]
  },
  {
   "id": "fireflies",
@@ -193,7 +432,23 @@
   "bestFor": "Sales and ops teams that want notes pushed into a CRM",
   "summary": "A meeting bot with deep integrations into CRMs, project tools and Slack, plus conversation analytics for teams.",
   "color": "#7A3FB0",
-  "pricing": "Freemium"
+  "pricing": "Freemium",
+  "inputs": [
+   "Calls on Zoom, Meet, Teams, Webex and more"
+  ],
+  "does": "Records meetings and routes notes into CRMs and team tools",
+  "outputs": [
+   "Summaries and action items",
+   "Notes synced to CRMs and Slack",
+   "Conversation analytics"
+  ],
+  "strengths": [
+   "Deepest integrations",
+   "Search across all meetings"
+  ],
+  "watchOut": [
+   "Free plan caps storage and AI credits"
+  ]
  },
  {
   "id": "fathom",
@@ -207,7 +462,23 @@
   "bestFor": "Individuals who want unlimited free recordings",
   "summary": "A meeting recorder with a famously generous free plan, unlimited recordings and transcripts, and clean highlights.",
   "color": "#1E8A5A",
-  "pricing": "Freemium"
+  "pricing": "Freemium",
+  "inputs": [
+   "Calls on Zoom, Meet, Teams"
+  ],
+  "does": "Records and transcribes calls with clean summaries and highlight clips",
+  "outputs": [
+   "Unlimited recordings and transcripts",
+   "Summaries and highlight clips"
+  ],
+  "strengths": [
+   "Most generous free plan",
+   "Quick setup"
+  ],
+  "watchOut": [
+   "Lighter team analytics",
+   "Built for video calls, not in person"
+  ]
  },
  {
   "id": "grok",
@@ -221,7 +492,24 @@
   "pricing": "Freemium",
   "bestFor": "Real-time takes on what is happening on X",
   "summary": "xAI's assistant, with live access to posts on X and a looser conversational style than most rivals.",
-  "color": "#3B3F46"
+  "color": "#3B3F46",
+  "inputs": [
+   "Chat prompts",
+   "Posts on X"
+  ],
+  "does": "Answers questions with live access to posts on X",
+  "outputs": [
+   "Answers and summaries",
+   "Takes on trending topics"
+  ],
+  "strengths": [
+   "Live access to X posts",
+   "Looser conversational style"
+  ],
+  "watchOut": [
+   "Best value only if you use X",
+   "Fewer workplace integrations than rivals"
+  ]
  },
  {
   "id": "meta-ai",
@@ -235,7 +523,24 @@
   "pricing": "Free",
   "bestFor": "Quick help inside WhatsApp, Instagram and Messenger",
   "summary": "Meta's free assistant, built into WhatsApp, Instagram, Facebook and Messenger as well as its own app.",
-  "color": "#2F6FD6"
+  "color": "#2F6FD6",
+  "inputs": [
+   "Chat prompts",
+   "Messages in WhatsApp, Instagram, Messenger"
+  ],
+  "does": "Answers questions inside Meta's apps you already use",
+  "outputs": [
+   "Quick answers",
+   "Simple generated images"
+  ],
+  "strengths": [
+   "Free",
+   "Already inside WhatsApp, Instagram and Messenger"
+  ],
+  "watchOut": [
+   "Few tools for serious work",
+   "Lives mainly inside Meta apps"
+  ]
  },
  {
   "id": "microsoft-copilot",
@@ -249,7 +554,24 @@
   "pricing": "Freemium",
   "bestFor": "People who work in Word, Excel, Outlook and Windows",
   "summary": "Microsoft's assistant, free on the web and Windows, and built into Word, Excel, PowerPoint and Outlook on Microsoft 365 plans.",
-  "color": "#0F7B8F"
+  "color": "#0F7B8F",
+  "inputs": [
+   "Chat prompts",
+   "Word, Excel, PowerPoint and Outlook files"
+  ],
+  "does": "Answers and drafts inside Windows and Microsoft 365 apps",
+  "outputs": [
+   "Drafts in Word and Outlook",
+   "Excel help",
+   "Answers on the web and Windows"
+  ],
+  "strengths": [
+   "Built into Microsoft 365 apps",
+   "Free version on web and Windows"
+  ],
+  "watchOut": [
+   "Best features need a Microsoft 365 plan"
+  ]
  },
  {
   "id": "leonardo-ai",
@@ -263,7 +585,23 @@
   "pricing": "Freemium",
   "bestFor": "Game art, characters and consistent asset sets",
   "summary": "An image platform with fine-grained controls, trained styles and a free daily allowance, popular for game and concept art.",
-  "color": "#7B4CC2"
+  "color": "#7B4CC2",
+  "inputs": [
+   "Text prompts",
+   "Trained styles"
+  ],
+  "does": "Generates images with fine-grained controls for game and concept art",
+  "outputs": [
+   "Characters and game assets",
+   "Consistent asset sets"
+  ],
+  "strengths": [
+   "Free daily allowance",
+   "Fine-grained generation controls"
+  ],
+  "watchOut": [
+   "More controls to learn than simpler tools"
+  ]
  },
  {
   "id": "runway",
@@ -277,7 +615,26 @@
   "pricing": "Freemium",
   "bestFor": "Filmmakers who want editing control over AI shots",
   "summary": "A creative video suite with text- and image-to-video models plus tools for editing, restyling and extending shots.",
-  "color": "#2D2F36"
+  "color": "#2D2F36",
+  "inputs": [
+   "Text prompts",
+   "Images",
+   "Existing video footage"
+  ],
+  "does": "Generates and edits video shots in one production suite",
+  "outputs": [
+   "Generated video clips",
+   "Restyled and extended footage",
+   "Objects removed from shots"
+  ],
+  "strengths": [
+   "Most editing control over shots",
+   "Generation and editing in one place",
+   "API for developers"
+  ],
+  "watchOut": [
+   "High-quality generations use credits fast"
+  ]
  },
  {
   "id": "kling",
@@ -291,7 +648,25 @@
   "pricing": "Freemium",
   "bestFor": "Realistic motion on a budget",
   "summary": "A video generator known for realistic human motion and long clips, with a free daily credit allowance.",
-  "color": "#1A8F6A"
+  "color": "#1A8F6A",
+  "inputs": [
+   "Text prompts",
+   "Product photos or character stills"
+  ],
+  "does": "Turns prompts and images into realistic video clips",
+  "outputs": [
+   "Realistic human motion",
+   "Longer clips with extensions"
+  ],
+  "strengths": [
+   "Best quality per dollar",
+   "Free daily credits",
+   "Strong image-to-video"
+  ],
+  "watchOut": [
+   "Basic editing tools",
+   "Queues at busy times on lower tiers"
+  ]
  },
  {
   "id": "google-veo",
@@ -305,7 +680,25 @@
   "pricing": "Paid",
   "bestFor": "Clips with native sound and dialogue",
   "summary": "Google's video model, available in Gemini and Flow, that generates video together with matching sound.",
-  "color": "#2B6CD9"
+  "color": "#2B6CD9",
+  "inputs": [
+   "Detailed text prompts",
+   "Images"
+  ],
+  "does": "Generates video together with matching sound and dialogue",
+  "outputs": [
+   "Clips with sound effects and dialogue",
+   "Scenes built in Flow"
+  ],
+  "strengths": [
+   "Native audio saves a post-production step",
+   "Strong prompt adherence",
+   "Included in Google AI plans"
+  ],
+  "watchOut": [
+   "No real free tier",
+   "Highest limits only on the top plan"
+  ]
  },
  {
   "id": "elevenlabs",
@@ -319,7 +712,27 @@
   "pricing": "Freemium",
   "bestFor": "The most natural voices, cloning and dubbing",
   "summary": "The leading AI voice platform: lifelike text-to-speech, voice cloning, dubbing and an API for developers.",
-  "color": "#26292F"
+  "color": "#26292F",
+  "inputs": [
+   "A script",
+   "A short voice sample (with consent)",
+   "Video to dub"
+  ],
+  "does": "Turns text into lifelike speech, clones voices and dubs video",
+  "outputs": [
+   "Natural narration",
+   "Cloned voices",
+   "Dubbed video in other languages"
+  ],
+  "strengths": [
+   "Most human-sounding voices",
+   "Real free tier and cheap entry plan",
+   "Widely used API"
+  ],
+  "watchOut": [
+   "Many features and credit types to learn",
+   "Long projects use credits quickly"
+  ]
  },
  {
   "id": "murf",
@@ -333,7 +746,24 @@
   "pricing": "Freemium",
   "bestFor": "Voiceovers for training videos and presentations",
   "summary": "A voiceover studio that lines narration up with slides and video, aimed at training, marketing and explainer content.",
-  "color": "#6C3FD1"
+  "color": "#6C3FD1",
+  "inputs": [
+   "A script",
+   "Slides or video"
+  ],
+  "does": "Produces voiceovers synced to slides and video on a timeline",
+  "outputs": [
+   "Narrated training and explainer videos",
+   "Voiceovers aligned to slides"
+  ],
+  "strengths": [
+   "Slide and video sync",
+   "Sentence-level control of pitch and pace"
+  ],
+  "watchOut": [
+   "Free option is only a preview",
+   "Entry plans cost more than ElevenLabs"
+  ]
  },
  {
   "id": "wellsaid",
@@ -347,7 +777,24 @@
   "pricing": "Paid",
   "bestFor": "Enterprise teams that need consistent, brand-safe voices",
   "summary": "An enterprise voice platform focused on consistent, commercially licensed voices with team controls.",
-  "color": "#C2412D"
+  "color": "#C2412D",
+  "inputs": [
+   "Scripts at volume",
+   "Brand voice requirements"
+  ],
+  "does": "Produces consistent, licensed voices for enterprise narration",
+  "outputs": [
+   "Consistent narration across large libraries",
+   "Custom brand voices"
+  ],
+  "strengths": [
+   "Licensed voices from consenting actors",
+   "Enterprise team controls"
+  ],
+  "watchOut": [
+   "No ongoing free plan",
+   "Priced for businesses"
+  ]
  },
  {
   "id": "gamma",
@@ -361,7 +808,26 @@
   "pricing": "Freemium",
   "bestFor": "Turning notes or a prompt into a deck in minutes",
   "summary": "An AI presentation maker that generates decks, documents and web pages from a prompt or pasted notes.",
-  "color": "#5A3FC0"
+  "color": "#5A3FC0",
+  "inputs": [
+   "A prompt",
+   "Pasted notes",
+   "A document"
+  ],
+  "does": "Generates a designed deck, document or web page from rough input",
+  "outputs": [
+   "Presentation decks",
+   "Scrolling documents",
+   "Simple web pages"
+  ],
+  "strengths": [
+   "Best first draft from the least input",
+   "One source, three formats"
+  ],
+  "watchOut": [
+   "Distinctive layouts may not fit corporate templates",
+   "Free plan limits AI credits"
+  ]
  },
  {
   "id": "beautiful-ai",
@@ -375,7 +841,24 @@
   "pricing": "Paid",
   "bestFor": "Teams that want consistently on-brand slides",
   "summary": "A presentation tool whose Smart Slides automatically re-layout as you edit, so decks stay tidy and on brand.",
-  "color": "#D2457A"
+  "color": "#D2457A",
+  "inputs": [
+   "Your content",
+   "Brand fonts, colours and logos"
+  ],
+  "does": "Lays out slides automatically with Smart Slides that adapt as you edit",
+  "outputs": [
+   "On-brand team decks",
+   "Polished chart and timeline slides"
+  ],
+  "strengths": [
+   "Hard to make an ugly slide",
+   "Brand controls across a team"
+  ],
+  "watchOut": [
+   "No ongoing free plan",
+   "Presentations only"
+  ]
  },
  {
   "id": "canva",
@@ -389,6 +872,23 @@
   "pricing": "Freemium",
   "bestFor": "Design-heavy decks and social graphics in one tool",
   "summary": "Canva's design suite with AI features for presentations, documents and social posts, and a generous free plan.",
-  "color": "#1C9BB5"
+  "color": "#1C9BB5",
+  "inputs": [
+   "A prompt or template",
+   "Your images and brand kit"
+  ],
+  "does": "Designs decks plus social posts, documents, video and print in one tool",
+  "outputs": [
+   "Presentations",
+   "Social graphics",
+   "Documents and print"
+  ],
+  "strengths": [
+   "Useful free plan with presentation export",
+   "Huge template library"
+  ],
+  "watchOut": [
+   "AI deck drafts trail Gamma's"
+  ]
  }
 ]
