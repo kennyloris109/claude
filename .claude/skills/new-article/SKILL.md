@@ -24,6 +24,9 @@ Follow the frontmatter schema in `src/content.config.ts` and the writing rules i
 5. `## The bottom line` with links to each `/tools/<id>/` page and at least one related `/compare/…/` article.
 6. 4+ FAQs in frontmatter, phrased the way people search.
 
+## 3b. Humanize the prose
+Run the `humanizer` skill over the article body, verdict, picks and FAQs. Keep every fact, price, pick and source exactly as researched; only the wording changes.
+
 ## 4. Link it in
 Add a contextual link to the new article from 1–2 existing related articles, and bump their `updatedDate`.
 

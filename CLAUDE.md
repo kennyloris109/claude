@@ -41,6 +41,8 @@ Use the `new-article` and `refresh-article` skills in `.claude/skills/` for the 
 
 - Anthropic's example skills (see `.claude/skills/ANTHROPIC-SKILLS.md`). `webapp-testing` (Playwright) is useful for checking pages; `canvas-design`/`algorithmic-art` for one-off visuals. **`brand-guidelines` applies Anthropic's own brand; never use it for ToolVerdict.** `theme-factory` themes are for decks and docs, not this site's design system.
 
+- `humanizer` (github.com/blader/humanizer, MIT, v4.0.0): rewrites AI-sounding prose (staged contrasts, forced triads, stock AI words, filler). Run it over new or refreshed articles before committing, together with `writing-guidelines`. It must not change facts, prices, picks or verdict meaning.
+
 ### Which design skill to use
 Several design skills overlap. Default roles on this site:
 1. **Review/score:** `impeccable critique` / `impeccable audit` (snapshots in `.impeccable/critique/`).
