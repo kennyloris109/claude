@@ -36,3 +36,13 @@ Use the `new-article` and `refresh-article` skills in `.claude/skills/` for the 
 - **This site deploys to Cloudflare Pages, not Vercel.** Only use `deploy-to-vercel`, `vercel-cli-with-tokens` or `vercel-optimize` when the user explicitly asks for Vercel.
 - The React skills don't apply to this codebase (Astro, no React) unless React is added.
 - `impeccable` (from github.com/pbakaus/impeccable, Apache 2.0, v4.11.1): design commands such as `/impeccable critique`, `audit`, `polish`, `bolder`, `typeset`, `layout`. Its helper binary is downloaded from the project's GitHub releases on first use and checked against `scripts/engine-checksums.txt`. Run `/impeccable init` once to create `PRODUCT.md`.
+- `ui-ux-pro-max` and its companions `design`, `design-system`, `brand`, `banner-design`, `slides`, `ui-styling` (github.com/nextlevelbuilder/ui-ux-pro-max-skill, MIT): searchable local design data (styles, palettes, font pairings, UX guidelines) via `python3 .claude/skills/ui-ux-pro-max/scripts/search.py`. The logo/icon generators in `design` call paid image APIs only if a key is provided; `ui-styling` targets shadcn/Tailwind, which this site does not use.
+- `design-taste-frontend` (github.com/leonxlnx/taste-skill, MIT): anti-generic website building with Node scripts and bundled licensed photos/icons; no API keys.
+
+### Which design skill to use
+Several design skills overlap. Default roles on this site:
+1. **Review/score:** `impeccable critique` / `impeccable audit` (snapshots in `.impeccable/critique/`).
+2. **Refine an existing section:** `impeccable polish|layout|typeset|bolder…`.
+3. **Ideas and data lookups** (palettes, fonts, UX rules): `ui-ux-pro-max`.
+4. **Building a brand-new page from scratch:** `design-taste-frontend`.
+Always keep `PRODUCT.md` truth (no fabricated ratings, reviews or stats) whichever skill runs.
