@@ -35,3 +35,4 @@ Use the `new-article` and `refresh-article` skills in `.claude/skills/` for the 
 - Useful here: `web-design-guidelines` (UI and accessibility audit of `src/`) and `writing-guidelines` (prose review of `src/content/articles/`).
 - **This site deploys to Cloudflare Pages, not Vercel.** Only use `deploy-to-vercel`, `vercel-cli-with-tokens` or `vercel-optimize` when the user explicitly asks for Vercel.
 - The React skills don't apply to this codebase (Astro, no React) unless React is added.
+- `impeccable` (from github.com/pbakaus/impeccable, Apache 2.0, v4.11.1): design commands such as `/impeccable critique`, `audit`, `polish`, `bolder`, `typeset`, `layout`. Its helper binary is downloaded from the project's GitHub releases on first use and checked against `scripts/engine-checksums.txt`. Run `/impeccable init` once to create `PRODUCT.md`.
