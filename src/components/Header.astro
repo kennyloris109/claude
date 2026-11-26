@@ -1,10 +1,9 @@
 ---
 import { SITE } from '../site.config.mjs';
 const nav = [
-  { href: '/tools/', label: 'Directory' },
+  { href: '/tools/', label: 'All tools' },
   { href: '/categories/', label: 'Categories' },
-  { href: '/compare/', label: 'Compare' },
-  { href: '/about/', label: 'About' },
+  { href: '/methodology/', label: 'How we compare' },
 ];
 const path = Astro.url.pathname;
 ---
@@ -24,7 +23,7 @@ const path = Astro.url.pathname;
         ))}
       </ul>
     </nav>
-    <a class="btn btn-primary cta" href="/compare/">Compare tools</a>
+    <a class="btn btn-primary cta" href="/compare/" aria-current={path.startsWith('/compare/') ? 'page' : undefined}>Comparisons</a>
   </div>
 </header>
 <style>

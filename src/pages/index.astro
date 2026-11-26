@@ -4,81 +4,94 @@ import Base from '../layouts/Base.astro';
 import ToolGrid from '../components/ToolGrid.astro';
 import ToolFilter from '../components/ToolFilter.astro';
 import CompareCards from '../components/CompareCards.astro';
-import CompareTable from '../components/CompareTable.astro';
 import Monogram from '../components/Monogram.astro';
-import { getArticles, getPickedToolIds, CATEGORIES, articleUrl, type Category } from '../lib/site';
+import { getArticles, getPickedToolIds, CATEGORIES, articleUrl, formatDate, type Category } from '../lib/site';
 import { SITE } from '../site.config.mjs';
 
 const tools = await getCollection('tools');
 const articles = await getArticles();
 const picked = await getPickedToolIds();
-const counts = Object.fromEntries(Object.keys(CATEGORIES).map((c) => [c, tools.filter((t) => t.data.category === c).length]));
+const categoryOrder = Object.keys(CATEGORIES) as Category[];
+const counts = Object.fromEntries(categoryOrder.map((c) => [c, tools.filter((t) => t.data.category === c).length]));
 
-// Show editor's picks first, then the rest, so the grid opens with the strongest tools.
-const ordered = [...tools].sort((a, b) => Number(picked.has(b.id)) - Number(picked.has(a.id)));
-
-const flagship = articles.find((a) => a.id === 'chatgpt-vs-claude-vs-gemini');
-const flagshipTools = flagship ? await getEntries(flagship.data.tools) : [];
-
-// "Top picks" boards: the use-case picks from the newest comparison in each category.
-const boards = await Promise.all(
-  (Object.keys(CATEGORIES) as Category[]).map(async (c) => {
-    const a = articles.find((x) => x.data.category === c);
-    if (!a) return null;
-    const seen = new Set<string>();
-    const unique = a.data.picks.filter((p) => !seen.has(p.tool.id) && seen.add(p.tool.id));
-    const rows = await Promise.all(unique.map(async (p) => ({ useCase: p.useCase, tool: (await getEntry(p.tool))! })));
-    return { c, a, rows };
-  })
+// Directory order: by category (same order as the chips), then name.
+const ordered = [...tools].sort(
+  (a, b) => categoryOrder.indexOf(a.data.category) - categoryOrder.indexOf(b.data.category) || a.data.name.localeCompare(b.data.name)
 );
+
+// The hero answers one real question with a real, dated verdict.
+const featured = articles.find((a) => a.id === 'chatgpt-vs-claude-vs-gemini') ?? articles[0];
+const featuredTools = featured ? await getEntries(featured.data.tools) : [];
+const featuredQuestion = featuredTools.map((t) => t.data.name).join(', ').replace(/, ([^,]+)$/, ' or $1') + '?';
+
+// "Our picks for every job": each category's newest comparison, one row per distinct tool.
+const boards = (
+  await Promise.all(
+    categoryOrder.map(async (c) => {
+      const a = articles.find((x) => x.data.category === c);
+      if (!a) return null;
+      const seen = new Set<string>();
+      const unique = a.data.picks.filter((p) => !seen.has(p.tool.id) && seen.add(p.tool.id));
+      const rows = await Promise.all(unique.map(async (p) => ({ useCase: p.useCase, tool: (await getEntry(p.tool))! })));
+      return { c, a, rows };
+    })
+  )
+).filter((b): b is NonNullable<typeof b> => b !== null);
 ---
 <Base title={SITE.name} description={SITE.description}>
-  <section class="hero">
-    <div class="wrap inner">
-      <h1>Find the best <span>AI tools</span> for every job</h1>
-      <p class="intro">Compare features and pricing of {tools.length} leading AI tools, with side-by-side comparisons that name a clear pick for every use case.</p>
-      <ToolFilter counts={counts} hero />
-      <div class="ctas">
-        <a class="btn btn-primary" href="/tools/">Explore tools</a>
-        <a class="btn btn-ghost" href="/compare/">Compare tools</a>
+  <section class="hero" aria-labelledby="hero-h">
+    <div class="wrap hero-grid">
+      <div class="ask">
+        <h1 id="hero-h">Which AI tool should you use?</h1>
+        <p class="intro">We compare the leading AI tools and name a pick for every job, with prices checked against each vendor's own pricing page.</p>
+        <ToolFilter counts={counts} show="search" size="large" />
       </div>
+
+      {featured && (
+        <article class="answer" aria-labelledby="answer-h">
+          <div class="logos" aria-hidden="true">
+            {featuredTools.map((t) => <Monogram name={t.data.name} color={t.data.color} size={52} />)}
+          </div>
+          <h2 id="answer-h">{featuredQuestion}</h2>
+          <p class="verdict"><span class="marker">{featured.data.verdict}</span></p>
+          <p class="checked">Prices last checked <time datetime={featured.data.lastVerified.toISOString()}>{formatDate(featured.data.lastVerified)}</time></p>
+          <a class="btn btn-primary" href={articleUrl(featured)}>Read the full comparison</a>
+        </article>
+      )}
     </div>
   </section>
 
   <div class="wrap">
-    <ToolGrid tools={ordered} picks={picked} />
-
-    {flagship && (
-      <section aria-labelledby="h2h">
-        <div class="section-head">
-          <h2 id="h2h" class="section-h">ChatGPT vs Claude vs Gemini at a glance</h2>
-          <a href={articleUrl(flagship)}>Read the full comparison</a>
-        </div>
-        <div class="panel">
-          <CompareTable tools={flagshipTools} comparison={flagship.data.comparison} heading={false} />
-        </div>
-      </section>
-    )}
-
     <section aria-labelledby="picks-h">
-      <h2 id="picks-h" class="section-h">Top picks by category</h2>
+      <div class="section-head">
+        <h2 id="picks-h" class="section-h">Our picks for every job</h2>
+        <a href="/compare/">All comparisons</a>
+      </div>
       <div class="boards">
-        {boards.filter(Boolean).map((b) => (
-          <article class="board">
-            <h3><a href={`/category/${b!.c}/`}>{CATEGORIES[b!.c].label}</a></h3>
-            <ol>
-              {b!.rows.map((r) => (
+        {boards.map((b) => (
+          <article class="board" aria-labelledby={`board-${b.c}`}>
+            <h3 id={`board-${b.c}`}><a href={`/category/${b.c}/`}>{CATEGORIES[b.c].label}</a></h3>
+            <ul role="list">
+              {b.rows.map((r) => (
                 <li>
-                  <Monogram name={r.tool.data.name} color={r.tool.data.color} size={28} />
+                  <Monogram name={r.tool.data.name} color={r.tool.data.color} size={32} />
+                  <span class="use">{r.useCase}</span>
                   <a href={`/tools/${r.tool.id}/`}>{r.tool.data.name}</a>
-                  <span>{r.useCase}</span>
                 </li>
               ))}
-            </ol>
-            <a class="more" href={articleUrl(b!.a)}>See why</a>
+            </ul>
+            <a class="why" href={articleUrl(b.a)}>Why we picked these<span class="sr">: {CATEGORIES[b.c].label}</span></a>
           </article>
         ))}
       </div>
+    </section>
+
+    <section id="directory" aria-labelledby="dir-h">
+      <h2 id="dir-h" class="section-h">All {tools.length} AI tools</h2>
+      <div class="dir-filters">
+        <ToolFilter counts={counts} show="chips" />
+      </div>
+      <ToolGrid tools={ordered} picks={picked} initial={12} />
     </section>
 
     <section aria-labelledby="latest-h">
@@ -88,171 +101,157 @@ const boards = await Promise.all(
       </div>
       <CompareCards articles={articles.slice(0, 6)} />
     </section>
-
-    <section aria-labelledby="cats-h">
-      <div class="section-head">
-        <h2 id="cats-h" class="section-h">Browse by category</h2>
-        <a href="/categories/">All categories</a>
-      </div>
-      <ul class="cats" role="list">
-        {Object.entries(CATEGORIES).map(([id, c]) => (
-          <li><a href={`/category/${id}/`}>{c.label}</a><span>{counts[id]} tools</span></li>
-        ))}
-      </ul>
-    </section>
   </div>
 </Base>
 <style>
   .hero {
-    background:
-      radial-gradient(60% 70% at 50% 0%, var(--hero-glow), transparent 70%),
-      linear-gradient(var(--paper-raised), var(--paper));
+    background: var(--paper-raised);
     border-bottom: 1px solid var(--rule);
-    padding-block: clamp(56px, 9vw, 112px) clamp(44px, 6vw, 72px);
-    margin-bottom: 48px;
+    padding-block: clamp(40px, 7vw, 88px);
   }
-  .inner {
+  .hero-grid {
     display: grid;
-    justify-items: center;
-    text-align: center;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: center;
   }
   h1 {
-    font-size: clamp(2.5rem, 6.4vw, 4.6rem);
+    font-size: clamp(2.6rem, 6vw, 5.2rem);
     font-weight: 800;
-    letter-spacing: -0.045em;
-    line-height: 1.03;
-    max-width: 17ch;
+    letter-spacing: -0.04em;
+    line-height: 0.98;
     margin: 0;
-  }
-  h1 span {
-    color: var(--cobalt);
+    max-width: 11ch;
   }
   .intro {
-    font-size: clamp(1.05rem, 1.5vw, 1.22rem);
-    max-width: 56ch;
+    font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+    line-height: 1.6;
     color: var(--ink-soft);
-    margin: 22px 0 34px;
+    max-width: 46ch;
+    margin: 22px 0 30px;
+  }
+  .answer {
+    display: grid;
+    gap: 18px;
+    justify-items: start;
+    padding: clamp(24px, 3vw, 36px);
+    border: 1px solid var(--rule);
+    border-radius: 24px;
+    background: var(--paper);
+    box-shadow: 0 24px 60px -32px color-mix(in srgb, var(--ink) 35%, transparent);
+  }
+  .logos {
+    display: flex;
+    gap: 10px;
+  }
+  .answer h2 {
+    margin: 0;
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    letter-spacing: -0.03em;
+  }
+  .verdict {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(1.08rem, 1.5vw, 1.25rem);
     line-height: 1.6;
   }
-  .ctas {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 14px;
-    margin-top: 8px;
+  .checked {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
   }
-  .ctas .btn {
-    padding: 14px 28px;
-    border-radius: 14px;
+  .answer .btn {
+    padding: 12px 22px;
   }
-  .panel {
-    background: var(--paper-raised);
-    border: 1px solid var(--rule);
-    border-radius: 14px;
-    padding: 4px 8px;
-    box-shadow: var(--shadow);
+
+  .section-h {
+    margin-top: 72px;
   }
   .boards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-    gap: 16px;
+    gap: 20px;
   }
   .board {
     background: var(--paper-raised);
     border: 1px solid var(--rule);
-    border-radius: 14px;
-    padding: 20px;
-    box-shadow: var(--shadow);
+    border-radius: 20px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
   }
   .board h3 {
-    margin: 0 0 12px;
-    font-size: 1.1rem;
+    margin: 0 0 14px;
+    font-size: 1.15rem;
   }
   .board h3 a {
     color: var(--ink);
+    text-decoration: none;
   }
-  .board ol {
+  .board h3 a:hover {
+    text-decoration: underline;
+  }
+  .board ul {
+    list-style: none;
     margin: 0;
     padding: 0;
-    list-style: none;
-    counter-reset: rank;
     display: grid;
-    gap: 10px;
+    gap: 12px;
     flex: 1;
   }
   .board li {
     display: grid;
-    grid-template-columns: 22px 28px 1fr;
+    grid-template-columns: 32px 1fr;
     grid-template-rows: auto auto;
-    column-gap: 10px;
+    column-gap: 12px;
     align-items: center;
     font-family: var(--display);
-    counter-increment: rank;
-  }
-  .board li::before {
-    content: counter(rank);
-    grid-row: span 2;
-    font-weight: 700;
-    color: var(--ink-soft);
   }
   .board li :global(.mono) {
     grid-row: span 2;
+    border-radius: 10px;
+  }
+  .use {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    line-height: 1.3;
   }
   .board li a {
     font-weight: 700;
     color: var(--ink);
     text-decoration: none;
+    line-height: 1.3;
   }
   .board li a:hover {
     text-decoration: underline;
   }
-  .board li span {
-    font-size: 0.85rem;
-    color: var(--ink-soft);
-    grid-column: 3;
-  }
-  .more {
-    margin-top: 14px;
+  .why {
+    margin-top: 18px;
     font-family: var(--display);
     font-weight: 600;
     font-size: 0.95rem;
   }
-  .cats {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
-    gap: 12px;
-  }
-  .cats li {
-    position: relative;
-    display: grid;
-    gap: 2px;
-    background: var(--paper-raised);
-    border: 1px solid var(--rule);
-    border-radius: 12px;
-    padding: 16px 18px;
-  }
-  .cats li:hover {
-    border-color: var(--cobalt);
-  }
-  .cats a {
-    font-family: var(--display);
-    font-weight: 700;
-    color: var(--ink);
-    text-decoration: none;
-  }
-  .cats a::after {
-    content: '';
+  .sr {
     position: absolute;
-    inset: 0;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
   }
-  .cats span {
-    font-family: var(--display);
-    font-size: 0.88rem;
-    color: var(--ink-soft);
+  #directory {
+    scroll-margin-top: 80px;
+  }
+  .dir-filters {
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 900px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    h1 {
+      max-width: 14ch;
+    }
   }
 </style>

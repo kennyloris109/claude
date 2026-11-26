@@ -107,6 +107,21 @@ a:hover {
   border-radius: 2px;
 }
 
+/* The hidden attribute always wins over component display rules (search/filter relies on it). */
+[hidden] {
+  display: none !important;
+}
+
+p,
+li {
+  text-wrap: pretty;
+}
+
+::selection {
+  background: var(--highlight);
+  color: var(--highlight-ink);
+}
+
 img {
   max-width: 100%;
   height: auto;

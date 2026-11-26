@@ -29,8 +29,13 @@ export function formatDate(d: Date) {
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 }
 
-/** Tool ids that are the #1 pick of a published comparison ("Top pick" badge). */
+/** Tool id → the use case it wins as the first pick of a published comparison ("Our pick" badge). */
 export async function getPickedToolIds() {
   const articles = await getArticles();
-  return new Set(articles.map((a) => a.data.picks[0]?.tool.id).filter(Boolean) as string[]);
+  const picks = new Map<string, string>();
+  for (const a of articles) {
+    const first = a.data.picks[0];
+    if (first && !picks.has(first.tool.id)) picks.set(first.tool.id, first.useCase);
+  }
+  return picks;
 }
