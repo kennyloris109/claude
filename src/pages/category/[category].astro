@@ -28,6 +28,7 @@ const jsonLd = [{
     <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/categories/">Categories</a></nav>
     <h1>{c.label}</h1>
     <p class="lede">{c.blurb}</p>
+    <h2 class="section-h">{tools.length} {c.label.replace(/^AI /, 'AI ')} we cover</h2>
     <ToolGrid tools={tools} picks={picked} />
     {articles.length > 0 && (
       <section aria-labelledby="cmp-h">

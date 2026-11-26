@@ -2,72 +2,76 @@
 import { getEntry, type CollectionEntry } from 'astro:content';
 import Monogram from './Monogram.astro';
 interface Props { picks: CollectionEntry<'articles'>['data']['picks'] }
-const rows = await Promise.all(
-  Astro.props.picks.map(async (p) => ({ ...p, tool: (await getEntry(p.tool))! }))
-);
+const rows = await Promise.all(Astro.props.picks.map(async (p) => ({ ...p, tool: (await getEntry(p.tool))! })));
 ---
 {rows.length > 0 && (
   <section class="picks" aria-labelledby="picks-h">
     <h2 id="picks-h">Which one should you pick?</h2>
-    <dl>
+    <ul role="list">
       {rows.map((r) => (
-        <div class="row">
-          <dt>{r.useCase}</dt>
-          <dd>
-            <span class="tool"><Monogram name={r.tool.data.name} color={r.tool.data.color} size={30} /><a href={`/tools/${r.tool.id}/`}>{r.tool.data.name}</a></span>
-            <span class="why">{r.why}</span>
-          </dd>
-        </div>
+        <li>
+          <span class="use">{r.useCase}</span>
+          <span class="tool">
+            <Monogram name={r.tool.data.name} color={r.tool.data.color} size={36} />
+            <a href={`/tools/${r.tool.id}/`}>{r.tool.data.name}</a>
+          </span>
+          <p>{r.why}</p>
+        </li>
       ))}
-    </dl>
+    </ul>
   </section>
 )}
 <style>
   .picks {
-    margin: 48px 0;
-    max-width: 860px;
+    margin: 64px 0 0;
   }
   h2 {
     font-size: clamp(1.5rem, 2.4vw, 1.9rem);
-    margin: 0 0 16px;
+    margin: 0 0 20px;
   }
-  dl {
+  ul {
+    list-style: none;
     margin: 0;
-    border-top: 2px solid var(--ink);
-  }
-  .row {
+    padding: 0;
     display: grid;
-    grid-template-columns: minmax(150px, 0.8fr) 2fr;
-    gap: 8px 24px;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--rule);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+    gap: 16px;
   }
-  dt {
-    font-family: var(--display);
-    font-weight: 600;
+  li {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 22px;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 20px;
   }
-  dd {
-    margin: 0;
-    display: grid;
-    gap: 4px;
-  }
-  .tool {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-family: var(--display);
-    font-weight: 700;
-    font-size: 1.1rem;
-  }
-  .tool a {
-    color: var(--ink);
-  }
-  .why {
+  .use {
+    font: 600 0.92rem var(--display);
     color: var(--ink-soft);
   }
-  @media (max-width: 600px) {
-    .row {
-      grid-template-columns: 1fr;
-    }
+  .tool {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .tool :global(.mono) {
+    border-radius: 11px;
+  }
+  .tool a {
+    font: 800 1.25rem var(--display);
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .tool a:hover {
+    color: var(--cobalt);
+    text-decoration: underline;
+  }
+  p {
+    margin: 0;
+    font-size: 0.98rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
   }
 </style>

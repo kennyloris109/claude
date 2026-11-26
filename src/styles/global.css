@@ -1,5 +1,7 @@
 @import '@fontsource-variable/plus-jakarta-sans';
 @import '@fontsource-variable/inter';
+@import '@fontsource-variable/newsreader/wght.css';
+@import '@fontsource-variable/newsreader/wght-italic.css';
 
 :root {
   --paper: #f7f8fb;
@@ -17,6 +19,8 @@
   --highlight-ink: #18212c;
   --display: 'Plus Jakarta Sans Variable', 'Segoe UI', system-ui, sans-serif;
   --text: 'Inter Variable', 'Segoe UI', system-ui, sans-serif;
+  /* Long-form reading face for article prose (ui-ux-pro-max "News Editorial" pairing). */
+  --read: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
   --measure: 68ch;
   --gutter: clamp(16px, 4vw, 40px);
   --radius-s: 6px;
@@ -67,6 +71,14 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: color-mix(in srgb, var(--cobalt) 15%, transparent);
+}
+
+a,
+button,
+summary,
+input {
+  touch-action: manipulation;
 }
 
 body {
@@ -162,51 +174,81 @@ img {
   padding: 0.05em 0.25em;
 }
 
-/* Long-form prose */
+/* Long-form prose: serif reading column, sans headings. */
 .prose {
-  max-width: var(--measure);
+  /* ~75 characters per line in Newsreader */
+  max-width: 34em;
+  font-family: var(--read);
+  font-size: 1.22rem;
+  line-height: 1.7;
+  color: var(--ink);
 }
 .prose h2 {
-  font-size: clamp(1.6rem, 2.4vw, 2rem);
-  margin: 2.4em 0 0.6em;
+  font-family: var(--display);
+  font-size: clamp(1.55rem, 2.4vw, 1.95rem);
+  line-height: 1.2;
+  margin: 2.2em 0 0.55em;
   scroll-margin-top: 96px;
 }
 .prose h3 {
-  font-size: 1.3rem;
-  margin: 1.8em 0 0.4em;
+  font-family: var(--display);
+  font-size: 1.25rem;
+  margin: 1.7em 0 0.4em;
 }
 .prose p,
 .prose ul,
 .prose ol {
-  margin: 0 0 1.1em;
+  margin: 0 0 1.05em;
 }
 .prose li {
-  margin-bottom: 0.4em;
+  margin-bottom: 0.35em;
+}
+.prose li::marker {
+  color: var(--cobalt);
+}
+.prose strong {
+  font-weight: 650;
+}
+.prose a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
 }
 .prose blockquote {
   margin: 1.5em 0;
-  padding-left: 1.1em;
+  padding: 0.2em 0 0.2em 1.1em;
   border-left: 4px solid var(--highlight);
   color: var(--ink-soft);
 }
 .prose table {
   width: 100%;
   border-collapse: collapse;
-  font-family: var(--display);
-  font-size: 0.95rem;
-  margin: 1.5em 0;
+  font-family: var(--text);
+  font-size: 0.98rem;
+  line-height: 1.45;
+  margin: 1.6em 0;
   display: block;
   overflow-x: auto;
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
 }
 .prose th,
 .prose td {
   text-align: left;
-  padding: 0.6em 0.8em;
+  padding: 0.75em 1em;
   border-bottom: 1px solid var(--rule);
   vertical-align: top;
 }
+.prose tr:last-child td {
+  border-bottom: 0;
+}
+.prose thead th {
+  font-family: var(--display);
+  background: var(--tint);
+  color: var(--ink);
+}
 .prose code {
-  font-size: 0.9em;
+  font-size: 0.88em;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -270,7 +312,20 @@ img {
   transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
 }
 .btn:hover { text-decoration: none; transform: translateY(-1px); }
+.btn:active { transform: translateY(0) scale(0.98); }
 .btn-primary { background: var(--cobalt); color: var(--cobalt-ink); box-shadow: 0 6px 18px -6px color-mix(in srgb, var(--cobalt) 60%, transparent); }
 .btn-dark { background: var(--ink); color: var(--paper); }
 .btn-ghost { background: var(--paper-raised); color: var(--ink); border-color: var(--rule); }
 .btn-ghost:hover { border-color: var(--ink-soft); }
+
+/* One entrance per page: elements marked data-enter rise in once on load. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-enter] {
+    animation: enter 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--i, 0) * 90ms);
+  }
+  @keyframes enter {
+    /* Starts already readable: only a small lift and fade-in from 60%, never from invisible. */
+    from { opacity: 0.6; transform: translateY(10px); }
+  }
+}

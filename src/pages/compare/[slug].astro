@@ -6,7 +6,7 @@ import Verdict from '../../components/Verdict.astro';
 import Picks from '../../components/Picks.astro';
 import CompareTable from '../../components/CompareTable.astro';
 import Faq from '../../components/Faq.astro';
-import ArticleList from '../../components/ArticleList.astro';
+import CompareCards from '../../components/CompareCards.astro';
 import { getArticles, CATEGORIES, heroUrl, formatDate, readingMinutes, articleUrl } from '../../lib/site';
 import { SITE } from '../../site.config.mjs';
 
@@ -24,6 +24,7 @@ const url = new URL(articleUrl(article), SITE.url).href;
 const related = (await getArticles())
   .filter((a) => a.id !== article.id && (a.data.category === d.category || a.data.tools.some((t) => d.tools.some((x) => x.id === t.id))))
   .slice(0, 3);
+const fallbackRelated = related.length ? related : (await getArticles()).filter((a) => a.id !== article.id).slice(0, 3);
 const toc = headings.filter((h) => h.depth === 2);
 
 const jsonLd = [
@@ -69,119 +70,165 @@ const jsonLd = [
   modifiedTime={d.updatedDate.toISOString()}
   jsonLd={jsonLd}
 >
-  <article class="wrap">
-    <nav class="crumbs" aria-label="Breadcrumb">
-      <a href="/">Home</a> / <a href={`/category/${d.category}/`}>{cat.label}</a>
-    </nav>
-
-    <header class="tape" style={`--n:${tools.length}`}>
-      <div class="fighters" aria-hidden="true">
-        {tools.map((t, i) => (
-          <>
-            {i > 0 && <span class="vs">vs</span>}
-            <span class="fighter"><Monogram name={t.data.name} color={t.data.color} size={64} /><span>{t.data.name}</span></span>
-          </>
-        ))}
+  <article>
+    <header class="head">
+      <div class="wrap">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a><span aria-hidden="true">/</span><a href={`/category/${d.category}/`}>{cat.label}</a>
+        </nav>
+        <ul class="contenders" role="list" aria-label="Tools compared" data-enter style="--i:0">
+          {tools.map((t) => (
+            <li><Monogram name={t.data.name} color={t.data.color} size={48} /><a href={`/tools/${t.id}/`}>{t.data.name}</a></li>
+          ))}
+        </ul>
+        <h1 data-enter style="--i:1">{d.title}</h1>
+        <p class="byline">
+          <span>By <a href={SITE.author.url}>{SITE.author.name}</a></span>
+          <span class="sep" aria-hidden="true"></span>
+          <span>Updated <time datetime={d.updatedDate.toISOString()}>{formatDate(d.updatedDate)}</time></span>
+          <span class="sep" aria-hidden="true"></span>
+          <span>{readingMinutes(article.body)} min read</span>
+        </p>
+        <Verdict text={d.verdict} verified={formatDate(d.lastVerified)} verifiedIso={d.lastVerified.toISOString()} />
       </div>
-      <h1>{d.title}</h1>
-      <p class="byline">
-        By <a href={SITE.author.url}>{SITE.author.name}</a>. Updated <time datetime={d.updatedDate.toISOString()}>{formatDate(d.updatedDate)}</time>. {readingMinutes(article.body)} min read.
-      </p>
     </header>
 
-    <Verdict text={d.verdict} verified={formatDate(d.lastVerified)} />
-    <figure class="scorecard">
-      <img src={heroUrl(article).replace('.png', '.webp')} width="1200" height="630" alt={d.heroAlt} fetchpriority="high" />
-    </figure>
-    <Picks picks={d.picks} />
-    <CompareTable tools={tools} comparison={d.comparison} />
+    <div class="wrap">
+      <Picks picks={d.picks} />
 
-    <div class="body">
-      {toc.length > 2 && (
-        <aside class="toc" aria-labelledby="toc-h">
-          <h2 id="toc-h">In this comparison</h2>
-          <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
-        </aside>
-      )}
-      <div class="prose">
-        <Content />
-        <Faq faqs={d.faqs} />
-        {d.sources.length > 0 && (
-          <section class="sources" aria-labelledby="src-h">
-            <h2 id="src-h">Sources we checked</h2>
-            <ul>{d.sources.map((s) => <li><a href={s.url} rel="nofollow noopener" target="_blank">{s.title}</a></li>)}</ul>
-          </section>
-        )}
+      <div class="table-panel">
+        <CompareTable tools={tools} comparison={d.comparison} />
       </div>
-    </div>
 
-    {related.length > 0 && (
+      <div class="body">
+        {toc.length > 2 && (
+          <nav class="toc" aria-labelledby="toc-h">
+            <h2 id="toc-h">On this page</h2>
+            <ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+          </nav>
+        )}
+        <div class="main">
+          <div class="prose"><Content /></div>
+          <Faq faqs={d.faqs} />
+          {d.sources.length > 0 && (
+            <section class="sources" aria-labelledby="src-h">
+              <h2 id="src-h">Sources we checked</h2>
+              <ul role="list">
+                {d.sources.map((s) => (
+                  <li>
+                    <a href={s.url} rel="nofollow noopener" target="_blank">{s.title}<span class="sr"> (opens in a new tab)</span></a>
+                    <span class="host">{new URL(s.url).hostname.replace(/^www\./, '')}</span>
+                  </li>
+                ))}
+              </ul>
+              <p class="note">Prices were checked on these pages on {formatDate(d.lastVerified)}. Vendors change plans often, so confirm on the official page before you buy.</p>
+            </section>
+          )}
+        </div>
+      </div>
+
       <section class="related" aria-labelledby="rel-h">
         <h2 id="rel-h">Related comparisons</h2>
-        <ArticleList articles={related} headingLevel="h3" />
+        <CompareCards articles={fallbackRelated} />
       </section>
-    )}
+    </div>
   </article>
 </Base>
 <style>
+  .head {
+    background: var(--paper-raised);
+    border-bottom: 1px solid var(--rule);
+    padding-block: 24px clamp(40px, 6vw, 64px);
+  }
   .crumbs {
-    font-family: var(--display);
-    font-size: 0.92rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font: 500 0.92rem var(--display);
     color: var(--ink-soft);
-    margin: 28px 0 0;
   }
   .crumbs a {
     color: var(--ink-soft);
+    text-decoration: none;
   }
-  .tape {
-    margin-top: 36px;
+  .crumbs a:hover {
+    color: var(--cobalt);
+    text-decoration: underline;
   }
-  .fighters {
+  .contenders {
+    list-style: none;
+    margin: 36px 0 0;
+    padding: 0;
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
-    gap: 14px 18px;
-    font-family: var(--display);
-    font-weight: 700;
-    font-size: 1.2rem;
+    gap: 10px;
   }
-  .fighter {
+  .contenders li {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
+    padding: 6px 16px 6px 6px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--paper);
   }
-  .vs {
-    font-size: 1rem;
-    color: var(--ink-soft);
-    font-style: italic;
-    font-weight: 500;
+  .contenders li :global(.mono) {
+    border-radius: 999px;
+    border: 0;
+    background: var(--paper-raised);
+  }
+  .contenders a {
+    font: 700 1.02rem var(--display);
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .contenders a:hover {
+    color: var(--cobalt);
   }
   h1 {
-    font-size: clamp(2.3rem, 5.6vw, 4.4rem);
-    letter-spacing: -0.035em;
-    margin: 26px 0 16px;
-    max-width: 18ch;
+    font-size: clamp(2.3rem, 5.2vw, 4.2rem);
     font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.02;
+    margin: 24px 0 18px;
+    max-width: 19ch;
   }
   .byline {
-    font-family: var(--display);
-    color: var(--ink-soft);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
     margin: 0;
-    font-size: 0.97rem;
+    font: 500 0.95rem var(--display);
+    color: var(--ink-soft);
   }
-  .scorecard {
-    margin: 36px 0 0;
-    max-width: 860px;
+  .byline a {
+    color: var(--ink);
   }
-  .scorecard img {
-    border-radius: var(--radius-l);
+  .sep {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--rule);
+  }
+  .table-panel {
+    margin-top: 64px;
+  }
+  .table-panel :global(.compare) {
+    margin: 0;
+  }
+  .table-panel :global(.scroll) {
+    background: var(--paper-raised);
     border: 1px solid var(--rule);
+    border-radius: 20px;
+    padding: 6px 10px;
   }
   .body {
     display: grid;
-    grid-template-columns: 220px minmax(0, 1fr);
-    gap: 56px;
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 64px;
     align-items: start;
+    margin-top: 40px;
   }
   .body:not(:has(.toc)) {
     grid-template-columns: minmax(0, 1fr);
@@ -189,45 +236,92 @@ const jsonLd = [
   .toc {
     position: sticky;
     top: 96px;
-    font-family: var(--display);
-    font-size: 0.93rem;
-    padding-top: 2.2em;
+    padding-top: 2.6em;
   }
   .toc h2 {
     font-size: 0.95rem;
     letter-spacing: 0;
     color: var(--ink-soft);
-    margin: 0 0 8px;
+    margin: 0 0 12px;
   }
   .toc ol {
-    padding-left: 1.1em;
+    list-style: none;
+    padding: 0 0 0 14px;
     margin: 0;
     display: grid;
-    gap: 6px;
+    gap: 10px;
+    border-left: 2px solid var(--rule);
+    font: 500 0.93rem/1.35 var(--display);
   }
   .toc a {
-    color: var(--ink);
+    color: var(--ink-soft);
     text-decoration: none;
   }
   .toc a:hover {
-    text-decoration: underline;
+    color: var(--cobalt);
+  }
+  .main {
+    min-width: 0;
+    max-width: 760px;
+  }
+  .sources {
+    margin-top: 56px;
+    padding: 24px;
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    background: var(--paper-raised);
+  }
+  .sources h2 {
+    font-size: 1.15rem;
+    margin: 0 0 12px;
   }
   .sources ul {
-    font-size: 0.95rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .sources li {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px 16px;
+    font: 600 0.98rem var(--display);
+  }
+  .host {
+    font-weight: 500;
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+  }
+  .note {
+    margin: 16px 0 0;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
   }
   .related {
-    margin-top: 72px;
+    margin-top: 88px;
   }
   .related > h2 {
     font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+    margin: 0 0 20px;
   }
-  @media (max-width: 900px) {
+  @media (max-width: 960px) {
     .body {
       grid-template-columns: minmax(0, 1fr);
       gap: 0;
     }
     .toc {
       position: static;
+      padding: 0;
+      margin: 0 0 8px;
     }
   }
 </style>

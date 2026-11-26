@@ -5,33 +5,70 @@ const { faqs } = Astro.props;
 {faqs.length > 0 && (
   <section class="faq" aria-labelledby="faq-h">
     <h2 id="faq-h">Questions people ask</h2>
-    {faqs.map((f) => (
-      <details>
-        <summary>{f.q}</summary>
-        <p>{f.a}</p>
-      </details>
-    ))}
+    <div class="list">
+      {faqs.map((f, i) => (
+        <details open={i === 0}>
+          <summary>
+            <span>{f.q}</span>
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
   </section>
 )}
 <style>
   .faq {
-    max-width: var(--measure);
-    margin: 56px 0;
+    margin: 64px 0 0;
   }
   h2 {
+    font-family: var(--display);
     font-size: clamp(1.5rem, 2.4vw, 1.9rem);
+    margin: 0 0 18px;
+  }
+  .list {
+    display: grid;
+    gap: 10px;
   }
   details {
-    border-bottom: 1px solid var(--rule);
-    padding: 14px 0;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    padding: 0 20px;
+    transition: border-color 0.15s;
+  }
+  details[open] {
+    border-color: color-mix(in srgb, var(--cobalt) 30%, var(--rule));
   }
   summary {
-    font-family: var(--display);
-    font-weight: 600;
-    font-size: 1.1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 0;
+    font: 700 1.05rem/1.4 var(--display);
     cursor: pointer;
+    list-style: none;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary svg {
+    width: 20px;
+    height: 20px;
+    flex: none;
+    color: var(--ink-soft);
+    transition: transform 0.2s;
+  }
+  details[open] summary svg {
+    transform: rotate(180deg);
   }
   details p {
-    margin: 10px 0 0;
+    max-width: 36em;
+    margin: 0 0 20px;
+    font-family: var(--read);
+    font-size: 1.12rem;
+    line-height: 1.65;
   }
 </style>

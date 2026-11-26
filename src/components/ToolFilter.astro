@@ -10,7 +10,7 @@ interface Props {
   show?: 'both' | 'search' | 'chips';
   size?: 'default' | 'large';
 }
-const { target = 'tool-grid', counts, placeholder = 'Try "video", "free" or "Claude"…', show = 'both', size = 'default' } = Astro.props;
+const { target = 'tool-grid', counts, placeholder = 'Try “video”, “free” or “Claude”…', show = 'both', size = 'default' } = Astro.props;
 const label = (l: string) => l.replace(/^AI (\w)/, (_, x) => x.toUpperCase());
 ---
 <div class:list={['filter', size]}>
@@ -49,8 +49,20 @@ const label = (l: string) => l.replace(/^AI (\w)/, (_, x) => x.toUpperCase());
     let catLabel = '';
     let expanded = false;
 
+    // Filters live in the URL (?q=…&cat=…) so a filtered view can be shared and survives Back.
+    const syncUrl = (q: string) => {
+      try {
+        const url = new URL(location.href);
+        q ? url.searchParams.set('q', q) : url.searchParams.delete('q');
+        cat ? url.searchParams.set('cat', cat) : url.searchParams.delete('cat');
+        history.replaceState(null, '', url);
+      } catch {
+        /* URL updates can be blocked in sandboxed previews; filtering still works. */
+      }
+    };
     const apply = () => {
       const q = (input?.value ?? '').trim().toLowerCase();
+      syncUrl(q);
       const filtering = Boolean(q || cat);
       let shown = 0;
       cards.forEach((card) => {
@@ -63,11 +75,11 @@ const label = (l: string) => l.replace(/^AI (\w)/, (_, x) => x.toUpperCase());
       if (empty) {
         empty.hidden = shown > 0;
         const where = catLabel ? ` in ${catLabel}` : '';
-        empty.textContent = `No tools match "${q}"${where}. Try a job such as "video" or "notes"${cat ? ', or choose All' : ''}.`;
+        empty.textContent = `No tools match “${q}”${where}. Try a job such as “video” or “notes”${cat ? ', or choose All' : ''}.`;
       }
       if (status) {
         status.textContent = filtering
-          ? `${shown} ${shown === 1 ? 'tool' : 'tools'}${catLabel ? ` in ${catLabel}` : ''}${q ? ` matching "${q}"` : ''}`
+          ? `${shown} ${shown === 1 ? 'tool' : 'tools'}${catLabel ? ` in ${catLabel}` : ''}${q ? ` matching “${q}”` : ''}`
           : '';
       }
     };
@@ -91,6 +103,19 @@ const label = (l: string) => l.replace(/^AI (\w)/, (_, x) => x.toUpperCase());
       apply();
       cards.find((c) => c.dataset.extra !== undefined)?.querySelector('a')?.focus();
     });
+    // Restore a shared or back-navigated filter.
+    try {
+      const params = new URLSearchParams(location.search);
+      if (input && params.get('q')) input.value = params.get('q')!;
+      const chip = chips.find((c) => c.dataset.cat === params.get('cat'));
+      if (chip) {
+        cat = chip.dataset.cat ?? '';
+        catLabel = chip.dataset.label ?? '';
+        chips.forEach((x) => x.setAttribute('aria-pressed', String(x === chip)));
+      }
+    } catch {
+      /* ignore */
+    }
     apply();
   });
 </script>

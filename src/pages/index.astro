@@ -42,13 +42,13 @@ const boards = (
   <section class="hero" aria-labelledby="hero-h">
     <div class="wrap hero-grid">
       <div class="ask">
-        <h1 id="hero-h">Which AI tool should you use?</h1>
-        <p class="intro">We compare the leading AI tools and name a pick for every job, with prices checked against each vendor's own pricing page.</p>
+        <h1 id="hero-h" data-enter>Which AI tool should you use?</h1>
+        <p class="intro" data-enter style="--i:1">We compare the leading AI tools and name a pick for every job, with prices checked against each vendor's own pricing page.</p>
         <ToolFilter counts={counts} show="search" size="large" />
       </div>
 
       {featured && (
-        <article class="answer" aria-labelledby="answer-h">
+        <article class="answer" aria-labelledby="answer-h" data-enter style="--i:2">
           <div class="logos" aria-hidden="true">
             {featuredTools.map((t) => <Monogram name={t.data.name} color={t.data.color} size={52} />)}
           </div>

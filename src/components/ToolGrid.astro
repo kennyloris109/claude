@@ -16,7 +16,7 @@ const hiddenCount = initial ? Math.max(0, tools.length - initial) : 0;
 <ul class="grid" id={id} role="list" data-filterable>
   {tools.map((t, i) => <ToolCard tool={t} pick={picks.get(t.id)} extra={Boolean(initial && i >= initial)} />)}
 </ul>
-<p class="empty" id={`${id}-empty`} hidden>No tools match that search. Try a job such as "video" or "notes".</p>
+<p class="empty" id={`${id}-empty`} hidden>No tools match that search. Try a job such as “video” or “notes”.</p>
 {hiddenCount > 0 && (
   <div class="more-row">
     <button type="button" class="btn btn-ghost" id={`${id}-more`} hidden>Show all {tools.length} tools</button>

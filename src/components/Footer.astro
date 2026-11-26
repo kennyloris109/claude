@@ -1,52 +1,106 @@
 ---
 import { SITE } from '../site.config.mjs';
+import { CATEGORIES } from '../lib/site';
 const year = new Date().getFullYear();
 ---
 <footer class="site-footer">
-  <div class="wrap cols">
-    <p class="about">
-      <strong>{SITE.name}</strong> compares AI tools by the jobs people use them for and names a pick for each one. We don't accept payment for verdicts.
-    </p>
-    <ul>
-      <li><a href="/about/">About us</a></li>
-      <li><a href="/methodology/">How we compare</a></li>
-      <li><a href="/tools/">All tools</a></li>
-      <li><a href="/rss.xml">RSS feed</a></li>
-    </ul>
+  <div class="wrap grid">
+    <div class="about">
+      <a class="brand" href="/">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="9" fill="currentColor" /><path d="M9 16.5l4.5 4.5L23 11.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        {SITE.name}
+      </a>
+      <p>Clear picks for every AI job, with prices checked against each vendor's own pricing page. No vendor pays for a verdict.</p>
+    </div>
+    <nav aria-labelledby="f-cats">
+      <h2 id="f-cats">Categories</h2>
+      <ul role="list">
+        {Object.entries(CATEGORIES).map(([id, c]) => <li><a href={`/category/${id}/`}>{c.label}</a></li>)}
+      </ul>
+    </nav>
+    <nav aria-labelledby="f-site">
+      <h2 id="f-site">ToolVerdict</h2>
+      <ul role="list">
+        <li><a href="/tools/">All tools</a></li>
+        <li><a href="/compare/">Comparisons</a></li>
+        <li><a href="/methodology/">How we compare</a></li>
+        <li><a href="/about/">About us</a></li>
+        <li><a href="/rss.xml">RSS feed</a></li>
+      </ul>
+    </nav>
   </div>
-  <p class="wrap legal">© {year} {SITE.name}. Prices change often; each article shows when we last checked them.</p>
+  <div class="wrap legal">
+    <p>© {year} {SITE.name}. Prices change often; each comparison shows when we last checked them. Some links may earn us a commission, which never changes a verdict.</p>
+  </div>
 </footer>
 <style>
   .site-footer {
-    margin-top: 96px;
+    margin-top: 112px;
+    background: var(--paper-raised);
     border-top: 1px solid var(--rule);
-    padding-block: 40px 28px;
+    padding-block: 56px 32px;
     font-family: var(--display);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 0.8fr);
+    gap: 40px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font: 800 1.3rem var(--display);
+    letter-spacing: -0.035em;
+    color: var(--cobalt);
+    text-decoration: none;
+  }
+  .brand svg {
+    width: 30px;
+    height: 30px;
+    color: var(--cobalt);
+  }
+  .about p {
+    margin: 14px 0 0;
+    max-width: 38ch;
     color: var(--ink-soft);
+    line-height: 1.6;
+  }
+  h2 {
     font-size: 0.95rem;
-  }
-  .cols {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 24px;
-  }
-  .about {
-    max-width: 46ch;
-    margin: 0;
+    letter-spacing: 0;
+    margin: 0 0 14px;
   }
   ul {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 6px;
+    gap: 9px;
   }
-  a {
-    color: var(--ink);
+  nav a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  nav a:hover {
+    color: var(--cobalt);
+    text-decoration: underline;
   }
   .legal {
-    margin-top: 28px;
+    margin-top: 44px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+  }
+  .legal p {
+    margin: 0;
     font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+  @media (max-width: 760px) {
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+    }
   }
 </style>
