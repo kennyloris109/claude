@@ -39,6 +39,8 @@ Use the `new-article` and `refresh-article` skills in `.claude/skills/` for the 
 - `ui-ux-pro-max` and its companions `design`, `design-system`, `brand`, `banner-design`, `slides`, `ui-styling` (github.com/nextlevelbuilder/ui-ux-pro-max-skill, MIT): searchable local design data (styles, palettes, font pairings, UX guidelines) via `python3 .claude/skills/ui-ux-pro-max/scripts/search.py`. The logo/icon generators in `design` call paid image APIs only if a key is provided; `ui-styling` targets shadcn/Tailwind, which this site does not use.
 - `design-taste-frontend` (github.com/leonxlnx/taste-skill, MIT): anti-generic website building with Node scripts and bundled licensed photos/icons; no API keys.
 
+- Anthropic's example skills (see `.claude/skills/ANTHROPIC-SKILLS.md`). `webapp-testing` (Playwright) is useful for checking pages; `canvas-design`/`algorithmic-art` for one-off visuals. **`brand-guidelines` applies Anthropic's own brand; never use it for ToolVerdict.** `theme-factory` themes are for decks and docs, not this site's design system.
+
 ### Which design skill to use
 Several design skills overlap. Default roles on this site:
 1. **Review/score:** `impeccable critique` / `impeccable audit` (snapshots in `.impeccable/critique/`).
