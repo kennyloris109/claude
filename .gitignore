@@ -4,3 +4,6 @@ dist/
 .env
 .env.*
 .DS_Store
+
+# impeccable runtime state (local servers, snapshots)
+.impeccable/live/server.json
