@@ -1,0 +1,315 @@
+---
+import { getCollection, getEntries } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Monogram from '../../components/Monogram.astro';
+import { getArticles, articleUrl, heroUrl, formatDate, readingMinutes, CATEGORIES, type Category } from '../../lib/site';
+import { SITE } from '../../site.config.mjs';
+
+const articles = await getArticles();
+const toolCount = (await getCollection('tools')).length;
+const items = await Promise.all(articles.map(async (a) => ({ a, tools: await getEntries(a.data.tools) })));
+const [featured, ...rest] = items;
+const cats = [...new Set(articles.map((a) => a.data.category))] as Category[];
+const lastChecked = articles.reduce((m, a) => (a.data.lastVerified > m ? a.data.lastVerified : m), articles[0].data.lastVerified);
+const firstSentence = (t: string) => t.split(/(?<=\.)\s/)[0];
+const jsonLd = [{
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'AI tool comparisons',
+  url: `${SITE.url}/compare/`,
+  mainEntity: { '@type': 'ItemList', itemListElement: articles.map((a, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE.url}${articleUrl(a)}`, name: a.data.title })) },
+}];
+---
+<Base title="AI tool comparisons" description="Side-by-side comparisons of AI tools with a short answer, a pick for every use case, current prices and verified quotes from reviewers." jsonLd={jsonLd}>
+  <header class="head">
+    <div class="wrap">
+      <h1 data-enter>AI tool comparisons</h1>
+      <p class="lede" data-enter style="--i:1">Every comparison starts with a short answer and names a pick for each use case. Then it shows how each tool works, what it costs and what reviewers say about it.</p>
+      <p class="facts" data-enter style="--i:1">
+        <span>{articles.length} comparisons</span><span>{toolCount} tools</span><span>Prices checked {formatDate(lastChecked)}</span>
+      </p>
+    </div>
+  </header>
+
+  <div class="wrap">
+    {featured && (
+      <article class="feature" aria-labelledby="feat-h">
+        <div class="feat-img">
+          <img src={heroUrl(featured.a).replace('.png', '.webp')} width="1200" height="630" alt={featured.a.data.heroAlt} fetchpriority="high" />
+        </div>
+        <div class="feat-body">
+          <span class="tag">Latest comparison</span>
+          <h2 id="feat-h"><a href={articleUrl(featured.a)}>{featured.a.data.title}</a></h2>
+          <p class="verdict"><span class="marker">{firstSentence(featured.a.data.verdict)}</span></p>
+          <div class="logos" aria-hidden="true">{featured.tools.map((t) => <Monogram name={t.data.name} color={t.data.color} size={36} />)}</div>
+          <p class="meta">Updated {formatDate(featured.a.data.updatedDate)} · {readingMinutes(featured.a.body)} min read</p>
+          <a class="btn btn-primary" href={articleUrl(featured.a)}>Read the comparison</a>
+        </div>
+      </article>
+    )}
+
+    <section aria-labelledby="all-h">
+      <div class="all-head">
+        <h2 id="all-h" class="section-h">All comparisons</h2>
+        <div class="chips" role="group" aria-label="Filter comparisons by category" data-blog-filter>
+          <button type="button" class="chip" data-cat="" aria-pressed="true">All</button>
+          {cats.map((c) => <button type="button" class="chip" data-cat={c} aria-pressed="false">{CATEGORIES[c].label.replace(/^AI (\w)/, (_, x) => x.toUpperCase())}</button>)}
+        </div>
+      </div>
+      <p class="status" id="blog-status" role="status" aria-live="polite"></p>
+      <ul class="grid" role="list" id="blog-grid">
+        {rest.map(({ a, tools }) => (
+          <li class="post" data-category={a.data.category}>
+            <img src={heroUrl(a).replace('.png', '.webp')} width="1200" height="630" alt="" loading="lazy" decoding="async" />
+            <div class="post-body">
+              <span class="tag">{CATEGORIES[a.data.category].label}</span>
+              <h3><a href={articleUrl(a)}>{a.data.title}</a></h3>
+              <p>{firstSentence(a.data.verdict)}</p>
+              <div class="post-foot">
+                <span class="logos" aria-hidden="true">{tools.map((t) => <Monogram name={t.data.name} color={t.data.color} size={26} />)}</span>
+                <span class="meta">{readingMinutes(a.body)} min read</span>
+              </div>
+            </div>
+          </li>
+        ))}
+        {featured && (
+          <li class="post" data-category={featured.a.data.category} data-featured hidden>
+            <img src={heroUrl(featured.a).replace('.png', '.webp')} width="1200" height="630" alt="" loading="lazy" decoding="async" />
+            <div class="post-body">
+              <span class="tag">{CATEGORIES[featured.a.data.category].label}</span>
+              <h3><a href={articleUrl(featured.a)}>{featured.a.data.title}</a></h3>
+              <p>{firstSentence(featured.a.data.verdict)}</p>
+              <div class="post-foot">
+                <span class="logos" aria-hidden="true">{featured.tools.map((t) => <Monogram name={t.data.name} color={t.data.color} size={26} />)}</span>
+                <span class="meta">{readingMinutes(featured.a.body)} min read</span>
+              </div>
+            </div>
+          </li>
+        )}
+      </ul>
+    </section>
+  </div>
+</Base>
+<script>
+  // Category filter for the comparison grid. When a category is chosen, the featured
+  // article's card is shown in the grid too, so every match is listed in one place.
+  const bar = document.querySelector<HTMLElement>('[data-blog-filter]');
+  const posts = [...document.querySelectorAll<HTMLElement>('#blog-grid .post')];
+  const status = document.getElementById('blog-status');
+  bar?.querySelectorAll<HTMLButtonElement>('.chip').forEach((chip) =>
+    chip.addEventListener('click', () => {
+      const cat = chip.dataset.cat ?? '';
+      bar.querySelectorAll('.chip').forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+      let shown = 0;
+      posts.forEach((p) => {
+        const featured = p.dataset.featured !== undefined;
+        const ok = cat ? p.dataset.category === cat : !featured;
+        p.hidden = !ok;
+        if (ok) shown++;
+      });
+      if (status) status.textContent = cat ? `${shown} comparison${shown === 1 ? '' : 's'} in ${chip.textContent?.trim()}` : '';
+    })
+  );
+</script>
+<style>
+  .head {
+    background: var(--paper-raised);
+    border-bottom: 1px solid var(--rule);
+    padding-block: clamp(40px, 6vw, 72px);
+  }
+  h1 {
+    font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.02;
+    margin: 0;
+  }
+  .lede {
+    max-width: 60ch;
+    font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 18px 0 22px;
+  }
+  .facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+  }
+  .facts span {
+    font: 700 0.9rem var(--display);
+    padding: 7px 13px;
+    border-radius: 999px;
+    background: var(--tint);
+  }
+  .feature {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 48px);
+    align-items: center;
+    margin-top: 48px;
+    padding: clamp(18px, 2.5vw, 28px);
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 28px;
+  }
+  .feat-img img {
+    border-radius: 18px;
+    border: 1px solid var(--rule);
+    transition: transform 0.3s ease;
+  }
+  .feat-img:hover img {
+    transform: scale(1.015);
+  }
+  .feat-img {
+    overflow: hidden;
+    border-radius: 18px;
+  }
+  .feat-body {
+    display: grid;
+    gap: 14px;
+    justify-items: start;
+  }
+  .tag {
+    align-self: flex-start;
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    font: 700 0.78rem var(--display);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--cobalt);
+  }
+  .feat-body h2 {
+    margin: 0;
+    font-size: clamp(1.6rem, 2.8vw, 2.3rem);
+    line-height: 1.12;
+  }
+  .feat-body h2 a,
+  .post h3 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .feat-body h2 a:hover,
+  .post h3 a:hover {
+    color: var(--cobalt);
+  }
+  .verdict {
+    margin: 0;
+    font: 600 1.1rem/1.55 var(--display);
+  }
+  .logos {
+    display: flex;
+    gap: 6px;
+  }
+  .meta {
+    font: 500 0.88rem var(--display);
+    color: var(--ink-soft);
+    margin: 0;
+  }
+  .all-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .all-head .section-h {
+    margin-bottom: 0;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    font: 600 0.9rem var(--display);
+    min-height: 38px;
+    border: 1px solid var(--rule);
+    background: var(--paper-raised);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 6px 14px;
+    cursor: pointer;
+  }
+  .chip[aria-pressed='true'] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+  .status {
+    margin: 0 0 12px;
+    font: 600 0.95rem var(--display);
+    color: var(--ink-soft);
+  }
+  .status:empty {
+    margin: 0;
+  }
+  .grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: 24px;
+  }
+  .post {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 22px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .post:hover,
+  .post:focus-within {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--cobalt) 35%, var(--rule));
+    box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--ink) 30%, transparent);
+  }
+  .post img {
+    border-bottom: 1px solid var(--rule);
+  }
+  .post-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px 22px 22px;
+    flex: 1;
+  }
+  .post h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    line-height: 1.2;
+  }
+  .post h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .post p {
+    margin: 0;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    flex: 1;
+  }
+  .post-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule);
+  }
+  .post-foot :global(.mono) {
+    border-radius: 8px;
+  }
+  @media (max-width: 860px) {
+    .feature {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

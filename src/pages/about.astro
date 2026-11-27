@@ -1,0 +1,14 @@
+---
+import Page from '../layouts/Page.astro';
+import { SITE } from '../site.config.mjs';
+const jsonLd = [{ '@context': 'https://schema.org', '@type': 'AboutPage', name: `About ${SITE.name}`, url: `${SITE.url}/about/` }];
+---
+<Page title={`About ${SITE.name}`} description="Who writes ToolVerdict, how we stay independent, how we make money and how to reach us about corrections or a tool you want compared.">
+  <p>{SITE.name} exists to answer one question quickly: <em>which AI tool should I use for this job?</em> Most comparison pages list features. We pick a winner for each use case and show the evidence.</p>
+  <h2>Who we are</h2>
+  <p>{SITE.name} is written by a small editorial team that uses these tools every day for writing, research, coding and design. <!-- TODO: replace with a named author, a photo and real credentials. Named, credible authors are one of the strongest trust signals for Google and AI answer engines. --></p>
+  <h2>How we stay independent</h2>
+  <p>No vendor pays for a verdict, a ranking or a review. If we ever earn affiliate commission from a link, the page will say so next to the link, and it never changes which tool we recommend.</p>
+  <h2>Corrections</h2>
+  <p>AI tools change monthly. Every article shows the date we last checked prices and features. If something is out of date, tell us and we'll re-test and update the page.</p>
+</Page>

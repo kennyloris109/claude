@@ -1,0 +1,233 @@
+---
+// Search box and/or category chips that filter a ToolGrid (matched by `target` = the grid's id).
+// The parts can be placed separately (e.g. search in the hero, chips above the grid); one script wires them.
+// Works without JS: every tool is shown.
+import { CATEGORIES } from '../lib/site';
+interface Props {
+  target?: string;
+  counts: Record<string, number>;
+  placeholder?: string;
+  show?: 'both' | 'search' | 'chips';
+  size?: 'default' | 'large';
+}
+const { target = 'tool-grid', counts, placeholder = 'Try “video”, “free” or “Claude”…', show = 'both', size = 'default' } = Astro.props;
+const label = (l: string) => l.replace(/^AI (\w)/, (_, x) => x.toUpperCase());
+---
+<div class:list={['filter', size]}>
+  {show !== 'chips' && (
+    <form class="row" role="search" data-search-for={target} action="#">
+      <label class="search">
+        <span class="sr">Search AI tools</span>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2" /><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
+        <input id={`${target}-q`} name="q" type="search" placeholder={placeholder} autocomplete="off" spellcheck="false" />
+      </label>
+      <button type="submit" class="btn btn-dark go">Search</button>
+    </form>
+  )}
+  {show !== 'search' && (
+    <div class="chips" role="group" aria-label="Filter by category" data-chips-for={target}>
+      <button type="button" class="chip" data-cat="" aria-pressed="true">All</button>
+      {Object.entries(CATEGORIES).filter(([id]) => counts[id]).map(([id, c]) => (
+        <button type="button" class="chip" data-cat={id} data-label={c.label} aria-pressed="false">{label(c.label)} <span>{counts[id]}</span></button>
+      ))}
+    </div>
+  )}
+</div>
+<script>
+  // One controller per filterable grid. Inputs and chips are found by their data-*-for attribute.
+  document.querySelectorAll<HTMLElement>('[data-filterable]').forEach((grid) => {
+    const id = grid.id;
+    const form = document.querySelector<HTMLFormElement>(`[data-search-for="${id}"]`);
+    const input = form?.querySelector('input') ?? null;
+    const chipsEl = document.querySelector<HTMLElement>(`[data-chips-for="${id}"]`);
+    const chips = chipsEl ? [...chipsEl.querySelectorAll<HTMLButtonElement>('button[data-cat]')] : [];
+    const status = document.getElementById(`${id}-status`);
+    const empty = document.getElementById(`${id}-empty`);
+    const more = document.getElementById(`${id}-more`) as HTMLButtonElement | null;
+    const cards = [...grid.querySelectorAll<HTMLElement>('[data-name]')];
+    let cat = '';
+    let catLabel = '';
+    let expanded = false;
+
+    // Filters live in the URL (?q=…&cat=…) so a filtered view can be shared and survives Back.
+    const syncUrl = (q: string) => {
+      try {
+        const url = new URL(location.href);
+        q ? url.searchParams.set('q', q) : url.searchParams.delete('q');
+        cat ? url.searchParams.set('cat', cat) : url.searchParams.delete('cat');
+        history.replaceState(null, '', url);
+      } catch {
+        /* URL updates can be blocked in sandboxed previews; filtering still works. */
+      }
+    };
+    const apply = () => {
+      const q = (input?.value ?? '').trim().toLowerCase();
+      syncUrl(q);
+      const filtering = Boolean(q || cat);
+      let shown = 0;
+      cards.forEach((card) => {
+        const match = (!cat || card.dataset.category === cat) && (!q || card.dataset.name!.includes(q));
+        const visible = match && (filtering || expanded || card.dataset.extra === undefined);
+        card.hidden = !visible;
+        if (match) shown++;
+      });
+      if (more) more.hidden = filtering || expanded || !cards.some((c) => c.dataset.extra !== undefined);
+      if (empty) {
+        empty.hidden = shown > 0;
+        const where = catLabel ? ` in ${catLabel}` : '';
+        empty.textContent = `No tools match “${q}”${where}. Try a job such as “video” or “notes”${cat ? ', or choose All' : ''}.`;
+      }
+      if (status) {
+        status.textContent = filtering
+          ? `${shown} ${shown === 1 ? 'tool' : 'tools'}${catLabel ? ` in ${catLabel}` : ''}${q ? ` matching “${q}”` : ''}`
+          : '';
+      }
+    };
+
+    input?.addEventListener('input', apply);
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      apply();
+      grid.closest('section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    chips.forEach((c) =>
+      c.addEventListener('click', () => {
+        cat = c.dataset.cat ?? '';
+        catLabel = c.dataset.label ?? '';
+        chips.forEach((x) => x.setAttribute('aria-pressed', String(x === c)));
+        apply();
+      })
+    );
+    more?.addEventListener('click', () => {
+      expanded = true;
+      apply();
+      cards.find((c) => c.dataset.extra !== undefined)?.querySelector('a')?.focus();
+    });
+    // Restore a shared or back-navigated filter.
+    try {
+      const params = new URLSearchParams(location.search);
+      if (input && params.get('q')) input.value = params.get('q')!;
+      const chip = chips.find((c) => c.dataset.cat === params.get('cat'));
+      if (chip) {
+        cat = chip.dataset.cat ?? '';
+        catLabel = chip.dataset.label ?? '';
+        chips.forEach((x) => x.setAttribute('aria-pressed', String(x === chip)));
+      }
+    } catch {
+      /* ignore */
+    }
+    apply();
+  });
+</script>
+<style>
+  .filter {
+    display: grid;
+    gap: 14px;
+  }
+  .row {
+    display: flex;
+    gap: 10px;
+    max-width: 640px;
+    margin: 0;
+  }
+  .search {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 0 14px;
+    box-shadow: var(--shadow);
+  }
+  .search:focus-within {
+    border-color: var(--cobalt);
+    outline: 3px solid var(--cobalt);
+    outline-offset: 2px;
+  }
+  .search svg {
+    width: 20px;
+    height: 20px;
+    color: var(--ink-soft);
+    flex: none;
+  }
+  input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font: 500 1.02rem var(--display);
+    padding: 14px 0;
+    outline: none;
+  }
+  input::placeholder {
+    color: var(--ink-soft);
+  }
+  .go {
+    border-radius: 12px;
+    padding-inline: 22px;
+    white-space: nowrap;
+  }
+  .large .row {
+    max-width: 620px;
+  }
+  .large .search {
+    border-radius: 16px;
+    padding: 0 18px;
+  }
+  .large input {
+    padding: 18px 0;
+    font-size: 1.08rem;
+  }
+  .large .go {
+    border-radius: 16px;
+    padding-inline: 26px;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    font: 600 0.92rem var(--display);
+    min-height: 40px;
+    border: 1px solid var(--rule);
+    background: var(--paper-raised);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 7px 15px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .chip:hover {
+    border-color: var(--ink-soft);
+  }
+  .chip span {
+    color: var(--ink-soft);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+  .chip[aria-pressed='true'] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+  .chip[aria-pressed='true'] span {
+    color: inherit;
+    opacity: 0.75;
+  }
+  @media (max-width: 560px) {
+    .row {
+      flex-direction: column;
+    }
+  }
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+</style>

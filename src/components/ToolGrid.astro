@@ -1,0 +1,57 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ToolCard from './ToolCard.astro';
+interface Props {
+  tools: CollectionEntry<'tools'>[];
+  /** tool id → the use case it is our top pick for */
+  picks: Map<string, string>;
+  id?: string;
+  /** Show only this many cards until "Show all" is pressed (filtering always shows every match). */
+  initial?: number;
+}
+const { tools, picks, id = 'tool-grid', initial } = Astro.props;
+const hiddenCount = initial ? Math.max(0, tools.length - initial) : 0;
+---
+<p class="status" id={`${id}-status`} role="status" aria-live="polite"></p>
+<ul class="grid" id={id} role="list" data-filterable>
+  {tools.map((t, i) => <ToolCard tool={t} pick={picks.get(t.id)} extra={Boolean(initial && i >= initial)} />)}
+</ul>
+<p class="empty" id={`${id}-empty`} hidden>No tools match that search. Try a job such as “video” or “notes”.</p>
+{hiddenCount > 0 && (
+  <div class="more-row">
+    <button type="button" class="btn btn-ghost" id={`${id}-more`} hidden>Show all {tools.length} tools</button>
+  </div>
+)}
+<style>
+  .grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+    gap: 24px;
+  }
+  .status {
+    margin: 0 0 14px;
+    min-height: 1.5em;
+    font: 600 0.95rem var(--display);
+    color: var(--ink-soft);
+  }
+  .status:empty {
+    min-height: 0;
+    margin: 0;
+  }
+  .empty {
+    font-family: var(--display);
+    color: var(--ink-soft);
+    padding: 28px;
+    border: 1px dashed var(--rule);
+    border-radius: 16px;
+    text-align: center;
+  }
+  .more-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 28px;
+  }
+</style>

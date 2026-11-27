@@ -1,0 +1,257 @@
+---
+import { getCollection, getEntries, getEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ToolGrid from '../components/ToolGrid.astro';
+import ToolFilter from '../components/ToolFilter.astro';
+import CompareCards from '../components/CompareCards.astro';
+import Monogram from '../components/Monogram.astro';
+import { getArticles, getPickedToolIds, CATEGORIES, articleUrl, formatDate, type Category } from '../lib/site';
+import { SITE } from '../site.config.mjs';
+
+const tools = await getCollection('tools');
+const articles = await getArticles();
+const picked = await getPickedToolIds();
+const categoryOrder = Object.keys(CATEGORIES) as Category[];
+const counts = Object.fromEntries(categoryOrder.map((c) => [c, tools.filter((t) => t.data.category === c).length]));
+
+// Directory order: by category (same order as the chips), then name.
+const ordered = [...tools].sort(
+  (a, b) => categoryOrder.indexOf(a.data.category) - categoryOrder.indexOf(b.data.category) || a.data.name.localeCompare(b.data.name)
+);
+
+// The hero answers one real question with a real, dated verdict.
+const featured = articles.find((a) => a.id === 'chatgpt-vs-claude-vs-gemini') ?? articles[0];
+const featuredTools = featured ? await getEntries(featured.data.tools) : [];
+const featuredQuestion = featuredTools.map((t) => t.data.name).join(', ').replace(/, ([^,]+)$/, ' or $1') + '?';
+
+// "Our picks for every job": each category's newest comparison, one row per distinct tool.
+const boards = (
+  await Promise.all(
+    categoryOrder.map(async (c) => {
+      const a = articles.find((x) => x.data.category === c);
+      if (!a) return null;
+      const seen = new Set<string>();
+      const unique = a.data.picks.filter((p) => !seen.has(p.tool.id) && seen.add(p.tool.id));
+      const rows = await Promise.all(unique.map(async (p) => ({ useCase: p.useCase, tool: (await getEntry(p.tool))! })));
+      return { c, a, rows };
+    })
+  )
+).filter((b): b is NonNullable<typeof b> => b !== null);
+---
+<Base title={SITE.name} description={SITE.description}>
+  <section class="hero" aria-labelledby="hero-h">
+    <div class="wrap hero-grid">
+      <div class="ask">
+        <h1 id="hero-h" data-enter>Which AI tool should you use?</h1>
+        <p class="intro" data-enter style="--i:1">We compare the leading AI tools and name a pick for every job, with prices checked against each vendor's own pricing page.</p>
+        <ToolFilter counts={counts} show="search" size="large" />
+      </div>
+
+      {featured && (
+        <article class="answer" aria-labelledby="answer-h" data-enter style="--i:2">
+          <div class="logos" aria-hidden="true">
+            {featuredTools.map((t) => <Monogram name={t.data.name} color={t.data.color} size={52} eager />)}
+          </div>
+          <h2 id="answer-h">{featuredQuestion}</h2>
+          <p class="verdict"><span class="marker">{featured.data.verdict}</span></p>
+          <p class="checked">Prices last checked <time datetime={featured.data.lastVerified.toISOString()}>{formatDate(featured.data.lastVerified)}</time></p>
+          <a class="btn btn-primary" href={articleUrl(featured)}>Read the full comparison</a>
+        </article>
+      )}
+    </div>
+  </section>
+
+  <div class="wrap">
+    <section aria-labelledby="picks-h">
+      <div class="section-head">
+        <h2 id="picks-h" class="section-h">Our picks for every job</h2>
+        <a href="/compare/">All comparisons</a>
+      </div>
+      <div class="boards">
+        {boards.map((b) => (
+          <article class="board" aria-labelledby={`board-${b.c}`}>
+            <h3 id={`board-${b.c}`}><a href={`/category/${b.c}/`}>{CATEGORIES[b.c].label}</a></h3>
+            <ul role="list">
+              {b.rows.map((r) => (
+                <li>
+                  <Monogram name={r.tool.data.name} color={r.tool.data.color} size={32} />
+                  <span class="use">{r.useCase}</span>
+                  <a href={`/tools/${r.tool.id}/`}>{r.tool.data.name}</a>
+                </li>
+              ))}
+            </ul>
+            <a class="why" href={articleUrl(b.a)}>Why we picked these<span class="sr">: {CATEGORIES[b.c].label}</span></a>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="directory" aria-labelledby="dir-h">
+      <h2 id="dir-h" class="section-h">All {tools.length} AI tools</h2>
+      <div class="dir-filters">
+        <ToolFilter counts={counts} show="chips" />
+      </div>
+      <ToolGrid tools={ordered} picks={picked} initial={12} />
+    </section>
+
+    <section aria-labelledby="latest-h">
+      <div class="section-head">
+        <h2 id="latest-h" class="section-h">Latest comparisons</h2>
+        <a href="/compare/">All comparisons</a>
+      </div>
+      <CompareCards articles={articles.slice(0, 6)} />
+    </section>
+  </div>
+</Base>
+<style>
+  .hero {
+    background: var(--paper-raised);
+    border-bottom: 1px solid var(--rule);
+    padding-block: clamp(40px, 7vw, 88px);
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: center;
+  }
+  h1 {
+    font-size: clamp(2.6rem, 6vw, 5.2rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 0.98;
+    margin: 0;
+    max-width: 11ch;
+  }
+  .intro {
+    font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 46ch;
+    margin: 22px 0 30px;
+  }
+  .answer {
+    display: grid;
+    gap: 18px;
+    justify-items: start;
+    padding: clamp(24px, 3vw, 36px);
+    border: 1px solid var(--rule);
+    border-radius: 24px;
+    background: var(--paper);
+    box-shadow: 0 24px 60px -32px color-mix(in srgb, var(--ink) 35%, transparent);
+  }
+  .logos {
+    display: flex;
+    gap: 10px;
+  }
+  .answer h2 {
+    margin: 0;
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    letter-spacing: -0.03em;
+  }
+  .verdict {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(1.08rem, 1.5vw, 1.25rem);
+    line-height: 1.6;
+  }
+  .checked {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .answer .btn {
+    padding: 12px 22px;
+  }
+
+  .section-h {
+    margin-top: 72px;
+  }
+  .boards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 20px;
+  }
+  .board {
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+  .board h3 {
+    margin: 0 0 14px;
+    font-size: 1.15rem;
+  }
+  .board h3 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .board h3 a:hover {
+    text-decoration: underline;
+  }
+  .board ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+    flex: 1;
+  }
+  .board li {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 12px;
+    align-items: center;
+    font-family: var(--display);
+  }
+  .board li :global(.mono) {
+    grid-row: span 2;
+    border-radius: 10px;
+  }
+  .use {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    line-height: 1.3;
+  }
+  .board li a {
+    font-weight: 700;
+    color: var(--ink);
+    text-decoration: none;
+    line-height: 1.3;
+  }
+  .board li a:hover {
+    text-decoration: underline;
+  }
+  .why {
+    margin-top: 18px;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+  #directory {
+    scroll-margin-top: 80px;
+  }
+  .dir-filters {
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 900px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    h1 {
+      max-width: 14ch;
+    }
+  }
+</style>

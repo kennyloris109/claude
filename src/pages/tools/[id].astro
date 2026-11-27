@@ -1,0 +1,204 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Monogram from '../../components/Monogram.astro';
+import CompareCards from '../../components/CompareCards.astro';
+import ToolGrid from '../../components/ToolGrid.astro';
+import ToolExplainer from '../../components/ToolExplainer.astro';
+import Voices from '../../components/Voices.astro';
+import { getArticles, getPickedToolIds, CATEGORIES } from '../../lib/site';
+import { SITE } from '../../site.config.mjs';
+
+export async function getStaticPaths() {
+  const tools = await getCollection('tools');
+  return tools.map((t) => ({ params: { id: t.id }, props: { tool: t } }));
+}
+const { tool } = Astro.props;
+const t = tool.data;
+const articles = (await getArticles()).filter((a) => a.data.tools.some((x) => x.id === tool.id));
+const alternatives = (await getCollection('tools')).filter((x) => x.data.category === t.category && x.id !== tool.id);
+const picked = await getPickedToolIds();
+const pick = picked.get(tool.id);
+const voices = articles.flatMap((a) => a.data.voices.filter((v) => v.tool.id === tool.id));
+const host = new URL(t.url).hostname.replace(/^www\./, '');
+const jsonLd = [{
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: t.name,
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  url: t.url,
+  description: t.summary,
+  publisher: { '@type': 'Organization', name: t.vendor },
+  offers: { '@type': 'Offer', price: t.freeTier ? '0' : undefined, priceCurrency: 'USD', description: t.startingPrice, url: t.pricingUrl },
+}];
+const facts = [
+  { label: 'Price', value: t.startingPrice },
+  { label: 'Pricing model', value: t.pricing },
+  { label: 'Free plan', value: t.freeTier ? 'Yes' : 'No' },
+  { label: 'Category', value: CATEGORIES[t.category].label },
+];
+---
+<Base image={`/images/tools/${tool.id}.png`} imageAlt={`How ${t.name} works: ${t.does}`} title={`${t.name}: pricing, strengths and alternatives`} description={`${t.summary.slice(0, 120)} See how ${t.name} compares with alternatives.`.slice(0, 160)} jsonLd={jsonLd}>
+  <header class="head">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/tools/">All tools</a><span aria-hidden="true">/</span><a href={`/category/${t.category}/`}>{CATEGORIES[t.category].label}</a></nav>
+      <div class="id" data-enter>
+        <Monogram name={t.name} color={t.color} size={88} eager />
+        <div>
+          <h1>{t.name}</h1>
+          <p class="vendor">Made by {t.vendor}</p>
+        </div>
+      </div>
+      <p class="summary" data-enter style="--i:1">{t.summary}</p>
+      <p class="best" data-enter style="--i:1"><strong>Best for:</strong> {t.bestFor.charAt(0).toLowerCase() + t.bestFor.slice(1)}.</p>
+      {pick && <p class="pick"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 1.8l2.5 5.1 5.6.8-4 3.9.9 5.6-5-2.6-5 2.6.9-5.6-4-3.9 5.6-.8z" fill="currentColor"/></svg>Our pick: {pick.charAt(0).toLowerCase() + pick.slice(1)}</p>}
+      <div class="actions" data-enter style="--i:2">
+        <a class="btn btn-primary" href={t.url} rel="nofollow noopener" target="_blank">Visit {host}<span class="sr"> (opens in a new tab)</span></a>
+        <a class="btn btn-ghost" href={t.pricingUrl} rel="nofollow noopener" target="_blank">Official pricing<span class="sr"> (opens in a new tab)</span></a>
+      </div>
+      <dl class="facts">
+        {facts.map((f) => <div><dt>{f.label}</dt><dd>{f.value}</dd></div>)}
+      </dl>
+    </div>
+  </header>
+  <div class="wrap">
+    <section aria-labelledby="how-h">
+      <h2 id="how-h" class="section-h">How {t.name} works</h2>
+      <ToolExplainer tool={tool} />
+    </section>
+    {voices.length > 0 && (
+      <section aria-labelledby="say-h">
+        <h2 id="say-h" class="section-h">What reviewers say about {t.name}</h2>
+        <Voices voices={voices} toolId={tool.id} heading={false} />
+        <p class="vnote">Quotes are word for word from the linked reviews and posts; the people quoted have no connection to {SITE.name}.</p>
+      </section>
+    )}
+    {articles.length > 0 && (
+      <section aria-labelledby="cmp-h">
+        <h2 id="cmp-h" class="section-h">Comparisons that include {t.name}</h2>
+        <CompareCards articles={articles} />
+      </section>
+    )}
+    {alternatives.length > 0 && (
+      <section aria-labelledby="alt-h">
+        <h2 id="alt-h" class="section-h">{t.name} alternatives</h2>
+        <ToolGrid tools={alternatives} picks={picked} id="alt-grid" />
+      </section>
+    )}
+  </div>
+</Base>
+<style>
+  .head {
+    background: var(--paper-raised);
+    border-bottom: 1px solid var(--rule);
+    padding-block: 24px clamp(36px, 5vw, 56px);
+  }
+  .crumbs {
+    display: flex;
+    gap: 8px;
+    font: 500 0.92rem var(--display);
+    color: var(--ink-soft);
+  }
+  .crumbs a {
+    color: var(--ink-soft);
+    text-decoration: none;
+  }
+  .crumbs a:hover {
+    color: var(--cobalt);
+    text-decoration: underline;
+  }
+  .id {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-top: 32px;
+  }
+  .id :global(.mono) {
+    border-radius: 24px;
+  }
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin: 0;
+  }
+  .vendor {
+    margin: 6px 0 0;
+    font: 500 1rem var(--display);
+    color: var(--ink-soft);
+  }
+  .summary {
+    font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+    line-height: 1.6;
+    max-width: 60ch;
+    margin: 28px 0 10px;
+  }
+  .best {
+    margin: 0 0 18px;
+    color: var(--ink-soft);
+    max-width: 60ch;
+  }
+  .best strong {
+    color: var(--ink);
+  }
+  .pick {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 22px;
+    font: 700 0.9rem var(--display);
+    padding: 6px 12px;
+    border-radius: 10px;
+    background: #fff6d6;
+    color: #6b4e00;
+  }
+  .pick svg {
+    width: 16px;
+    height: 16px;
+    color: #f2b705;
+  }
+  :root[data-theme='dark'] .pick { background: #3a3010; color: #f5d77a; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) .pick { background: #3a3010; color: #f5d77a; }
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: 12px;
+    margin: 36px 0 0;
+    max-width: 960px;
+  }
+  .facts div {
+    padding: 16px 18px;
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    background: var(--paper);
+  }
+  dt {
+    font: 600 0.85rem var(--display);
+    color: var(--ink-soft);
+  }
+  dd {
+    margin: 4px 0 0;
+    font: 700 1.02rem/1.4 var(--display);
+  }
+  .vnote {
+    margin: 12px 0 0;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+  }
+  .sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+</style>

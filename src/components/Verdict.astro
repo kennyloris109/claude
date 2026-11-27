@@ -1,0 +1,50 @@
+---
+interface Props { text: string; verified: string; verifiedIso: string }
+const { text, verified, verifiedIso } = Astro.props;
+---
+<section class="verdict" aria-labelledby="short-answer" data-enter style="--i:2">
+  <h2 id="short-answer">The short answer</h2>
+  <p class="text"><span class="marker">{text}</span></p>
+  <p class="checked">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 6v4.2l2.8 1.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <span>Prices and features last checked <time datetime={verifiedIso}>{verified}</time></span>
+  </p>
+</section>
+<style>
+  .verdict {
+    max-width: 880px;
+    margin: 36px 0 0;
+    padding: clamp(24px, 3.5vw, 40px);
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 24px;
+    box-shadow: 0 24px 60px -36px color-mix(in srgb, var(--ink) 40%, transparent);
+  }
+  h2 {
+    margin: 0 0 14px;
+    font-size: 1rem;
+    letter-spacing: 0;
+    color: var(--ink-soft);
+  }
+  .text {
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(1.2rem, 2.1vw, 1.5rem);
+    line-height: 1.55;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .checked {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 18px 0 0;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+  .checked svg {
+    width: 17px;
+    height: 17px;
+    flex: none;
+  }
+</style>

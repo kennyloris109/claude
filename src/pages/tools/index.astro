@@ -1,0 +1,24 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ToolGrid from '../../components/ToolGrid.astro';
+import ToolFilter from '../../components/ToolFilter.astro';
+import { CATEGORIES, getPickedToolIds } from '../../lib/site';
+const tools = (await getCollection('tools')).sort((a, b) => a.data.name.localeCompare(b.data.name));
+const picked = await getPickedToolIds();
+const counts = Object.fromEntries(Object.keys(CATEGORIES).map((c) => [c, tools.filter((t) => t.data.category === c).length]));
+---
+<Base title="AI tools directory" description={`Browse ${tools.length} AI tools by category: chatbots, coding, image, video, voice, search, meetings and presentations, with pricing and what each is best for.`}>
+  <div class="wrap">
+    <h1>AI tools directory</h1>
+    <p class="lede">Every tool we cover, with its pricing model and what it's best for. Top picks are the tools that win the first use case in one of our comparisons.</p>
+    <h2 class="sr">Search and filter tools</h2>
+    <ToolFilter counts={counts} />
+    <ToolGrid tools={tools} picks={picked} />
+  </div>
+</Base>
+<style>
+  h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 800; letter-spacing: -0.04em; margin: 48px 0 10px; }
+  .lede { font-family: var(--display); color: var(--ink-soft); max-width: 60ch; margin: 0 0 28px; font-size: 1.08rem; line-height: 1.5; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+</style>
