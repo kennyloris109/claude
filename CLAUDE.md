@@ -44,6 +44,8 @@ Use the `new-article` and `refresh-article` skills in `.claude/skills/` for the 
 
 - `humanizer` (github.com/blader/humanizer, MIT, v4.0.0): rewrites AI-sounding prose (staged contrasts, forced triads, stock AI words, filler). Run it over new or refreshed articles before committing, together with `writing-guidelines`. It must not change facts, prices, picks or verdict meaning.
 
+- **Claude SEO** plugin (github.com/AgriciDaniel/claude-seo, MIT, v2.6.3), enabled in `.claude/settings.json`: `/seo audit <url>`, `/seo page`, `/seo schema`, `/seo geo` (AI-search citability), `/seo technical`, `/seo content`, `/seo sitemap`, `/seo plan` and more, with 20 specialist agents. Run `/seo setup` once per environment (it builds its own Python env and headless browser). Its PostToolUse hook validates JSON-LD in files you edit. Extensions that need paid API keys (Ahrefs, DataForSEO, SE Ranking, image generation) stay off unless the user adds keys. Its advice never overrides `PRODUCT.md` truth rules (no fake reviews, ratings or stats).
+
 ### Which design skill to use
 Several design skills overlap. Default roles on this site:
 1. **Review/score:** `impeccable critique` / `impeccable audit` (snapshots in `.impeccable/critique/`).
