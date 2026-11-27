@@ -1,5 +1,5 @@
 ---
-title: "Perplexity vs ChatGPT Search vs Google AI Mode: Best AI Search"
+title: "Perplexity vs ChatGPT Search vs Google AI Mode Compared"
 description: "Perplexity, ChatGPT Search and Google AI Mode all answer with sources. Which AI search engine is best cited, most useful and best for everyday use?"
 pubDate: 2026-11-26
 updatedDate: 2026-11-26

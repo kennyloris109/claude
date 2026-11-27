@@ -34,9 +34,9 @@ const jsonLd = [{
   <div class="wrap">
     {featured && (
       <article class="feature" aria-labelledby="feat-h">
-        <a class="feat-img" href={articleUrl(featured.a)} tabindex="-1" aria-hidden="true">
-          <img src={heroUrl(featured.a).replace('.png', '.webp')} width="1200" height="630" alt="" fetchpriority="high" />
-        </a>
+        <div class="feat-img">
+          <img src={heroUrl(featured.a).replace('.png', '.webp')} width="1200" height="630" alt={featured.a.data.heroAlt} fetchpriority="high" />
+        </div>
         <div class="feat-body">
           <span class="tag">Latest comparison</span>
           <h2 id="feat-h"><a href={articleUrl(featured.a)}>{featured.a.data.title}</a></h2>

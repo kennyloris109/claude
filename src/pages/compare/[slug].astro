@@ -80,7 +80,7 @@ const jsonLd = [
         </nav>
         <ul class="contenders" role="list" aria-label="Tools compared" data-enter style="--i:0">
           {tools.map((t) => (
-            <li><Monogram name={t.data.name} color={t.data.color} size={48} /><a href={`/tools/${t.id}/`}>{t.data.name}</a></li>
+            <li><Monogram name={t.data.name} color={t.data.color} size={48} eager /><a href={`/tools/${t.id}/`}>{t.data.name}</a></li>
           ))}
         </ul>
         <h1 data-enter style="--i:1">{d.title}</h1>

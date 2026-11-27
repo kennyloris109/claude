@@ -44,7 +44,7 @@ const facts = [
     <div class="wrap">
       <nav class="crumbs" aria-label="Breadcrumb"><a href="/tools/">All tools</a><span aria-hidden="true">/</span><a href={`/category/${t.category}/`}>{CATEGORIES[t.category].label}</a></nav>
       <div class="id" data-enter>
-        <Monogram name={t.name} color={t.color} size={88} />
+        <Monogram name={t.name} color={t.color} size={88} eager />
         <div>
           <h1>{t.name}</h1>
           <p class="vendor">Made by {t.vendor}</p>

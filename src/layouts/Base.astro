@@ -30,7 +30,13 @@ const {
 
 const canonical = new URL(Astro.url.pathname, SITE.url).href;
 const imageUrl = new URL(image, SITE.url).href;
-const fullTitle = title === SITE.name ? `${SITE.name}: ${SITE.tagline}` : `${title} | ${SITE.name}`;
+// Keep titles within ~60 characters so Google doesn't truncate them: add the brand only when it fits.
+const fullTitle =
+  title === SITE.name
+    ? `${SITE.name}: ${SITE.tagline}`
+    : `${title} | ${SITE.name}`.length <= 60
+      ? `${title} | ${SITE.name}`
+      : title;
 
 const siteGraph = [
   {

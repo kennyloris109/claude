@@ -2,7 +2,7 @@
 export const SITE = {
   name: 'ToolVerdict',
   url: 'https://toolverdict.com', // ← set your real domain before launch
-  tagline: 'Straight answers on which AI tool to use.',
+  tagline: 'Compare AI tools and pick the right one',
   description:
     'Independent comparisons of AI tools (chatbots, coding assistants, image generators, AI search and meeting notetakers) with a clear verdict for every use case.',
   locale: 'en_US',

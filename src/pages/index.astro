@@ -50,7 +50,7 @@ const boards = (
       {featured && (
         <article class="answer" aria-labelledby="answer-h" data-enter style="--i:2">
           <div class="logos" aria-hidden="true">
-            {featuredTools.map((t) => <Monogram name={t.data.name} color={t.data.color} size={52} />)}
+            {featuredTools.map((t) => <Monogram name={t.data.name} color={t.data.color} size={52} eager />)}
           </div>
           <h2 id="answer-h">{featuredQuestion}</h2>
           <p class="verdict"><span class="marker">{featured.data.verdict}</span></p>
